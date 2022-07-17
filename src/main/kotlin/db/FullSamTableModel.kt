@@ -1,8 +1,14 @@
 package db
 
+import db.FullSamTableModel.AMPC_BCPI.nullable
+import db.FullSamTableModel.AMPPC.nullable
+import db.FullSamTableModel.AMPPCES.nullable
 import db.FullSamTableModel.AMPP_ECON.nullable
 import db.FullSamTableModel.AMPP_NIHDI.nullable
 import db.FullSamTableModel.AMPP_NIHDI_BIS.nullable
+import db.FullSamTableModel.CMRCL.nullable
+import db.FullSamTableModel.DLVM.nullable
+import db.FullSamTableModel.DRGIMP.nullable
 import db.FullSamTableModel.SPPROB.nullable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
@@ -304,6 +310,131 @@ class FullSamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
-
     }
+    
+    //Derogation Import
+    object DRGIMP : Table("DRGIMP") {
+        val ctiExtended = varchar("ctiExtended", 9)
+        val sequenceNumber = integer("sequenceNumber")
+
+        val noteNl = text("noteNl")
+        val noteFr = text("noteFr")
+        val noteGer = text("noteGer").nullable()
+        val noteEng = text("noteEng").nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+    
+    //ATC Code
+    object ATC : Table("ATC") {
+        val code = varchar("code", 7)
+        val description = text("description")
+    }
+    
+    //Delivery mode
+    object DLVM : Table("DLVM") {
+        val code = varchar("code", 7)
+
+        val descriptionNameNl = text("descriptionNameNl")
+        val descriptionNameFr = text("descriptionNameFr")
+        val descriptionNameGer = text("descriptionNameGer").nullable()
+        val descriptionNameEng = text("descriptionNameEng").nullable()
+    }
+
+    //Delivery Mode Specification
+    object DLVMS : Table("DLVMS") {
+        val code = varchar("code", 7)
+
+        val descriptionNameNl = text("descriptionNameNl")
+        val descriptionNameFr = text("descriptionNameFr")
+        val descriptionNameGer = text("descriptionNameGer").nullable()
+        val descriptionNameEng = text("descriptionNameEng").nullable()
+    }
+
+    //AMPP Component
+    object AMPPC : Table("AMPPC") {
+        val ctiExtended = varchar("ctiExtended", 9)
+        val sequenceNumber = integer("sequenceNumber")
+        val ampcSequenceNumber = integer("ampcSequenceNumber").nullable()
+        val deviceTypeCode = varchar("deviceTypeCode", 8).nullable()
+        val packagingTypeCode = varchar("packagingTypeCode", 8).nullable()
+        val contentType = varchar("contentType", 50)
+        val contentMultiplier = integer("contentMultiplier").nullable()
+        val packSpecification = varchar("packSpecification", 255).nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //AMPPC-Equivalent - don't judge me. The actual explanation also doesn't really make sense. Who uses this stuff?
+    object AMPPCES : Table("AMPPCES") {
+        val ctiExtended = varchar("ctiExtended", 9)
+        val amppcSequenceNumber = integer("amppcSequenceNumber")
+        val sequenceNumber = integer("sequenceNumber")
+        val contentQuantity = integer("contentQuantity")
+        val contentUnit = varchar("contentUnit", 20)
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Device Type
+    object DVCTP : Table("DVCTP") {
+        val code = varchar("code", 8)
+        val nameNl = varchar("nameNl", 255)
+        val nameFr = varchar("nameFr", 255)
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+        val edqmCode = varchar("edqmCode", 20).nullable()
+        val edqmDefinition = text("edqmDefinition").nullable()
+    }
+
+    //Packaging Closure
+    object PCKCL : Table("PCKCL") {
+        val code = varchar("code", 8)
+        val nameNl = varchar("nameNl", 255)
+        val nameFr = varchar("nameFr", 255)
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+        val edqmCode = varchar("edqmCode", 20).nullable()
+        val edqmDefinition = text("edqmDefinition").nullable()
+    }
+
+    //Packaging Material
+    object PCKMT : Table("PCKMT") {
+        val code = varchar("code", 8)
+        val nameNl = varchar("nameNl", 255)
+        val nameFr = varchar("nameFr", 255)
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+    }
+
+    //Packaging type
+    object PCKTP : Table("PCKTP") {
+        val code = varchar("code", 8)
+        val nameNl = varchar("nameNl", 255)
+        val nameFr = varchar("nameFr", 255)
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+        val edqmCode = varchar("edqmCode", 20).nullable()
+        val edqmDefinition = text("edqmDefinition").nullable()
+    }
+
+    //Delivered Medicinal Product Package
+    object DMPP : Table("DMPP") {
+        val code = varchar("code", 7)
+        val codeType = varchar("codeType", 10)
+        val deliveryEnvironment = varchar("deliveryEnvironment", 1)
+        val price = integer("price").nullable()
+        val reimbursable = bool("reimbursable")
+        val reimbursementRequiresPriorAgreement = bool("reimbursementRequiresPriorAgreement").nullable()
+        val cheapestCeilingPricesStatus5 = bool("cheapestCeilingPricesStatus5").nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Real Actual Ingredient
+
 }
