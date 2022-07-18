@@ -1,15 +1,5 @@
 package db
 
-import db.FullSamTableModel.AMPC_BCPI.nullable
-import db.FullSamTableModel.AMPPC.nullable
-import db.FullSamTableModel.AMPPCES.nullable
-import db.FullSamTableModel.AMPP_ECON.nullable
-import db.FullSamTableModel.AMPP_NIHDI.nullable
-import db.FullSamTableModel.AMPP_NIHDI_BIS.nullable
-import db.FullSamTableModel.CMRCL.nullable
-import db.FullSamTableModel.DLVM.nullable
-import db.FullSamTableModel.DRGIMP.nullable
-import db.FullSamTableModel.SPPROB.nullable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date
 
@@ -18,7 +8,7 @@ import org.jetbrains.exposed.sql.javatime.date
  * Don't blame me for their content, because it's really really dumb the way
  * this stuff is subdivided
  */
-class FullSamTableModel {
+class ActualMedicineSamTableModel {
 
     //Company Actor Table
     //Sem. key = Actor Number
@@ -311,7 +301,7 @@ class FullSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //Derogation Import
     object DRGIMP : Table("DRGIMP") {
         val ctiExtended = varchar("ctiExtended", 9)
@@ -325,13 +315,13 @@ class FullSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //ATC Code
     object ATC : Table("ATC") {
         val code = varchar("code", 7)
         val description = text("description")
     }
-    
+
     //Delivery mode
     object DLVM : Table("DLVM") {
         val code = varchar("code", 7)
@@ -436,5 +426,37 @@ class FullSamTableModel {
     }
 
     //Real Actual Ingredient
+    object RACTING : Table("RACTING") {
+        val ampCode = varchar("ampCode", 12)
+        val sequenceNumber = integer("sequenceNumber")
+        val rank = integer("rank")
+        val type = varchar("type", 20)
+        val substanceCode = varchar("substanceCode", 10)
+        val knownEffect = bool("knownEffect").nullable()
+        val strengthQuantity = integer("strengthQuantity").nullable()
+        val strengthUnit = varchar("strengthUnit", 20).nullable()
+        val strengthDescription = varchar("strengthDescription", 50).nullable()
+        val additionalInformation = varchar("additionalInformation", 255).nullable()
 
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Real Actual Ingredient Equivalent
+    object RACTIEQ : Table("RACTIEQ") {
+        val ampCode = varchar("ampCode", 12)
+        val ampcSequenceNumber = integer("ampcSequenceNumber")
+        val rank = integer("rank")
+        val sequenceNumber = integer("sequenceNumber")
+        val type = varchar("type", 20)
+        val substanceCode = varchar("substanceCode", 10)
+        val knownEffect = bool("knownEffect").nullable()
+        val strengthQuantity = integer("strengthQuantity").nullable()
+        val strengthUnit = varchar("strengthUnit", 20).nullable()
+        val strengthDescription = varchar("strengthDescription", 50).nullable()
+        val additionalInformation = varchar("additionalInformation", 255).nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
 }
