@@ -1,6 +1,12 @@
 package db
 
+import db.ActualMedicineSamTableModel.AMPC_BCPI.nullable
+import db.Chapter4SamTableModel.ADDED_DOCUMENT.nullable
+import db.Chapter4SamTableModel.EXCLUSION.nullable
+import db.Chapter4SamTableModel.NAME_EXPLANATION.nullable
 import db.Chapter4SamTableModel.PARAGRAPH.nullable
+import db.Chapter4SamTableModel.PROF_AUTHORISATION.nullable
+import db.Chapter4SamTableModel.QUALLIST.nullable
 import db.Chapter4SamTableModel.VERSE.nullable
 import db.VirtualMedicineSamTableModel.VTM.nullable
 import org.jetbrains.exposed.sql.Table
@@ -102,5 +108,92 @@ class Chapter4SamTableModel {
         val professionalName = varchar("professionalName", 50).nullable()
     }
 
+    //Professional Authorisation
+    object PROF_AUTHORISATION : Table("PROF_AUTHIRISATION") {
+        val professionalAuthorisationId = integer("professionalAuthorisationId")
+        val qualificationList = varchar("qualificationList", 10)
+        val professionalCv = varchar("professionalCv", 10).nullable()
+        val purchasingAdvisorName = varchar("purchasingAdvisorName", 50).nullable()
+        val modificationStatus = varchar("modificationStatus", 1)
 
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Form Type
+    object FORM_TYPE : Table("FORM_TABLE") {
+        val formTypeId = integer("formTypeId")
+        val nameId = integer("nameId")
+    }
+
+    //Appendix Type
+    object APPENDIX_TYPE : Table("APPENDIX_TYPE") {
+        val appendixTypeId = integer("appendixTypeId")
+        val nameId = integer("nameId")
+    }
+
+    //Added document
+    object ADDED_DOCUMENT : Table("ADDED_DOCUMENT") {
+        val chapterName = varchar("chapterName", 10)
+        val paragrapName = varchar("paragrapName", 10)
+        val verseSequence = integer("verseSequence")
+        val documentSequence = integer("documentSequence")
+        val nameId = integer("nameId")
+        val formTypeId = integer("formTypeId")
+        val appendixTypeId = integer("appendixTypeId")
+        val mimeType = varchar("mimeType", 10).nullable()
+        val documentContent = blob("documentContent").nullable()
+        val addressURL = varchar("addressURL", 255).nullable()
+        val modificationStatus = varchar("modificationStatus", 1)
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    object EXCLUSION : Table("EXCLUSION") {
+        val chapterName = varchar("chapterName", 10)
+        val paragraphName = varchar("paragraphName", 10)
+        val exclusionType = varchar("exclusionType", 1)
+        val identifierNum = varchar("identifierNum", 10)
+        val modificationStatus = varchar("modificationStatus", 1)
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    object NAME_EXPLANATION : Table("NAME_EXPLANATION") {
+        val nameId = integer("nameId")
+        val sourceTableId = integer("sourceTableId")
+        val modificationStatus = varchar("modificationStatus", 1)
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    object NAME_TYPE : Table("NAME_TYPE") {
+        val nameTypeCV = varchar("nameTypeCV", 6)
+        val nameId = integer("nameId")
+        val nameType = varchar("nameType", 50).nullable()
+        val nameTypeSequence = integer("nameTypeSequence").nullable()
+    }
+
+    object NAME_TRANSLATION : Table("NAME_TRANSLATION") {
+        val nameId = integer("nameId")
+        val nameTypeCV = varchar("nameTypeCV", 6)
+        val languageCv = varchar("languageCv", 2)
+        val shortText = varchar("shortText", 300).nullable()
+        val longText = text("longText").nullable()
+        val longBinaryText = blob("longBinaryText").nullable()
+        val addressURL = varchar("addressURL", 255).nullable()
+        val modificationStatus = varchar("modificationStatus", 1)
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    object LEGAL_REF_TO_PARAGRAPH : Table("LEGAL_REF_TO_PARAGRAPH") {
+        val legalReferencePath = varchar("legalReferencePath", 79)
+        val chapterName = varchar("chapterName", 10)
+        val paragraphName = varchar("paragraphName", 10)
+    }
 }
