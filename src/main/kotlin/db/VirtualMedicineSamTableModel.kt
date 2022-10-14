@@ -1,11 +1,11 @@
 package db
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
 class VirtualMedicineSamTableModel {
-    
-    object VTM : Table("VTM") {
+
+    object VTM : IntIdTable("VTM") {
         val code = integer("code")
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
@@ -15,9 +15,9 @@ class VirtualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //Virtual Medicinal Product
-    object VMP : Table("VMP") {
+    object VMP : IntIdTable("VMP") {
         val code = integer("code")
         val vmpGroupCode = integer("vmpGroupCode")
         val nameNl = varchar("nameNl", 255)
@@ -33,9 +33,9 @@ class VirtualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //VMP Component
-    object VMPC : Table("VMPC") {
+    object VMPC : IntIdTable("VMPC") {
         val code = integer("code")
         val vmpCode = integer("vmpCode")
         val virtualFormCode = varchar("virtualFormCode", 10)
@@ -49,9 +49,9 @@ class VirtualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //VMP Group
-    object VMPG : Table("VMPG") {
+    object VMPG : IntIdTable("VMPG") {
         val code = integer("code")
         val noswrCode = varchar("noswrCode", 10).nullable()
         val nognprCode = varchar("nognprCode", 10).nullable()
@@ -62,14 +62,14 @@ class VirtualMedicineSamTableModel {
         val nameEnglish = varchar("nameEng", 255).nullable()
 
         val patientFrailtyIndicator = bool("patientFrailtyIndicator").nullable()
-        val singleAdministrationDose = integer("singleAdministrationDose") .nullable()
-        
+        val singleAdministrationDose = integer("singleAdministrationDose").nullable()
+
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //Commented Classification
-    object COMCLS : Table("COMCLS") {
+    object COMCLS : IntIdTable("COMCLS") {
         val code = varchar("code", 10)
 
         val titleNl = varchar("titleNl", 255).nullable()
@@ -94,7 +94,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //Virtual Ingredient
-    object VTLING : Table("VTLING") {
+    object VTLING : IntIdTable("VTLING") {
         val vmpcCode = integer("vmpcCode")
         val rank = integer("rank")
         val substanceCode = varchar("substanceCode", 10)
@@ -109,7 +109,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //Real Virtual Ingredient
-    object RVTLING : Table("RVTLING") {
+    object RVTLING : IntIdTable("RVTLING") {
         val vmpcCode = integer("vmpcCode")
         val rank = integer("rank")
         val sequenceNumber = integer("sequenceNumber")
@@ -124,9 +124,9 @@ class VirtualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //Standard Dosage
-    object STDDOS : Table("STDDOS") {
+    object STDDOS : IntIdTable("STDDOS") {
         val vmpGroupCode = integer("vmpGroupCode")
         val code = integer("code")
         val indicationCode = text("indicationCode")
@@ -145,7 +145,7 @@ class VirtualMedicineSamTableModel {
         val temporaryDurationDetailsNoteFr = varchar("temporaryDurationDetailsNoteFr", 255).nullable()
         val temporaryDurationDetailsNoteGerman = varchar("temporaryDurationDetailsNoteGer", 255).nullable()
         val temporaryDurationDetailsNoteEnglish = varchar("temporaryDurationDetailsNoteEng", 255).nullable()
-        
+
         val dosageUnitQuantityValue = integer("dosageUnitQuantityValue").nullable()
         val dosageUnitQuantityUnit = varchar("dosageUnitQuantityUnit", 20).nullable()
         val dosageUnitMultiplier = integer("dosageUnitMultiplier").nullable()
@@ -170,13 +170,13 @@ class VirtualMedicineSamTableModel {
     }
 
     //Virtual Form
-    object VTFRM : Table("VTFRM") {
+    object VTFRM : IntIdTable("VTFRM") {
         val code = varchar("code", 10)
         val abbreviatedNl = varchar("abbreviatedNl", 255)
         val abbreviatedFr = varchar("abbreviatedFr", 255)
         val abbreviatedGer = varchar("abbreviatedGer", 255).nullable()
         val abbreviatedEng = varchar("abbreviatedEng", 255).nullable()
-        
+
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
         val nameGer = varchar("nameGer", 255).nullable()
@@ -187,9 +187,9 @@ class VirtualMedicineSamTableModel {
         val descriptionGer = text("descriptionGer").nullable()
         val descriptionEng = text("descriptionEng").nullable()
     }
-    
+
     //World Anti-doping Agency
-    object WADA : Table("WADA") {
+    object WADA : IntIdTable("WADA") {
         val code = varchar("code", 10)
 
         val nameNl = varchar("nameNl", 255)
@@ -204,7 +204,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //No switch Reason
-    object NOSWR : Table("NOSWR") {
+    object NOSWR : IntIdTable("NOSWR") {
         val code = varchar("code", 10)
 
         val descriptionNl = text("descriptionNl").nullable()
@@ -214,7 +214,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //No generic prescription reason
-    object NOGNPR : Table("NOGNPR") {
+    object NOGNPR : IntIdTable("NOGNPR") {
         val code = varchar("code", 10)
 
         val descriptionNl = text("descriptionNl").nullable()
@@ -222,9 +222,9 @@ class VirtualMedicineSamTableModel {
         val descriptionGer = text("descriptionGer").nullable()
         val descriptionEng = text("descriptionEng").nullable()
     }
-    
+
     //Standard Form
-    object STDFRM : Table("STDFRM") {
+    object STDFRM : IntIdTable("STDFRM") {
         val standard = varchar("standard", 20)
         val code = varchar("code", 20)
 
@@ -232,7 +232,7 @@ class VirtualMedicineSamTableModel {
         val nameFr = varchar("nameFr", 255).nullable()
         val nameGer = varchar("nameGer", 255).nullable()
         val nameEng = varchar("nameEng", 255).nullable()
-        
+
         val definitionNl = varchar("definitionNl", 255).nullable()
         val definitionFr = varchar("definitionFr", 255).nullable()
         val definitionGer = varchar("definitionGer", 255).nullable()
@@ -242,7 +242,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //Route of administration
-    object ROA : Table("ROA") {
+    object ROA : IntIdTable("ROA") {
         val code = varchar("code", 10)
 
         val nameNl = varchar("nameNl", 255)
@@ -252,7 +252,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //Standard Route Of Administration
-    object STDROA : Table("STDROA") {
+    object STDROA : IntIdTable("STDROA") {
         val standard = varchar("standard", 20)
         val code = varchar("code", 20)
 
@@ -270,7 +270,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //Substance
-    object SBST : Table("SBST") {
+    object SBST : IntIdTable("SBST") {
         val code = varchar("code", 10)
         val chemicalForm = varchar("chemical", 10)
 
@@ -286,7 +286,7 @@ class VirtualMedicineSamTableModel {
     }
 
     //Standard Substance
-    object STDSBST : Table("STDSBST") {
+    object STDSBST : IntIdTable("STDSBST") {
         val standard = varchar("standard", 20)
         val code = varchar("code", 20)
 

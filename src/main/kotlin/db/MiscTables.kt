@@ -1,6 +1,6 @@
 package db
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 
 /**
  * Adds a couple of miscelanious tables, like the compounding parts, the nonmedicinal part and the units
@@ -8,19 +8,19 @@ import org.jetbrains.exposed.sql.Table
 class MiscTables {
     //Compounding part
 
-    object COMP_INGREDIENT : Table("COMP_INGREDIENT") {
+    object COMP_INGREDIENT : IntIdTable("COMP_INGREDIENT") {
         val cnk = varchar("cnk", 7)
         val synonym = text("synonym").nullable()
     }
 
-    object COMP_FORMULA : Table("COMP_FORMULA") {
+    object COMP_FORMULA : IntIdTable("COMP_FORMULA") {
         val cnk = varchar("cnk", 7)
         val synonym = text("synonym").nullable()
         val formulary = text("formulary").nullable()
     }
 
     //Nonmedicinal
-    object NONMEDICINAL : Table("NONMEDICINAL") {
+    object NONMEDICINAL : IntIdTable("NONMEDICINAL") {
         val cnk = varchar("cnk", 7)
 
         val nameNl = varchar("nameNl", 255)
@@ -47,7 +47,7 @@ class MiscTables {
     }
 
     //Standard Unit
-    object STDUNT : Table("STDUNT") {
+    object STDUNT : IntIdTable("STDUNT") {
         val name = varchar("name", 20)
 
         val descriptionNl = varchar("descriptionNl", 255).nullable()

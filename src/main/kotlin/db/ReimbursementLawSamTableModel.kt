@@ -4,19 +4,16 @@ import db.ReimbursementLawSamTableModel.LGLBAS.nullable
 import db.ReimbursementLawSamTableModel.LGLREF.nullable
 import db.ReimbursementLawSamTableModel.LGLTXT.nullable
 import db.ReimbursementLawSamTableModel.RMBCTX.nullable
-import db.VirtualMedicineSamTableModel.COMCLS.nullable
-import db.VirtualMedicineSamTableModel.VTFRM.nullable
-import db.VirtualMedicineSamTableModel.VTM.nullable
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
 /**
  * Deprecated tables. See Chapter IV statements
  */
 class ReimbursementLawSamTableModel {
-    
+
     //Legal basis 
-    object LGLBAS : Table("LGLBAS") {
+    object LGLBAS : IntIdTable("LGLBAS") {
         val key = varchar("key", 15)
 
         val titleNl = varchar("titleNl", 255).nullable()
@@ -26,13 +23,13 @@ class ReimbursementLawSamTableModel {
 
         val type = varchar("type", 30)
         val effectiveOn = date("effectiveOn").nullable()
-        
+
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
-    
+
     //Legal Reference
-    object LGLREF : Table("LGLREF") {
+    object LGLREF : IntIdTable("LGLREF") {
         val legalReferencePath = varchar("legalReferencePath", 79)
         val type = varchar("type", 30)
 
@@ -50,7 +47,7 @@ class ReimbursementLawSamTableModel {
     }
 
     //Legal Text
-    object LGLTXT : Table("LGLTXT") {
+    object LGLTXT : IntIdTable("LGLTXT") {
         val legalTextPath = varchar("legalTextPath", 175)
         val legalReferencePath = varchar("legalReferencePath", 79).nullable()
         val type = varchar("type", 30)
@@ -59,7 +56,7 @@ class ReimbursementLawSamTableModel {
         val contentFr = text("contentFr").nullable()
         val contentGerman = text("contentGer").nullable()
         val contentEnglish = text("contentEng").nullable()
-        
+
         val sequenceNumber = integer("sequenceNumber")
         val lastModifiedOn = date("lastModifiedOn").nullable()
 
@@ -68,7 +65,7 @@ class ReimbursementLawSamTableModel {
     }
 
     //Reimbursement Context
-    object RMBCTX : Table("RMBCTX") {
+    object RMBCTX : IntIdTable("RMBCTX") {
         val code = varchar("code", 7)
         val codeType = varchar("codeType", 10)
         val deliveryEnvironment = varchar("deliveryEnvironment", 1)
@@ -104,7 +101,7 @@ class ReimbursementLawSamTableModel {
     }
 
     //Reimbursement Criterion
-    object RMBCRIT : Table("RMBCRIT") {
+    object RMBCRIT : IntIdTable("RMBCRIT") {
         val category = varchar("category", 10)
         val code = varchar("code", 10)
 
@@ -115,7 +112,7 @@ class ReimbursementLawSamTableModel {
     }
 
     //Copayment
-    object COPAY : Table("COPAY") {
+    object COPAY : IntIdTable("COPAY") {
         val code = varchar("code", 7)
         val codeType = varchar("codeType", 10)
         val deliveryEnvironment = varchar("deliveryEnvironment", 1)

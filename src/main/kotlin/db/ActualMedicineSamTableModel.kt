@@ -1,6 +1,6 @@
 package db
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
 /**
@@ -14,7 +14,7 @@ class ActualMedicineSamTableModel {
     //Sem. key = Actor Number
 
     //Q: waarom de shit zit dit ook mee in de AMP-tabel? dit zit al in de CPN-tabel..
-    object CPN : Table("CPN") {
+    object CPN : IntIdTable("CPN") {
         val actorNumber = varchar("actorNumber", 5) //Number(5) - varchar
         val authorisationNumber = varchar("authorisationNumber", 50).nullable()
         val vatCountryCode = varchar("vatCountryCode", 2).nullable()
@@ -41,8 +41,9 @@ class ActualMedicineSamTableModel {
     //Foreign keys:
     //CPN: Company Actor Number
     //VMP: VMP Code
-    object AMP_FAMHP : Table("AMP_FAMHP") {
+    object AMP_FAMHP : IntIdTable("AMP_FAMHP") {
         val code = varchar("code", 12)
+        val vmpCode = integer("vmpCode")
         val companyActorNumber = varchar("companyActorNumber", 5)
         val status = varchar("status", 10)
         val blackTriangle = bool("blackTriangle")
@@ -63,7 +64,7 @@ class ActualMedicineSamTableModel {
 */
     }
 
-    object AMP_BCPI : Table("AMP_BCPI") {
+    object AMP_BCPI : IntIdTable("AMP_BCPI") {
         val code = varchar("code", 12)
         val abbreviatedNameNl = varchar("abbreviatedNameNl", 255)
         val abbreviatedNameFr = varchar("abbreviatedNameFr", 255)
@@ -89,14 +90,14 @@ class ActualMedicineSamTableModel {
     //VMPC: VMPC code
 
     //Wauw nuttig object
-    object AMPC_FAMHP : Table("AMPC_FAMHP") {
+    object AMPC_FAMHP : IntIdTable("AMPC_FAMHP") {
         val ampCode = varchar("ampCode", 12)
         val sequenceNumber = integer("sequenceNumber")
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
 
-    object AMPC_BCPI : Table("AMPC_BCPI") {
+    object AMPC_BCPI : IntIdTable("AMPC_BCPI") {
         val ampCode = varchar("ampCode", 12)
         val sequenceNumber = integer("sequenceNumber")
 
@@ -126,7 +127,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Pharmaceutical Form
-    object PHFRM : Table("PHFRM") {
+    object PHFRM : IntIdTable("PHFRM") {
         val code = varchar("code", 10)
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
@@ -140,7 +141,7 @@ class ActualMedicineSamTableModel {
     //AMP: AMP Code
     //DLVM: Delivery Modus Code
     //DLVMS: Delivery Modus Specification Code
-    object AMPP_FAMHP : Table("AMPP_FAMHP") {
+    object AMPP_FAMHP : IntIdTable("AMPP_FAMHP") {
         val ctiExtended = varchar("ctiExtended", 9)
         val ampCode = varchar("ampCode", 12)
         val deliveryModusCode = varchar("deliveryModusCode", 7)
@@ -190,7 +191,7 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object AMPP_BCFI : Table("AMPP_BCFI") {
+    object AMPP_BCFI : IntIdTable("AMPP_BCFI") {
         val ctiExtended = varchar("ctiExtended", 9)
         val singleUse = bool("singleUse").nullable()
         val speciallyRegulated = varchar("speciallyRegulated", 1).nullable()
@@ -219,7 +220,7 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object AMPP_NIHDI : Table("AMPP_NIHDI") {
+    object AMPP_NIHDI : IntIdTable("AMPP_NIHDI") {
         val ctiExtended = varchar("ctiExtended", 9)
         val exfactory_price = integer("exfactory_price")
         val reimbursementCode = varchar("reimbursementCode", 10).nullable()
@@ -233,7 +234,7 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object AMPP_NIHDI_BIS : Table("AMPP_NIHDI_BIS") {
+    object AMPP_NIHDI_BIS : IntIdTable("AMPP_NIHDI_BIS") {
         val ctiExtended = varchar("ctiExtended", 9)
         val definedDailyDose = integer("definedDailyDose").nullable()
         val definedDailyDoseUnit = varchar("definedDailyDoseUnit", 20).nullable()
@@ -242,7 +243,7 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object AMPP_ECON : Table("AMPP_ECON") {
+    object AMPP_ECON : IntIdTable("AMPP_ECON") {
         val ctiExtended = varchar("ctiExtended", 9)
 
         val officialExFactoryPrice = integer("officialExFactoryPrice")
@@ -254,7 +255,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Supply Problem
-    object SPPROB : Table("SPPROB") {
+    object SPPROB : IntIdTable("SPPROB") {
         val ctiExtended = varchar("ctiExtended", 9)
 
         val expectedEndDate = date("expectedEndDate").nullable()
@@ -283,7 +284,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Commercialization
-    object CMRCL : Table("CMRCL") {
+    object CMRCL : IntIdTable("CMRCL") {
         val ctiExtended = varchar("ctiExtended", 9)
         val endOfCommercializationNl = varchar("endOfCommercializationNl", 50).nullable()
         val endOfCommercializationFr = varchar("endOfCommercializationFr", 50).nullable()
@@ -303,7 +304,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Derogation Import
-    object DRGIMP : Table("DRGIMP") {
+    object DRGIMP : IntIdTable("DRGIMP") {
         val ctiExtended = varchar("ctiExtended", 9)
         val sequenceNumber = integer("sequenceNumber")
 
@@ -317,13 +318,13 @@ class ActualMedicineSamTableModel {
     }
 
     //ATC Code
-    object ATC : Table("ATC") {
+    object ATC : IntIdTable("ATC") {
         val code = varchar("code", 7)
         val description = text("description")
     }
 
     //Delivery mode
-    object DLVM : Table("DLVM") {
+    object DLVM : IntIdTable("DLVM") {
         val code = varchar("code", 7)
 
         val descriptionNameNl = text("descriptionNameNl")
@@ -333,7 +334,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Delivery Mode Specification
-    object DLVMS : Table("DLVMS") {
+    object DLVMS : IntIdTable("DLVMS") {
         val code = varchar("code", 7)
 
         val descriptionNameNl = text("descriptionNameNl")
@@ -343,7 +344,7 @@ class ActualMedicineSamTableModel {
     }
 
     //AMPP Component
-    object AMPPC : Table("AMPPC") {
+    object AMPPC : IntIdTable("AMPPC") {
         val ctiExtended = varchar("ctiExtended", 9)
         val sequenceNumber = integer("sequenceNumber")
         val ampcSequenceNumber = integer("ampcSequenceNumber").nullable()
@@ -358,7 +359,7 @@ class ActualMedicineSamTableModel {
     }
 
     //AMPPC-Equivalent - don't judge me. The actual explanation also doesn't really make sense. Who uses this stuff?
-    object AMPPCES : Table("AMPPCES") {
+    object AMPPCES : IntIdTable("AMPPCES") {
         val ctiExtended = varchar("ctiExtended", 9)
         val amppcSequenceNumber = integer("amppcSequenceNumber")
         val sequenceNumber = integer("sequenceNumber")
@@ -370,7 +371,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Device Type
-    object DVCTP : Table("DVCTP") {
+    object DVCTP : IntIdTable("DVCTP") {
         val code = varchar("code", 8)
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
@@ -381,7 +382,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Packaging Closure
-    object PCKCL : Table("PCKCL") {
+    object PCKCL : IntIdTable("PCKCL") {
         val code = varchar("code", 8)
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
@@ -392,7 +393,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Packaging Material
-    object PCKMT : Table("PCKMT") {
+    object PCKMT : IntIdTable("PCKMT") {
         val code = varchar("code", 8)
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
@@ -401,7 +402,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Packaging type
-    object PCKTP : Table("PCKTP") {
+    object PCKTP : IntIdTable("PCKTP") {
         val code = varchar("code", 8)
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)
@@ -412,7 +413,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Delivered Medicinal Product Package
-    object DMPP : Table("DMPP") {
+    object DMPP : IntIdTable("DMPP") {
         val code = varchar("code", 7)
         val codeType = varchar("codeType", 10)
         val deliveryEnvironment = varchar("deliveryEnvironment", 1)
@@ -426,7 +427,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Real Actual Ingredient
-    object RACTING : Table("RACTING") {
+    object RACTING : IntIdTable("RACTING") {
         val ampCode = varchar("ampCode", 12)
         val sequenceNumber = integer("sequenceNumber")
         val rank = integer("rank")
@@ -443,7 +444,7 @@ class ActualMedicineSamTableModel {
     }
 
     //Real Actual Ingredient Equivalent
-    object RACTIEQ : Table("RACTIEQ") {
+    object RACTIEQ : IntIdTable("RACTIEQ") {
         val ampCode = varchar("ampCode", 12)
         val ampcSequenceNumber = integer("ampcSequenceNumber")
         val rank = integer("rank")

@@ -1,15 +1,6 @@
 package db
 
-import db.ActualMedicineSamTableModel.AMPC_BCPI.nullable
-import db.Chapter4SamTableModel.ADDED_DOCUMENT.nullable
-import db.Chapter4SamTableModel.EXCLUSION.nullable
-import db.Chapter4SamTableModel.NAME_EXPLANATION.nullable
-import db.Chapter4SamTableModel.PARAGRAPH.nullable
-import db.Chapter4SamTableModel.PROF_AUTHORISATION.nullable
-import db.Chapter4SamTableModel.QUALLIST.nullable
-import db.Chapter4SamTableModel.VERSE.nullable
-import db.VirtualMedicineSamTableModel.VTM.nullable
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
 /**
@@ -18,7 +9,7 @@ import org.jetbrains.exposed.sql.javatime.date
 class Chapter4SamTableModel {
 
     //Paragraph
-    object PARAGRAPH : Table("PARAGRAPH") {
+    object PARAGRAPH : IntIdTable("PARAGRAPH") {
         val chapterName = varchar("chapterName", 10)
         val paragraphName = varchar("paragraphName", 10)
 
@@ -38,7 +29,7 @@ class Chapter4SamTableModel {
     }
 
     //Paragraph Trace
-    object PARAGR_TRACE : Table("PARAGR_TRACE") {
+    object PARAGR_TRACE : IntIdTable("PARAGR_TRACE") {
         val chapterName = varchar("chapterName", 10)
         val paragraphName = varchar("paragraphName", 10)
         val parentChapterName = varchar("parentChapterName", 10)
@@ -50,7 +41,7 @@ class Chapter4SamTableModel {
     }
 
     //Verse
-    object VERSE : Table("VERSE") {
+    object VERSE : IntIdTable("VERSE") {
         val chapterName = varchar("chapterName", 10)
         val paragraphName = varchar("paragraphName", 10)
 
@@ -91,7 +82,7 @@ class Chapter4SamTableModel {
     }
 
     //Qualification List
-    object QUALLIST : Table("QUALLIST") {
+    object QUALLIST : IntIdTable("QUALLIST") {
         val qualificationList = varchar("qualificationList", 10)
         val nameId = integer("nameId")
         val exclusiveInd = varchar("exclusiveInd", 1).nullable()
@@ -102,14 +93,14 @@ class Chapter4SamTableModel {
     }
 
     //Professional code
-    object PROFFESSIONALCODE : Table("PROFESSIONALCODE") {
+    object PROFFESSIONALCODE : IntIdTable("PROFESSIONALCODE") {
         val professionalCv = varchar("professionalCv", 10)
         val nameId = integer("nameId")
         val professionalName = varchar("professionalName", 50).nullable()
     }
 
     //Professional Authorisation
-    object PROF_AUTHORISATION : Table("PROF_AUTHIRISATION") {
+    object PROF_AUTHORISATION : IntIdTable("PROF_AUTHIRISATION") {
         val professionalAuthorisationId = integer("professionalAuthorisationId")
         val qualificationList = varchar("qualificationList", 10)
         val professionalCv = varchar("professionalCv", 10).nullable()
@@ -121,19 +112,19 @@ class Chapter4SamTableModel {
     }
 
     //Form Type
-    object FORM_TYPE : Table("FORM_TABLE") {
+    object FORM_TYPE : IntIdTable("FORM_TABLE") {
         val formTypeId = integer("formTypeId")
         val nameId = integer("nameId")
     }
 
     //Appendix Type
-    object APPENDIX_TYPE : Table("APPENDIX_TYPE") {
+    object APPENDIX_TYPE : IntIdTable("APPENDIX_TYPE") {
         val appendixTypeId = integer("appendixTypeId")
         val nameId = integer("nameId")
     }
 
     //Added document
-    object ADDED_DOCUMENT : Table("ADDED_DOCUMENT") {
+    object ADDED_DOCUMENT : IntIdTable("ADDED_DOCUMENT") {
         val chapterName = varchar("chapterName", 10)
         val paragrapName = varchar("paragrapName", 10)
         val verseSequence = integer("verseSequence")
@@ -150,7 +141,7 @@ class Chapter4SamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object EXCLUSION : Table("EXCLUSION") {
+    object EXCLUSION : IntIdTable("EXCLUSION") {
         val chapterName = varchar("chapterName", 10)
         val paragraphName = varchar("paragraphName", 10)
         val exclusionType = varchar("exclusionType", 1)
@@ -161,7 +152,7 @@ class Chapter4SamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object NAME_EXPLANATION : Table("NAME_EXPLANATION") {
+    object NAME_EXPLANATION : IntIdTable("NAME_EXPLANATION") {
         val nameId = integer("nameId")
         val sourceTableId = integer("sourceTableId")
         val modificationStatus = varchar("modificationStatus", 1)
@@ -170,14 +161,14 @@ class Chapter4SamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object NAME_TYPE : Table("NAME_TYPE") {
+    object NAME_TYPE : IntIdTable("NAME_TYPE") {
         val nameTypeCV = varchar("nameTypeCV", 6)
         val nameId = integer("nameId")
         val nameType = varchar("nameType", 50).nullable()
         val nameTypeSequence = integer("nameTypeSequence").nullable()
     }
 
-    object NAME_TRANSLATION : Table("NAME_TRANSLATION") {
+    object NAME_TRANSLATION : IntIdTable("NAME_TRANSLATION") {
         val nameId = integer("nameId")
         val nameTypeCV = varchar("nameTypeCV", 6)
         val languageCv = varchar("languageCv", 2)
@@ -191,7 +182,7 @@ class Chapter4SamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object LEGAL_REF_TO_PARAGRAPH : Table("LEGAL_REF_TO_PARAGRAPH") {
+    object LEGAL_REF_TO_PARAGRAPH : IntIdTable("LEGAL_REF_TO_PARAGRAPH") {
         val legalReferencePath = varchar("legalReferencePath", 79)
         val chapterName = varchar("chapterName", 10)
         val paragraphName = varchar("paragraphName", 10)
