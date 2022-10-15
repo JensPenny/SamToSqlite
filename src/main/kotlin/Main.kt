@@ -18,18 +18,23 @@ fun main() {
     parseAmpXml(inputFactory)
 }
 
-//Temp object to hold the fields that can persist into object ActualMedicineSamTableModel.AMP_FAMHP
+/**
+ * Temp object to hold the fields that can persist into object ActualMedicineSamTableModel.AMP_FAMHP
+ */
 data class AmpElement(
     var from: LocalDate? = null,
     var to: LocalDate? = null,
     var officialName: String? = null,
     var status: String? = null,
-    var name: translatedData = translatedData(),
+    var name: TranslatedData = TranslatedData(),
     var blackTriangle: Boolean = false,
     var medicineType: String? = null,
     var companyActorNr: Int? = null,
 )
 
+/**
+ * Function to parse the AMP data - element
+ */
 fun amp(
     ampCode: String,
     vmpCode: Int?,
@@ -97,16 +102,19 @@ fun amp(
     }
 }
 
-data class translatedData(
+/**
+ * Holder object for common xml parts that can have translations
+ */
+data class TranslatedData(
     var nl: String? = null,
     var fr: String? = null,
     var en: String? = null,
     var de: String? = null,
 )
 
-fun parseTranslation(reader: XMLEventReader): translatedData {
+fun parseTranslation(reader: XMLEventReader): TranslatedData {
     var nextInName = reader.nextTag()
-    val nameTranslations = translatedData()
+    val nameTranslations = TranslatedData()
     while (!(nextInName.isEndElement && nextInName.asEndElement().name.localPart.equals("Name"))) {
         if (nextInName.isStartElement) {
             when (nextInName.asStartElement().name.localPart) {
