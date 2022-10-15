@@ -1,15 +1,14 @@
 import db.ActualMedicineSamTableModel
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.FileInputStream
 import java.time.LocalDate
-import java.util.*
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
-import javax.xml.stream.events.XMLEvent
 
 fun main(args: Array<String>) {
     createDB()
@@ -19,17 +18,84 @@ fun main(args: Array<String>) {
     parseAmpXml(inputFactory)
 }
 
+//Temp object to hold the fields that can persist into object ActualMedicineSamTableModel.AMP_FAMHP
 data class ampElement(
-    val from: LocalDate,
-    val to: LocalDate?,
+    var from: LocalDate? = null,
+    var to: LocalDate? = null,
     var officialName: String? = null,
     var status: String? = null,
-    var authorized: String? = null,
-    var name: translatedData? = null,
+    var name: translatedData = translatedData(),
     var blackTriangle: Boolean = false,
     var medicineType: String? = null,
-    var companyActorNr: String? = null,
+    var companyActorNr: Int? = null,
 )
+
+fun amp(
+    ampCode: String,
+    vmpCode: Int?,
+    reader: XMLEventReader
+) {
+    var event = reader.nextTag() //We peeked to get here, so get the data element as well
+    val amp = ampElement()
+
+    //Each data object is 1 transactional row
+    while (!(event.isEndElement && event.asEndElement().name.localPart.equals("Data"))) {
+        if (event.isStartElement) {
+            val startElement = event.asStartElement()
+
+            when (startElement.name.localPart) {
+                "Data" -> {
+                    val toAttr = startElement.getAttributeByName(QName("to"))
+                    if (toAttr?.value != null) {
+                        amp.to = LocalDate.parse(toAttr.value)
+                    }
+
+                    val fromAttr = startElement.getAttributeByName(QName("from"))
+                    if (fromAttr?.value != null) {
+                        amp.from = LocalDate.parse(fromAttr.value)
+                    }
+                }
+
+                "OfficialName" -> {
+                    amp.officialName = reader.elementText
+                }
+
+                "Status" -> {
+                    amp.status = reader.elementText
+                }
+
+                "Name" -> {
+                    amp.name = parseTranslation(reader)
+                }
+
+                "BlackTriangle" -> {
+                    amp.blackTriangle = reader.elementText.toBoolean()
+                }
+
+                "MedicineType" -> {
+                    amp.medicineType = reader.elementText
+                }
+
+                "Company" -> {
+                    val actorNrAttr = startElement.getAttributeByName(QName("actorNr"))
+                    amp.companyActorNr = actorNrAttr?.value?.toInt()
+                }
+
+                else -> {
+                    println("AMP: No AMP-handler found! " + startElement.name.localPart)
+                }
+            }
+        }
+        //Go to the next event
+        event = reader.nextEvent()
+    }
+
+    //While loop stops after we encounter a 'data' end element
+    //Let's check that and persist the tuple
+    if (event.isEndElement && event.asEndElement().name.localPart.equals("Data")) {
+        persistAmpFAMHP(ampCode, vmpCode, amp)
+    }
+}
 
 data class translatedData(
     var nl: String? = null,
@@ -38,83 +104,55 @@ data class translatedData(
     var de: String? = null,
 )
 
-fun ampDataElement(
-    event: XMLEvent,
-    reader: XMLEventReader,
-    from: LocalDate,
-    to: LocalDate?
-) {
-    val amp = ampElement(from, to)
-    while (!(event.isEndElement && event.asEndElement().name.localPart.equals("Data"))) {
-        val nextElement = reader.nextEvent()
-        if (nextElement.isStartElement) {
-            val startElement = nextElement.asStartElement()
-
-            when (startElement.name.localPart) {
-                "OfficialName" -> amp.officialName = reader.elementText
-                "Status" -> amp.status = reader.elementText
-                "Name" -> {
-                    //Itereer over de verschillende translates en voeg die toe
-                    //Todo: generischer maken in toolsklasse
-                    var nextInName = reader.nextTag()
-                    val nameTranslations = translatedData()
-                    while (!(nextInName.isEndElement && nextElement.asEndElement().name.localPart.equals("Name"))) {
-                        if (nextInName.isStartElement) {
-                            when (nextInName.asStartElement().name.localPart) {
-                                "Nl" -> nameTranslations.nl = reader.elementText
-                                "Fr" -> nameTranslations.fr = reader.elementText
-                                "En" -> nameTranslations.en = reader.elementText
-                                "De" -> nameTranslations.de = reader.elementText
-                            }
-                        }
-                        nextInName = reader.nextTag()
-                    }
-                    amp.name = nameTranslations
-                }
+fun parseTranslation(reader: XMLEventReader): translatedData {
+    var nextInName = reader.nextTag()
+    val nameTranslations = translatedData()
+    while (!(nextInName.isEndElement && nextInName.asEndElement().name.localPart.equals("Name"))) {
+        if (nextInName.isStartElement) {
+            when (nextInName.asStartElement().name.localPart) {
+                "Nl" -> nameTranslations.nl = reader.elementText
+                "Fr" -> nameTranslations.fr = reader.elementText
+                "En" -> nameTranslations.en = reader.elementText
+                "De" -> nameTranslations.de = reader.elementText
             }
         }
-
+        nextInName = reader.nextTag()
     }
+    return nameTranslations
 }
 
-fun amp(
-    ampCode: String,
-    vmpCode: Int,
-    event: XMLEvent,
-    reader: XMLEventReader
-) {
-    while (!(event.isEndElement && event.asEndElement().name.localPart.equals("Amp"))) {
-        val nextElement = reader.nextEvent()
-        if (nextElement.isStartElement) {
-            val startElement = nextElement.asStartElement()
-
-            when (startElement.name.localPart) {
-
-                "Data" -> {
-                    val endDateAsString = startElement.getAttributeByName(QName("to"))?.value
-                    val endDate: LocalDate? = if (endDateAsString != null) {
-                        LocalDate.parse(endDateAsString)
-                    } else {
-                        null
-                    }
-
-                    ampDataElement(
-                        nextElement,
-                        reader,
-                        LocalDate.parse(startElement.getAttributeByName(QName("from")).value),
-                        endDate
-                    )
+fun persistAmpFAMHP(ampCode: String, vmp: Int?, amp: ampElement) {
+    try {
+        transaction {
+            ActualMedicineSamTableModel.AMP_FAMHP.insert {
+                it[code] = ampCode
+                if (vmp != null) {
+                    it[vmpCode] = vmp
                 }
+                it[validTo] = amp.to
+                it[validFrom] = amp.from!!
+                it[officialName] = amp.officialName!!
+                it[status] = amp.status!!
+                it[nameNl] = amp.name.nl!!
+                it[nameFr] = amp.name.fr!!
+                it[nameEnglish] = amp.name.en
+                it[nameGerman] = amp.name.de
+                it[blackTriangle] = amp.blackTriangle
+                it[medicineType] = amp.medicineType!!
+                it[companyActorNumber] = amp.companyActorNr!!
             }
-
-        } else if (nextElement.isEndElement) {
-
         }
+        println("inserted amp")
+    } catch (e: ExposedSQLException) {
+        println("Error persisting tuple: " + e.message)
+        println("Trace: " + e.stackTrace.toString())
     }
-}
 
-fun singleAmpElement() {
-
+        /*
+                ActualMedicineSamTableModel.AMP_BCPI.insert {
+                    it[code] = amp
+                }
+        */
 }
 
 fun parseAmpXml(inputFactory: XMLInputFactory) {
@@ -124,17 +162,6 @@ fun parseAmpXml(inputFactory: XMLInputFactory) {
 
     var amp: String = ""
     var vmp: Int? = 0
-    var ampFrom: Date?
-    var ampTo: Date?
-    var officialName: String?
-    var status: String?
-    var nameFr: String?
-    var nameNl: String?
-    var nameDe: String?
-    var nameEn: String?
-    var blackTriangle = false
-    var medicineType: String?
-    var companyId: Int?
 
     while (reader.hasNext()) {
         val nextEvent = reader.nextEvent()
@@ -148,11 +175,22 @@ fun parseAmpXml(inputFactory: XMLInputFactory) {
                     val vmpCodeAttr = startElement.getAttributeByName(QName("vmpCode"))
 
                     amp = codeAttr.value
-                    vmp = vmpCodeAttr.value?.toInt()
-                }
-                "Data" -> {
+                    vmp = vmpCodeAttr?.value?.toInt()
 
+                    //The xml can have these random ass \n chars
+                    if (reader.peek().isCharacters) {
+                        reader.nextEvent()
+                    }
+                    //if the next tag is a data-element we pass it to the amp data persistor.
+                    //We keep checking if there are following data elements to see if we need to persist more
+                    while (reader.peek().isStartElement && reader.peek()
+                            .asStartElement().name.localPart.equals("Data")
+                    ) {
+                        amp(amp, vmp, reader)
+                    }
+                    //Otherwise we continue
                 }
+
                 else -> {
                     println("no handler for " + startElement.name.localPart)
                 }
@@ -161,25 +199,13 @@ fun parseAmpXml(inputFactory: XMLInputFactory) {
 
         if (nextEvent.isEndElement) {
             val endElement = nextEvent.asEndElement()
-            if (endElement.name.localPart.equals("Amp")) {
-                //Persist the rows and create new ones
-                transaction {
-                    ActualMedicineSamTableModel.AMP_FAMHP.insert {
-                        it[code] = amp
-                        if (vmp != null){
-                            it[vmpCode] = vmp
-                        }
-                    }
-
-                    ActualMedicineSamTableModel.AMP_BCPI.insert {
-                        it[code] = amp
-                    }
-                }
-                println("inserted amp")
-            }
+            //if (endElement.name.localPart.equals("Amp")) {
+            //Persist the rows and create new ones
+            //}
         }
     }
 }
+
 fun createTables() {
     println("creating tables")
     transaction {
@@ -187,6 +213,7 @@ fun createTables() {
         SchemaUtils.create(ActualMedicineSamTableModel.AMP_BCPI)
     }
 }
+
 fun createDB() {
     //Database.connect()
     // In file

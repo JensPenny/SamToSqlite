@@ -43,8 +43,8 @@ class ActualMedicineSamTableModel {
     //VMP: VMP Code
     object AMP_FAMHP : IntIdTable("AMP_FAMHP") {
         val code = varchar("code", 12)
-        val vmpCode = integer("vmpCode")
-        val companyActorNumber = varchar("companyActorNumber", 5)
+        val vmpCode = integer("vmpCode").nullable()
+        val companyActorNumber = integer("companyActorNumber")
         val status = varchar("status", 10)
         val blackTriangle = bool("blackTriangle")
         val officialName = varchar("officialName", 255)
