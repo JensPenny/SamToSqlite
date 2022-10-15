@@ -10,7 +10,7 @@ import javax.xml.namespace.QName
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
 
-fun main(args: Array<String>) {
+fun main() {
     createDB()
     createTables()
 
@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 }
 
 //Temp object to hold the fields that can persist into object ActualMedicineSamTableModel.AMP_FAMHP
-data class ampElement(
+data class AmpElement(
     var from: LocalDate? = null,
     var to: LocalDate? = null,
     var officialName: String? = null,
@@ -36,7 +36,7 @@ fun amp(
     reader: XMLEventReader
 ) {
     var event = reader.nextTag() //We peeked to get here, so get the data element as well
-    val amp = ampElement()
+    val amp = AmpElement()
 
     //Each data object is 1 transactional row
     while (!(event.isEndElement && event.asEndElement().name.localPart.equals("Data"))) {
@@ -121,7 +121,7 @@ fun parseTranslation(reader: XMLEventReader): translatedData {
     return nameTranslations
 }
 
-fun persistAmpFAMHP(ampCode: String, vmp: Int?, amp: ampElement) {
+fun persistAmpFAMHP(ampCode: String, vmp: Int?, amp: AmpElement) {
     try {
         transaction {
             ActualMedicineSamTableModel.AMP_FAMHP.insert {
@@ -160,8 +160,8 @@ fun parseAmpXml(inputFactory: XMLInputFactory) {
     val path = "res/latest/AMP-1657800909670.xml" //todo make changable
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
-    var amp: String = ""
-    var vmp: Int? = 0
+    var amp: String
+    var vmp: Int?
 
     while (reader.hasNext()) {
         val nextEvent = reader.nextEvent()
@@ -197,12 +197,12 @@ fun parseAmpXml(inputFactory: XMLInputFactory) {
             }
         }
 
-        if (nextEvent.isEndElement) {
-            val endElement = nextEvent.asEndElement()
+        //if (nextEvent.isEndElement) {
+            //val endElement = nextEvent.asEndElement()
             //if (endElement.name.localPart.equals("Amp")) {
             //Persist the rows and create new ones
             //}
-        }
+        //}
     }
 }
 
