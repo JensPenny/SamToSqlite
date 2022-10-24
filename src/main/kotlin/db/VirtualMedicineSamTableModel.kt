@@ -243,7 +243,7 @@ class VirtualMedicineSamTableModel {
 
     //Route of administration
     object ROA : IntIdTable("ROA") {
-        val code = varchar("code", 10)
+        val code = varchar("code", 10).uniqueIndex()
 
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)

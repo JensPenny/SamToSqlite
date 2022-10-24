@@ -56,12 +56,12 @@ class ActualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
 
-/*      rare shit in de docs - prescription en prescriptiontranslations?
-        val prescriptionNameNl = text("prescriptionNameNl")
-        val prescriptionNameFr = text("prescriptionNameFr")
-        val prescriptionNameGer = text("prescriptionNameGer").nullable()
-        val prescriptionNameEng = text("prescriptionNameEng").nullable()
-*/
+        /*      rare shit in de docs - prescription en prescriptiontranslations?
+                val prescriptionNameNl = text("prescriptionNameNl")
+                val prescriptionNameFr = text("prescriptionNameFr")
+                val prescriptionNameGer = text("prescriptionNameGer").nullable()
+                val prescriptionNameEng = text("prescriptionNameEng").nullable()
+        */
     }
 
     object AMP_BCPI : IntIdTable("AMP_BCPI") {
@@ -460,4 +460,20 @@ class ActualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
+
+    //Linking tables
+    //Linking table amp component to form
+    object AMPC_TO_PHARMFORM : IntIdTable("AMPC_TO_PHARMFORM") {
+        val ampCode = varchar("ampCode", 12)
+        val sequenceNumber = integer("sequenceNumber")
+        val pharmaFormCode = varchar("pharmaCode", 10)
+    }
+
+    //Linking table amp component to route of administration
+    object AMPC_TO_ROA : IntIdTable("AMPC_TO_ROA") {
+        val ampCode = varchar("ampCode", 12)
+        val sequenceNumber = integer("sequenceNumber")
+        val roaCode = varchar("roaCode", 10)
+    }
+
 }
