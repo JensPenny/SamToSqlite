@@ -9,12 +9,15 @@ fun createTables() {
 
     //AMP Tables
     transaction {
+        SchemaUtils.drop(ActualMedicineSamTableModel.AMP_FAMHP)
         SchemaUtils.create(ActualMedicineSamTableModel.AMP_FAMHP)
+        SchemaUtils.drop(ActualMedicineSamTableModel.AMP_BCPI)
         SchemaUtils.create(ActualMedicineSamTableModel.AMP_BCPI)
     }
 
     //Reference tables
     transaction {
+        SchemaUtils.drop(ReferenceTableModel.ATC)
         SchemaUtils.create(ReferenceTableModel.ATC)
     }
 

@@ -2,16 +2,20 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import db.ReferenceTableModel
 import db.createDB
 import db.createTables
+import mu.KotlinLogging
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import parser.Mapper
 import pojo.ATC
+import pojo.DeliveryModus
 import java.io.FileInputStream
 import java.io.StringWriter
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
+
+val logger = KotlinLogging.logger {}
 
 fun main() {
     createDB()
@@ -23,7 +27,6 @@ fun main() {
 }
 
 fun parseReferenceXml(inputFactory: XMLInputFactory) {
-
     val path = "res/latest/REF-1657801178464.xml" //todo make changable
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
@@ -34,18 +37,25 @@ fun parseReferenceXml(inputFactory: XMLInputFactory) {
             val startElement = event.asStartElement()
 
             when (startElement.name.localPart) {
-                "AtcClassification" -> {
+                "_AtcClassification" -> { //todo _ niet committen - voor nu te negeren
                     val atcClassificationString = fullElement(startElement, reader)
                     val atc = Mapper.xmlMapper.readValue<ATC>(atcClassificationString)
-                    println("ATC OBJ: ${atc.atcCode} - ${atc.description}")
                     tryPersist{
                         transaction {
-                            val insertStatement = ReferenceTableModel.ATC.insert{
+                            ReferenceTableModel.ATC.insert{
                                 it[code] = atc.atcCode
                                 it[description] = atc.description
                             }
                         }
+                        logger.info { "Persisted ATC: : ${atc.atcCode} - ${atc.description}" }
                     }
+                }
+
+                "DeliveryModus" -> {
+                    val deliveryModusString = fullElement(startElement, reader)
+                    val deliveryModus = Mapper.xmlMapper.readValue<DeliveryModus>(deliveryModusString)
+                    logger.info { deliveryModus.toString() }
+
                 }
 
                 else -> {
@@ -56,7 +66,7 @@ fun parseReferenceXml(inputFactory: XMLInputFactory) {
     }
 }
 
-inline fun tryPersist(call: () -> Any){
+inline fun tryPersist(call: () -> Unit){
     try {
         call()
     } catch (e: ExposedSQLException) {

@@ -3,6 +3,9 @@ package pojo
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 
+/**
+ * @see db.ReferenceTableModel.ATC
+ */
 @JsonRootName("AtcClassification")
 data class ATC(
 
@@ -12,36 +15,16 @@ data class ATC(
     @set:JsonProperty("Description")
     var description: String,
 )
+
 /**
- * data class LedgerActivityDetail(
-
-@set:JsonProperty("TransactionType")
-var loanType: String? = null,
-
-@set:JsonProperty("Amount")
-var amount: String? = null
-)
-
-
-@JsonRootName("LedgerActivityObject")
-data class LedgerActivity(
-
-@set:JsonProperty("LedgerTransactionDate")
-var LedgerTransactionDate: String? = null,
-
-@set:JsonProperty("Amount")
-var amount: String? = null,
-
-// HERE IS WHERE THE MAGIC HAPPENS!!!
-@set:JsonAlias("LedgerTransactionDetails", "LedgerActivityDetailObject")
-var LedgerActivityDetails: List<LedgerActivityDetail> = ArrayList()
-)
-
-
-@JsonRootName("ArrayOfLedgerActivityObject")
-data class LedgerActivities(
-
-@set:JsonProperty("LedgerActivityObject")
-var ledgerActivities: List<LedgerActivity> = ArrayList()
-)
+ * @See db.ReferenceTableModel.DLVM
  */
+@JsonRootName("DeliveryModus")
+data class DeliveryModus(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonProperty("description")
+    var description: TranslatedData
+
+)
