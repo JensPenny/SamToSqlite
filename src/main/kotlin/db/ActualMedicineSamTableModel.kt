@@ -317,12 +317,6 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    //ATC Code
-    object ATC : IntIdTable("ATC") {
-        val code = varchar("code", 7)
-        val description = text("description")
-    }
-
     //Delivery mode
     object DLVM : IntIdTable("DLVM") {
         val code = varchar("code", 7)

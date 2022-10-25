@@ -1,7 +1,7 @@
 import db.ActualMedicineSamTableModel
+import db.createDB
+import db.createTables
 import org.jetbrains.exposed.exceptions.ExposedSQLException
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.AMPComponentElement
@@ -314,18 +314,3 @@ fun parseAmpXml(inputFactory: XMLInputFactory) {
     }
 }
 
-fun createTables() {
-    println("creating tables")
-    transaction {
-        SchemaUtils.create(ActualMedicineSamTableModel.AMP_FAMHP)
-        SchemaUtils.create(ActualMedicineSamTableModel.AMP_BCPI)
-    }
-}
-
-fun createDB() {
-    //Database.connect()
-    // In file
-    Database.connect("jdbc:sqlite:/home/jens/Workspace/SamToSqlite/data/data.db", "org.sqlite.JDBC")
-    // In memory
-    //Database.connect("jdbc:sqlite:file:test?mode=memory&cache=shared", "org.sqlite.JDBC")
-}
