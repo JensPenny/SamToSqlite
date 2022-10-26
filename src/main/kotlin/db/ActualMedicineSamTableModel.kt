@@ -126,15 +126,6 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    //Pharmaceutical Form
-    object PHFRM : IntIdTable("PHFRM") {
-        val code = varchar("code", 10)
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
-        val nameGerman = varchar("nameGer", 255).nullable()
-        val nameEnglish = varchar("nameEng", 255).nullable()
-    }
-
     //AMP Package
     //Sem. Key: CTI-Extended
     //Foreign keys:
@@ -317,17 +308,6 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-
-    //Delivery Mode Specification
-    object DLVMS : IntIdTable("DLVMS") {
-        val code = varchar("code", 7)
-
-        val descriptionNameNl = text("descriptionNameNl")
-        val descriptionNameFr = text("descriptionNameFr")
-        val descriptionNameGer = text("descriptionNameGer").nullable()
-        val descriptionNameEng = text("descriptionNameEng").nullable()
-    }
-
     //AMPP Component
     object AMPPC : IntIdTable("AMPPC") {
         val ctiExtended = varchar("ctiExtended", 9)
@@ -353,48 +333,6 @@ class ActualMedicineSamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
-    }
-
-    //Device Type
-    object DVCTP : IntIdTable("DVCTP") {
-        val code = varchar("code", 8)
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-        val edqmCode = varchar("edqmCode", 20).nullable()
-        val edqmDefinition = text("edqmDefinition").nullable()
-    }
-
-    //Packaging Closure
-    object PCKCL : IntIdTable("PCKCL") {
-        val code = varchar("code", 8)
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-        val edqmCode = varchar("edqmCode", 20).nullable()
-        val edqmDefinition = text("edqmDefinition").nullable()
-    }
-
-    //Packaging Material
-    object PCKMT : IntIdTable("PCKMT") {
-        val code = varchar("code", 8)
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-    }
-
-    //Packaging type
-    object PCKTP : IntIdTable("PCKTP") {
-        val code = varchar("code", 8)
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-        val edqmCode = varchar("edqmCode", 20).nullable()
-        val edqmDefinition = text("edqmDefinition").nullable()
     }
 
     //Delivered Medicinal Product Package
@@ -444,6 +382,24 @@ class ActualMedicineSamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+    }
+
+    //Standard Route Of Administration
+    object STDROA : IntIdTable("STDROA") {
+        val standard = varchar("standard", 20)
+        val code = varchar("code", 20)
+
+        val nameNl = varchar("nameNl", 255).nullable()
+        val nameFr = varchar("nameFr", 255).nullable()
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+
+        val definitionNl = varchar("definitionNl", 255).nullable()
+        val definitionFr = varchar("definitionFr", 255).nullable()
+        val definitionGer = varchar("definitionGer", 255).nullable()
+        val definitionEng = varchar("definitionEng", 255).nullable()
+
+        val url = varchar("url", 255).nullable()
     }
 
     //Linking tables

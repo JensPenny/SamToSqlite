@@ -21,8 +21,25 @@ fun createTables() {
         SchemaUtils.create(ReferenceTableModel.ATC)
         SchemaUtils.drop(ReferenceTableModel.DLVM)
         SchemaUtils.create(ReferenceTableModel.DLVM)
+        SchemaUtils.drop(ReferenceTableModel.DLVMS)
+        SchemaUtils.create(ReferenceTableModel.DLVMS)
+        SchemaUtils.drop(ReferenceTableModel.DVCTP)
+        SchemaUtils.create(ReferenceTableModel.DVCTP)
+        SchemaUtils.drop(ReferenceTableModel.PCKCL)
+        SchemaUtils.create(ReferenceTableModel.PCKCL)
+        SchemaUtils.drop(ReferenceTableModel.PCKMT)
+        SchemaUtils.create(ReferenceTableModel.PCKMT)
+        SchemaUtils.drop(ReferenceTableModel.PCKTP)
+        SchemaUtils.create(ReferenceTableModel.PCKTP)
+        SchemaUtils.drop(ReferenceTableModel.PHFRM)
+        SchemaUtils.create(ReferenceTableModel.PHFRM)
+        SchemaUtils.drop(ReferenceTableModel.ROA)
+        SchemaUtils.create(ReferenceTableModel.ROA)
+        SchemaUtils.drop(ReferenceTableModel.SBST)
+        SchemaUtils.create(ReferenceTableModel.SBST)
+        SchemaUtils.drop(ReferenceTableModel.NOSWR)
+        SchemaUtils.create(ReferenceTableModel.NOSWR)
     }
-
 }
 
 fun createDB() {

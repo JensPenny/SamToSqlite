@@ -203,16 +203,6 @@ class VirtualMedicineSamTableModel {
         val descriptionEng = text("descriptionEng").nullable()
     }
 
-    //No switch Reason
-    object NOSWR : IntIdTable("NOSWR") {
-        val code = varchar("code", 10)
-
-        val descriptionNl = text("descriptionNl").nullable()
-        val descriptionFr = text("descriptionFr").nullable()
-        val descriptionGer = text("descriptionGer").nullable()
-        val descriptionEng = text("descriptionEng").nullable()
-    }
-
     //No generic prescription reason
     object NOGNPR : IntIdTable("NOGNPR") {
         val code = varchar("code", 10)
@@ -239,50 +229,6 @@ class VirtualMedicineSamTableModel {
         val definitionEng = varchar("definitionEng", 255).nullable()
 
         val url = varchar("url", 255).nullable()
-    }
-
-    //Route of administration
-    object ROA : IntIdTable("ROA") {
-        val code = varchar("code", 10).uniqueIndex()
-
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-    }
-
-    //Standard Route Of Administration
-    object STDROA : IntIdTable("STDROA") {
-        val standard = varchar("standard", 20)
-        val code = varchar("code", 20)
-
-        val nameNl = varchar("nameNl", 255).nullable()
-        val nameFr = varchar("nameFr", 255).nullable()
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-
-        val definitionNl = varchar("definitionNl", 255).nullable()
-        val definitionFr = varchar("definitionFr", 255).nullable()
-        val definitionGer = varchar("definitionGer", 255).nullable()
-        val definitionEng = varchar("definitionEng", 255).nullable()
-
-        val url = varchar("url", 255).nullable()
-    }
-
-    //Substance
-    object SBST : IntIdTable("SBST") {
-        val code = varchar("code", 10)
-        val chemicalForm = varchar("chemical", 10)
-
-        val nameNl = varchar("nameNl", 255).nullable()
-        val nameFr = varchar("nameFr", 255).nullable()
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-
-        val noteNl = text("noteNl").nullable()
-        val noteFr = text("noteFr").nullable()
-        val noteGer = text("noteGer").nullable()
-        val noteEng = text("noteEng").nullable()
     }
 
     //Standard Substance
