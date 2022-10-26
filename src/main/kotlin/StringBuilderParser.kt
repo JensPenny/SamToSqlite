@@ -157,7 +157,7 @@ fun parseReferenceXml(
                         logger.info { "Persisted Packaging Material $material" }
                     }
                 }
-                
+
                 "PackagingType" -> {
                     val packagingTypeString = fullElement(startElement, reader)
                     val packagingType = xmlMapper.readValue<PackagingType>(packagingTypeString)
@@ -216,9 +216,9 @@ fun parseReferenceXml(
                 "Substance" -> {
                     val substanceString = fullElement(startElement, reader)
                     val substance = xmlMapper.readValue<Substance>(substanceString)
-                    tryPersist { 
-                        transaction { 
-                            ReferenceTableModel.SBST.insert { 
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.SBST.insert {
                                 it[code] = substance.code
                                 it[chemicalForm] = substance.chemicalForm
                                 it[nameNl] = substance.name.nl!!
@@ -254,6 +254,32 @@ fun parseReferenceXml(
 
                 "VirtualForm" -> {
                     val virtualFormString = fullElement(startElement, reader)
+                    val virtualForm = xmlMapper.readValue<VirtualForm>(virtualFormString)
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.VTFRM.insert {
+                                it[code] = virtualForm.code
+                                it[abbreviatedNl] = virtualForm.abbreviation.nl!!
+                                it[abbreviatedFr] = virtualForm.abbreviation.fr!!
+                                it[abbreviatedEng] = virtualForm.abbreviation.en
+                                it[abbreviatedGer] = virtualForm.abbreviation.de
+
+                                it[nameNl] = virtualForm.name.nl!!
+                                it[nameFr] = virtualForm.name.fr!!
+                                it[nameEng] = virtualForm.name.en
+                                it[nameGer] = virtualForm.name.de
+
+                                it[descriptionNl] = virtualForm.description?.nl
+                                it[descriptionFr] = virtualForm.description?.fr
+                                it[descriptionEng] = virtualForm.description?.en
+                                it[descriptionGer] = virtualForm.description?.de
+                            }
+                        }
+                    }
+                }
+
+                "Wada" -> {
+
                 }
 
                 else -> {

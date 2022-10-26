@@ -45,3 +45,5 @@ the edqm-fields are empty.
 Has a couple of fields, like note and chemical substance, but these are *very* empty.
 
 ## NoSwitchReason
+
+## VirtualForm

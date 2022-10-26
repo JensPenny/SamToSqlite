@@ -116,5 +116,38 @@ class ReferenceTableModel {
         val descriptionEng = text("descriptionEng").nullable()
     }
 
+    //Virtual Form
+    object VTFRM : IntIdTable("VTFRM") {
+        val code = varchar("code", 10)
+        val abbreviatedNl = varchar("abbreviatedNl", 255)
+        val abbreviatedFr = varchar("abbreviatedFr", 255)
+        val abbreviatedGer = varchar("abbreviatedGer", 255).nullable()
+        val abbreviatedEng = varchar("abbreviatedEng", 255).nullable()
+
+        val nameNl = varchar("nameNl", 255)
+        val nameFr = varchar("nameFr", 255)
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+
+        val descriptionNl = text("descriptionNl").nullable()
+        val descriptionFr = text("descriptionFr").nullable()
+        val descriptionGer = text("descriptionGer").nullable()
+        val descriptionEng = text("descriptionEng").nullable()
+    }
+
+    //World Anti-doping Agency
+    object WADA : IntIdTable("WADA") {
+        val code = varchar("code", 10)
+
+        val nameNl = varchar("nameNl", 255)
+        val nameFr = varchar("nameFr", 255)
+        val nameGer = varchar("nameGer", 255).nullable()
+        val nameEng = varchar("nameEng", 255).nullable()
+
+        val descriptionNl = text("descriptionNl").nullable()
+        val descriptionFr = text("descriptionFr").nullable()
+        val descriptionGer = text("descriptionGer").nullable()
+        val descriptionEng = text("descriptionEng").nullable()
+    }
 
 }

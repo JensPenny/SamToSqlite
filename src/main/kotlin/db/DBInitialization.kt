@@ -39,6 +39,8 @@ fun createTables() {
         SchemaUtils.create(ReferenceTableModel.SBST)
         SchemaUtils.drop(ReferenceTableModel.NOSWR)
         SchemaUtils.create(ReferenceTableModel.NOSWR)
+        SchemaUtils.drop(ReferenceTableModel.VTFRM)
+        SchemaUtils.create(ReferenceTableModel.VTFRM)
     }
 }
 

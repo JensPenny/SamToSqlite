@@ -149,6 +149,25 @@ data class Substance(
 )
 
 /**
+ * @See db.ReferenceTableModel.VTFRM
+ */
+@JsonRootName("VirtualForm")
+data class VirtualForm(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("TranslatedData", "Abbreviation")
+    var abbreviation: TranslatedData,
+
+    @set:JsonAlias("TranslatedData", "Name")
+    var name: TranslatedData,
+
+    @set:JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData?,
+)
+
+
+/**
  * @See db.ReferenceTableModel.NOSWR
  */
 @JsonRootName("NoSwitchReason")
