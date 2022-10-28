@@ -283,7 +283,7 @@ fun parseReferenceXml(
                     val wada = xmlMapper.readValue<Wada>(wadaString)
                     tryPersist {
                         transaction {
-                            ReferenceTableModel.VTFRM.insert {
+                            ReferenceTableModel.WADA.insert {
                                 it[code] = wada.code
 
                                 it[nameNl] = wada.name.nl!!
