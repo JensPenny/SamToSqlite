@@ -2,6 +2,8 @@ package db
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SchemaUtils.drop
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun createTables() {
@@ -9,38 +11,40 @@ fun createTables() {
 
     //AMP Tables
     transaction {
-        SchemaUtils.drop(ActualMedicineSamTableModel.AMP_FAMHP)
-        SchemaUtils.create(ActualMedicineSamTableModel.AMP_FAMHP)
-        SchemaUtils.drop(ActualMedicineSamTableModel.AMP_BCPI)
-        SchemaUtils.create(ActualMedicineSamTableModel.AMP_BCPI)
+        drop(ActualMedicineSamTableModel.AMP_FAMHP)
+        create(ActualMedicineSamTableModel.AMP_FAMHP)
+        drop(ActualMedicineSamTableModel.AMP_BCPI)
+        create(ActualMedicineSamTableModel.AMP_BCPI)
     }
 
     //Reference tables
     transaction {
-        SchemaUtils.drop(ReferenceTableModel.ATC)
-        SchemaUtils.create(ReferenceTableModel.ATC)
-        SchemaUtils.drop(ReferenceTableModel.DLVM)
-        SchemaUtils.create(ReferenceTableModel.DLVM)
-        SchemaUtils.drop(ReferenceTableModel.DLVMS)
-        SchemaUtils.create(ReferenceTableModel.DLVMS)
-        SchemaUtils.drop(ReferenceTableModel.DVCTP)
-        SchemaUtils.create(ReferenceTableModel.DVCTP)
-        SchemaUtils.drop(ReferenceTableModel.PCKCL)
-        SchemaUtils.create(ReferenceTableModel.PCKCL)
-        SchemaUtils.drop(ReferenceTableModel.PCKMT)
-        SchemaUtils.create(ReferenceTableModel.PCKMT)
-        SchemaUtils.drop(ReferenceTableModel.PCKTP)
-        SchemaUtils.create(ReferenceTableModel.PCKTP)
-        SchemaUtils.drop(ReferenceTableModel.PHFRM)
-        SchemaUtils.create(ReferenceTableModel.PHFRM)
-        SchemaUtils.drop(ReferenceTableModel.ROA)
-        SchemaUtils.create(ReferenceTableModel.ROA)
-        SchemaUtils.drop(ReferenceTableModel.SBST)
-        SchemaUtils.create(ReferenceTableModel.SBST)
-        SchemaUtils.drop(ReferenceTableModel.NOSWR)
-        SchemaUtils.create(ReferenceTableModel.NOSWR)
-        SchemaUtils.drop(ReferenceTableModel.VTFRM)
-        SchemaUtils.create(ReferenceTableModel.VTFRM)
+        drop(ReferenceTableModel.ATC)
+        create(ReferenceTableModel.ATC)
+        drop(ReferenceTableModel.DLVM)
+        create(ReferenceTableModel.DLVM)
+        drop(ReferenceTableModel.DLVMS)
+        create(ReferenceTableModel.DLVMS)
+        drop(ReferenceTableModel.DVCTP)
+        create(ReferenceTableModel.DVCTP)
+        drop(ReferenceTableModel.PCKCL)
+        create(ReferenceTableModel.PCKCL)
+        drop(ReferenceTableModel.PCKMT)
+        create(ReferenceTableModel.PCKMT)
+        drop(ReferenceTableModel.PCKTP)
+        create(ReferenceTableModel.PCKTP)
+        drop(ReferenceTableModel.PHFRM)
+        create(ReferenceTableModel.PHFRM)
+        drop(ReferenceTableModel.ROA)
+        create(ReferenceTableModel.ROA)
+        drop(ReferenceTableModel.SBST)
+        create(ReferenceTableModel.SBST)
+        drop(ReferenceTableModel.NOSWR)
+        create(ReferenceTableModel.NOSWR)
+        drop(ReferenceTableModel.VTFRM)
+        create(ReferenceTableModel.VTFRM)
+        drop(ReferenceTableModel.WADA)
+        create(ReferenceTableModel.WADA)
     }
 }
 

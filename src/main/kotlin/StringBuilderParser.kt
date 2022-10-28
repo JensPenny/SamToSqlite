@@ -279,7 +279,25 @@ fun parseReferenceXml(
                 }
 
                 "Wada" -> {
+                    val wadaString = fullElement(startElement, reader)
+                    val wada = xmlMapper.readValue<Wada>(wadaString)
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.VTFRM.insert {
+                                it[code] = wada.code
 
+                                it[nameNl] = wada.name.nl!!
+                                it[nameFr] = wada.name.fr!!
+                                it[nameEng] = wada.name.en
+                                it[nameGer] = wada.name.de
+
+                                it[descriptionNl] = wada.description?.nl
+                                it[descriptionFr] = wada.description?.fr
+                                it[descriptionEng] = wada.description?.en
+                                it[descriptionGer] = wada.description?.de
+                            }
+                        }
+                    }
                 }
 
                 else -> {

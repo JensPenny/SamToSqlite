@@ -166,6 +166,23 @@ data class VirtualForm(
     var description: TranslatedData?,
 )
 
+/**
+ * @See db.ReferenceTableModel.VTFRM
+ */
+@JsonRootName("Wada")
+data class Wada(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("TranslatedData", "Name")
+    var name: TranslatedData,
+
+    @set:JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData?,
+)
+
+
+
 
 /**
  * @See db.ReferenceTableModel.NOSWR

@@ -47,3 +47,5 @@ Has a couple of fields, like note and chemical substance, but these are *very* e
 ## NoSwitchReason
 
 ## VirtualForm
+
+## Wada
