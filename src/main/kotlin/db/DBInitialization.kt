@@ -51,8 +51,8 @@ fun createTables() {
         create(ReferenceTableModel.STDFRM)
         drop(ReferenceTableModel.STDROA)
         create(ReferenceTableModel.STDROA)
-        drop(ReferenceTableModel.SBST)
-        create(ReferenceTableModel.SBST)
+        drop(ReferenceTableModel.STDSBST)
+        create(ReferenceTableModel.STDSBST)
     }
 }
 
