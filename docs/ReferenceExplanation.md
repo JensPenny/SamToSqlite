@@ -49,3 +49,14 @@ Has a couple of fields, like note and chemical substance, but these are *very* e
 ## VirtualForm
 
 ## Wada
+
+## NoGenericPrescriptionReason
+
+## StandardForm
+I have no idea why the documentation is what it is. It doesn't refer to a url. 
+It's a link-table between 'VirtualForm' and a code + standard. The standard encompasses the namespace of the standard we refer to, 
+and the code is the code in that standard.  
+
+## StandardRoute
+The same as standard form. Contains a standard and a link to the route of administration that it links toward
+

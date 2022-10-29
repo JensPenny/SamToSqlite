@@ -45,6 +45,14 @@ fun createTables() {
         create(ReferenceTableModel.VTFRM)
         drop(ReferenceTableModel.WADA)
         create(ReferenceTableModel.WADA)
+        drop(ReferenceTableModel.NOGNPR)
+        create(ReferenceTableModel.NOGNPR)
+        drop(ReferenceTableModel.STDFRM)
+        create(ReferenceTableModel.STDFRM)
+        drop(ReferenceTableModel.STDROA)
+        create(ReferenceTableModel.STDROA)
+        drop(ReferenceTableModel.SBST)
+        create(ReferenceTableModel.SBST)
     }
 }
 

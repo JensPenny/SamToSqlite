@@ -150,4 +150,42 @@ class ReferenceTableModel {
         val descriptionEng = text("descriptionEng").nullable()
     }
 
+    //No generic prescription reason
+    object NOGNPR : IntIdTable("NOGNPR") {
+        val code = varchar("code", 10)
+
+        val descriptionNl = text("descriptionNl").nullable()
+        val descriptionFr = text("descriptionFr").nullable()
+        val descriptionGer = text("descriptionGer").nullable()
+        val descriptionEng = text("descriptionEng").nullable()
+    }
+
+    //Standard Form
+    object STDFRM : IntIdTable("STDFRM") {
+        val standard = varchar("standard", 20)
+        val code = varchar("code", 20)
+
+        val virtualFormCode = varchar("virtualFormCode", 10)
+    }
+
+    //Standard Route Of Administration
+    object STDROA : IntIdTable("STDROA") {
+        val standard = varchar("standard", 20)
+        val code = varchar("code", 20)
+
+        val routeOfAdministrationCode = varchar("roaCode", 10)
+    }
+
+    //Standard Substance
+    object STDSBST : IntIdTable("STDSBST") {
+        val standard = varchar("standard", 20)
+        val code = varchar("code", 20)
+
+        val substanceCode = varchar("substanceCode", 10)
+
+    }
+
+
+
+
 }

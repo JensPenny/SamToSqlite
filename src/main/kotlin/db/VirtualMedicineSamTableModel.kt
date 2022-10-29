@@ -169,49 +169,4 @@ class VirtualMedicineSamTableModel {
         val supplementaryInfoEnglish = varchar("supplementaryInfoEng", 255).nullable()
     }
 
-    //No generic prescription reason
-    object NOGNPR : IntIdTable("NOGNPR") {
-        val code = varchar("code", 10)
-
-        val descriptionNl = text("descriptionNl").nullable()
-        val descriptionFr = text("descriptionFr").nullable()
-        val descriptionGer = text("descriptionGer").nullable()
-        val descriptionEng = text("descriptionEng").nullable()
-    }
-
-    //Standard Form
-    object STDFRM : IntIdTable("STDFRM") {
-        val standard = varchar("standard", 20)
-        val code = varchar("code", 20)
-
-        val nameNl = varchar("nameNl", 255).nullable()
-        val nameFr = varchar("nameFr", 255).nullable()
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-
-        val definitionNl = varchar("definitionNl", 255).nullable()
-        val definitionFr = varchar("definitionFr", 255).nullable()
-        val definitionGer = varchar("definitionGer", 255).nullable()
-        val definitionEng = varchar("definitionEng", 255).nullable()
-
-        val url = varchar("url", 255).nullable()
-    }
-
-    //Standard Substance
-    object STDSBST : IntIdTable("STDSBST") {
-        val standard = varchar("standard", 20)
-        val code = varchar("code", 20)
-
-        val nameNl = varchar("nameNl", 255).nullable()
-        val nameFr = varchar("nameFr", 255).nullable()
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-
-        val definitionNl = varchar("definitionNl", 255).nullable()
-        val definitionFr = varchar("definitionFr", 255).nullable()
-        val definitionGer = varchar("definitionGer", 255).nullable()
-        val definitionEng = varchar("definitionEng", 255).nullable()
-
-        val url = varchar("url", 255).nullable()
-    }
 }

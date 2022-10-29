@@ -15,3 +15,11 @@ data class TranslatedData(
     @set:JsonProperty("ns2:De")
     var de: String? = null,
 )
+
+/**
+ * Holder object for references to other objects by code-field
+ */
+data class CodeReference(
+    @set:JsonProperty("code")
+    var codeReference: String
+)

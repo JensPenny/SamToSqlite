@@ -178,7 +178,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "PharmaceuticalForm" -> {
+                "_PharmaceuticalForm" -> {
                     val pharmaceuticalFormString = fullElement(startElement, reader)
                     val pharmaceuticalForm = xmlMapper.readValue<PharmaceuticalForm>(pharmaceuticalFormString)
 
@@ -196,7 +196,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "RouteOfAdministration" -> {
+                "_RouteOfAdministration" -> {
                     val routeOfAdmString = fullElement(startElement, reader)
                     val routeOfAdministration = xmlMapper.readValue<RouteOfAdministration>(routeOfAdmString)
                     tryPersist {
@@ -213,7 +213,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "Substance" -> {
+                "_Substance" -> {
                     val substanceString = fullElement(startElement, reader)
                     val substance = xmlMapper.readValue<Substance>(substanceString)
                     tryPersist {
@@ -248,7 +248,7 @@ fun parseReferenceXml(
                                 it[descriptionGer] = noSwitchReason.description.de
                             }
                         }
-                        logger.info { "Persisted Route of Administration $noSwitchReason" }
+                        logger.info { "Persisted no-switch reason $noSwitchReason" }
                     }
                 }
 
@@ -275,6 +275,7 @@ fun parseReferenceXml(
                                 it[descriptionGer] = virtualForm.description?.de
                             }
                         }
+                        logger.info { "Persisted vitualForm $virtualForm" }
                     }
                 }
 
@@ -297,6 +298,73 @@ fun parseReferenceXml(
                                 it[descriptionGer] = wada.description?.de
                             }
                         }
+                        logger.info { "Persisted wada $wada" }
+                    }
+                }
+
+                "NoGenericPrescriptionReason"-> {
+                    val noGenPrescrReasonStr = fullElement(startElement, reader)
+                    val noGenPrescrReason = xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
+
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.NOGNPR.insert {
+                                it[code] = noGenPrescrReason.code
+                                it[descriptionNl] = noGenPrescrReason.description.nl
+                                it[descriptionFr] = noGenPrescrReason.description.fr
+                                it[descriptionEng] = noGenPrescrReason.description.en
+                                it[descriptionGer] = noGenPrescrReason.description.de
+                            }
+                        }
+                        logger.info { "Persisted no-generic prescription reason $noGenPrescrReason" }
+                    }
+                }
+
+                "StandardForm" -> {
+                    val standardFormString = fullElement(startElement, reader)
+                    val standardForm = xmlMapper.readValue<StandardForm>(standardFormString)
+
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.STDFRM.insert {
+                                it[standard] = standardForm.standard
+                                it[code] = standardForm.code
+                                it[virtualFormCode] = standardForm.virtualFormReference.codeReference
+                            }
+                        }
+                        logger.info { "Persisted standard form $standardForm" }
+                    }
+                }
+
+                "StandardRoute" -> {
+                    val standardRouteString = fullElement(startElement, reader)
+                    val standardRoute = xmlMapper.readValue<StandardRoute>(standardRouteString)
+
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.STDROA.insert {
+                                it[standard] = standardRoute.standard
+                                it[code] = standardRoute.code
+                                it[routeOfAdministrationCode] = standardRoute.routeOfAdminReference.codeReference
+                            }
+                        }
+                        logger.info { "Persisted standard route $standardRoute" }
+                    }
+                }
+
+                "StandardSubstance" -> {
+                    val standardSubstanceString = fullElement(startElement, reader)
+                    val standardSubstance = xmlMapper.readValue<StandardSubstance>(standardSubstanceString)
+
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.STDSBST.insert {
+                                it[standard] = standardSubstance.standard
+                                it[code] = standardSubstance.code
+                                it[substanceCode] = standardSubstance.substanceReference.codeReference
+                            }
+                        }
+                        logger.info { "Persisted standard route $standardSubstance" }
                     }
                 }
 

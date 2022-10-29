@@ -149,6 +149,18 @@ data class Substance(
 )
 
 /**
+ * @See db.ReferenceTableModel.NOSWR
+ */
+@JsonRootName("NoSwitchReason")
+data class NoSwitchReason(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData,
+)
+
+/**
  * @See db.ReferenceTableModel.VTFRM
  */
 @JsonRootName("VirtualForm")
@@ -181,17 +193,50 @@ data class Wada(
     var description: TranslatedData?,
 )
 
-
-
-
 /**
- * @See db.ReferenceTableModel.NOSWR
+ * @see db.ReferenceTableModel.NOGNPR
  */
-@JsonRootName("NoSwitchReason")
-data class NoSwitchReason(
+@JsonRootName("NoGenericPrescriptionReason")
+data class NoGenericPrescriptionReason(
     @set:JsonProperty("code")
     var code: String,
 
     @set:JsonAlias("TranslatedData", "Description")
     var description: TranslatedData,
+)
+
+@JsonRootName("StandardForm")
+data class StandardForm(
+    @set:JsonProperty("standard")
+    var standard: String,
+
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("CodeReference", "VirtualForm")
+    var virtualFormReference: CodeReference,
+)
+
+@JsonRootName("StandardRoute")
+data class StandardRoute(
+    @set:JsonProperty("standard")
+    var standard: String,
+
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("CodeReference", "RouteOfAdministration")
+    var routeOfAdminReference: CodeReference,
+)
+
+@JsonRootName("StandardSubstance")
+data class StandardSubstance(
+    @set:JsonProperty("standard")
+    var standard: String,
+
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("CodeReference", "Substance")
+    var substanceReference: CodeReference,
 )

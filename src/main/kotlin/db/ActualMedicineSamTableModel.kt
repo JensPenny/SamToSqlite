@@ -384,24 +384,6 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    //Standard Route Of Administration
-    object STDROA : IntIdTable("STDROA") {
-        val standard = varchar("standard", 20)
-        val code = varchar("code", 20)
-
-        val nameNl = varchar("nameNl", 255).nullable()
-        val nameFr = varchar("nameFr", 255).nullable()
-        val nameGer = varchar("nameGer", 255).nullable()
-        val nameEng = varchar("nameEng", 255).nullable()
-
-        val definitionNl = varchar("definitionNl", 255).nullable()
-        val definitionFr = varchar("definitionFr", 255).nullable()
-        val definitionGer = varchar("definitionGer", 255).nullable()
-        val definitionEng = varchar("definitionEng", 255).nullable()
-
-        val url = varchar("url", 255).nullable()
-    }
-
     //Linking tables
     //Linking table amp component to form
     object AMPC_TO_PHARMFORM : IntIdTable("AMPC_TO_PHARMFORM") {
