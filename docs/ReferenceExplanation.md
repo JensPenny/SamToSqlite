@@ -1,10 +1,14 @@
 # Reference table
+
 ## AtcClassification
-Contains the atc codes and description (in english) of these codes.  
+
+Contains the atc codes and description (in english) of these codes.
 
 ## DeliveryModus
-Repository of the delivery modi. 
-For some weird stuff in the deliveryModus:  
+
+Repository of the delivery modi.
+For some weird stuff in the deliveryModus:
+
 ```    
 <DeliveryModus code="M3 + M4">
         <Description>
@@ -23,14 +27,17 @@ For some weird stuff in the deliveryModus:
         </Description>
     </DeliveryModus>
 ```
+
 M3 + M4 has a semantic different meaning then M3+M4
 
 ## DeliveryModusSpecification
 
 ## DeviceType
+
 the edqm-fields are empty.
 
 ## PackagingClosure
+
 the edqm-fields are empty.
 
 ## PackagingMaterial
@@ -42,6 +49,7 @@ the edqm-fields are empty.
 ## RouteOfAdministration
 
 ## Substance
+
 Has a couple of fields, like note and chemical substance, but these are *very* empty.
 
 ## NoSwitchReason
@@ -53,10 +61,25 @@ Has a couple of fields, like note and chemical substance, but these are *very* e
 ## NoGenericPrescriptionReason
 
 ## StandardForm
-I have no idea why the documentation is what it is. It doesn't refer to a url. 
-It's a link-table between 'VirtualForm' and a code + standard. The standard encompasses the namespace of the standard we refer to, 
-and the code is the code in that standard.  
+
+I have no idea why the documentation is what it is. It doesn't refer to a url.
+It's a link-table between 'VirtualForm' and a code + standard. The standard encompasses the namespace of the standard we
+refer to,
+and the code is the code in that standard.
 
 ## StandardRoute
+
 The same as standard form. Contains a standard and a link to the route of administration that it links toward
 
+## StandardSubstance
+
+The same as standard route, with the difference that this can link to multiple substances.
+For example: I have no idea what this can mean:
+
+```    
+    <StandardSubstance standard="CAS" code="x">
+        <Substance code="11107"/>
+        <Substance code="11108"/>
+        <Substance code="78"/>
+    </StandardSubstance>
+```

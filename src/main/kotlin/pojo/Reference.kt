@@ -238,5 +238,5 @@ data class StandardSubstance(
     var code: String,
 
     @set:JsonAlias("CodeReference", "Substance")
-    var substanceReference: CodeReference,
+    var substanceReference: List<CodeReference> = ArrayList(),
 )

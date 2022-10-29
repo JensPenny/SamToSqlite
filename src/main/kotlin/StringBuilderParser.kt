@@ -358,10 +358,12 @@ fun parseReferenceXml(
 
                     tryPersist {
                         transaction {
-                            ReferenceTableModel.STDSBST.insert {
-                                it[standard] = standardSubstance.standard
-                                it[code] = standardSubstance.code
-                                it[substanceCode] = standardSubstance.substanceReference.codeReference
+                            for (singleReference in standardSubstance.substanceReference) {
+                                ReferenceTableModel.STDSBST.insert {
+                                    it[standard] = standardSubstance.standard
+                                    it[code] = standardSubstance.code
+                                    it[substanceCode] = singleReference.codeReference
+                                }
                             }
                         }
                         logger.info { "Persisted standard route $standardSubstance" }
