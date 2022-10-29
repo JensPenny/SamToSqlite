@@ -7,9 +7,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import db.CompanyTableModel
+import db.DBInitialization
 import db.ReferenceTableModel
-import db.createDB
-import db.createTables
 import mu.KotlinLogging
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.insert
@@ -17,6 +17,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.*
 import java.io.FileInputStream
 import java.io.StringWriter
+import java.time.LocalDate
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
@@ -24,8 +25,9 @@ import javax.xml.stream.events.StartElement
 val logger = KotlinLogging.logger {}
 
 fun main() {
-    createDB()
-    createTables()
+    val dbInit = DBInitialization()
+    dbInit.createDB()
+    dbInit.createTables()
 
     val inputFactory = XmlFactory.builder().xmlInputFactory()
     inputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false)
@@ -39,8 +41,10 @@ fun main() {
         .registerKotlinModule()
 
     //Todo: make paths also variable
-    parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
-    parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml")
+    //parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
+    //parseCompoundingXml(inputFactory, xmlMapper, "")
+    parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
+    parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml") //done
 }
 
 fun parseAmpXml(
@@ -50,6 +54,64 @@ fun parseAmpXml(
 ) {
 
 }
+
+fun parseCompanyXml(
+    inputFactory: XMLInputFactory,
+    xmlMapper: ObjectMapper,
+    path: String
+) {
+
+    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+
+    while (reader.hasNext()) {
+        val event = reader.nextEvent()
+
+        if (event.isStartElement) {
+            val startElement = event.asStartElement()
+
+            when (startElement.name.localPart) {
+                "ns2:Company" -> {
+                    val companyString = fullElement(startElement, reader)
+                    val company = xmlMapper.readValue<Company>(companyString)
+
+                    tryPersist {
+                        for (datablock in company.data) {
+                            transaction {
+                                CompanyTableModel.CPN.insert {
+                                    it[actorNumber] = company.actorNr
+                                    it[authorisationNumber] = datablock.authorisationNr
+                                    it[vatCountryCode] = datablock.vat?.countryCode
+                                    it[vatNumber] = datablock.vat?.VatNr
+                                    it[europeanNumber] = null
+                                    it[denomination] = datablock.denomination
+                                    it[legalForm] = datablock.legalForm
+                                    it[building] = datablock.building
+                                    it[streetName] = datablock.streetName
+                                    it[streetNum] = datablock.streetNum
+                                    it[postbox] = datablock.postbox
+                                    it[postcode] = datablock.postcode
+                                    it[city] = datablock.city
+                                    it[countryCode] = datablock.countryCode
+                                    it[phone] = datablock.phone
+                                    it[language] = datablock.language
+                                    it[website] = datablock.website
+                                    it[validFrom] = LocalDate.parse(datablock.from)
+                                    if (datablock.to != null) {
+                                        it[validTo] = LocalDate.parse(datablock.to)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    logger.info { "company parsed: $company" }
+                }
+            }
+        }
+    }
+}
+
+
 fun parseReferenceXml(
     inputFactory: XMLInputFactory,
     xmlMapper: ObjectMapper,
@@ -311,7 +373,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "NoGenericPrescriptionReason"-> {
+                "NoGenericPrescriptionReason" -> {
                     val noGenPrescrReasonStr = fullElement(startElement, reader)
                     val noGenPrescrReason = xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
 
