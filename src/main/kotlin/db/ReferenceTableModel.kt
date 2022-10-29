@@ -185,6 +185,15 @@ class ReferenceTableModel {
 
     }
 
+    //Standard Unit
+    object STDUNT : IntIdTable("STDUNT") {
+        val name = varchar("name", 20)
+
+        val descriptionNl = varchar("descriptionNl", 255).nullable()
+        val descriptionFr = varchar("descriptionFr", 255).nullable()
+        val descriptionGer = varchar("descriptionGer", 255).nullable()
+        val descriptionEng = varchar("descriptionEng", 255).nullable()
+    }
 
 
 

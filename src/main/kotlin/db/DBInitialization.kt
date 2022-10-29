@@ -53,6 +53,8 @@ fun createTables() {
         create(ReferenceTableModel.STDROA)
         drop(ReferenceTableModel.STDSBST)
         create(ReferenceTableModel.STDSBST)
+        drop(ReferenceTableModel.STDUNT)
+        create(ReferenceTableModel.STDUNT)
     }
 }
 

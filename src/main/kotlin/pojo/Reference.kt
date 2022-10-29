@@ -205,6 +205,9 @@ data class NoGenericPrescriptionReason(
     var description: TranslatedData,
 )
 
+/**
+ * @see db.ReferenceTableModel.STDFRM
+ */
 @JsonRootName("StandardForm")
 data class StandardForm(
     @set:JsonProperty("standard")
@@ -217,6 +220,9 @@ data class StandardForm(
     var virtualFormReference: CodeReference,
 )
 
+/**
+ * @see db.ReferenceTableModel.STDROA
+ */
 @JsonRootName("StandardRoute")
 data class StandardRoute(
     @set:JsonProperty("standard")
@@ -229,6 +235,9 @@ data class StandardRoute(
     var routeOfAdminReference: CodeReference,
 )
 
+/**
+ * @see db.ReferenceTableModel.STDSBST
+ */
 @JsonRootName("StandardSubstance")
 data class StandardSubstance(
     @set:JsonProperty("standard")
@@ -239,4 +248,16 @@ data class StandardSubstance(
 
     @set:JsonAlias("CodeReference", "Substance")
     var substanceReference: List<CodeReference> = ArrayList(),
+)
+
+/**
+ * @see db.ReferenceTableModel.STDUNT
+ */
+@JsonRootName("StandardUnit")
+data class StandardUnit(
+    @set:JsonProperty("name")
+    var name: String,
+
+    @set: JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData
 )

@@ -370,25 +370,6 @@ fun parseReferenceXml(
                     }
                 }
 
-                "StandardUnit" -> {
-                    val standardUnitString = fullElement(startElement, reader)
-                    val standardUnit = xmlMapper.readValue<StandardUnit>(standardUnitString)
-
-                    tryPersist {
-                        transaction {
-                            ReferenceTableModel.STDUNT.insert {
-                                it[name] = standardUnit.name
-                                it[descriptionNl] = standardUnit.description.nl
-                                it[descriptionFr] = standardUnit.description.fr
-                                it[descriptionEng] = standardUnit.description.en
-                                it[descriptionGer] = standardUnit.description.de
-                            }
-                        }
-                    }
-                }
-
-
-
                 else -> {
                     println("no handler for " + startElement.name.localPart)
                 }
