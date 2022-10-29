@@ -55,6 +55,13 @@ fun createTables() {
         create(ReferenceTableModel.STDSBST)
         drop(ReferenceTableModel.STDUNT)
         create(ReferenceTableModel.STDUNT)
+        drop(ReferenceTableModel.APPENDIX)
+        create(ReferenceTableModel.APPENDIX)
+        drop(ReferenceTableModel.FORMCAT)
+        create(ReferenceTableModel.FORMCAT)
+        //Parameter should come here, if it's a bit less shit
+        drop(ReferenceTableModel.RMBCRIT)
+        create(ReferenceTableModel.RMBCRIT)
     }
 }
 

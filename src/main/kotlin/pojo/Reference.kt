@@ -259,5 +259,43 @@ data class StandardUnit(
     var name: String,
 
     @set: JsonAlias("TranslatedData", "Description")
-    var description: TranslatedData
+    var description: TranslatedData?,
+)
+
+/**
+ * @see db.ReferenceTableModel.APPENDIX
+ */
+@JsonRootName("Appendix")
+data class Appendix(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData,
+)
+
+/**
+ * @see db.ReferenceTableModel.APPENDIX
+ */
+@JsonRootName("FormCategory")
+data class FormCategory(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData,
+)
+
+// noop - parameter / domain / whatever that shit is
+
+@JsonRootName("ReimbursementCriterion")
+data class ReimbursementCriterion(
+    @set:JsonProperty("code")
+    var code: String,
+
+    @set:JsonProperty("category")
+    var category: String,
+
+    @set:JsonAlias("TranslatedData", "Description")
+    var description: TranslatedData,
 )

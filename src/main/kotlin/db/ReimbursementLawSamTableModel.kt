@@ -100,17 +100,6 @@ class ReimbursementLawSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    //Reimbursement Criterion
-    object RMBCRIT : IntIdTable("RMBCRIT") {
-        val category = varchar("category", 10)
-        val code = varchar("code", 10)
-
-        val descriptionNl = text("descriptionNl").nullable()
-        val descriptionFr = text("descriptionFr").nullable()
-        val descriptionGer = text("descriptionGer").nullable()
-        val descriptionEng = text("descriptionEng").nullable()
-    }
-
     //Copayment
     object COPAY : IntIdTable("COPAY") {
         val code = varchar("code", 7)

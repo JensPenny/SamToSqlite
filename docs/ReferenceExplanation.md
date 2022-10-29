@@ -85,3 +85,18 @@ For example: I have no idea what this can mean:
 ```
 
 ## StandardUnit
+
+Issues: 
+* `<StandardUnit name="1"/>` is ook dimensieloos, maar heeft geen content
+
+## Appendix
+Exists in the TOC of the documentation, but doesn't actually exist in the docs themselves. 
+The tables do exist in the XML reference document though, so this is pretty confusing. 
+
+## Parameter
+Again, literally no documentation whatsoever. There is a reimbursementlaw-document that should shed light on this, but 
+by god this documentation is dense and in most ways pretty hard to implement. I have no idea what the expectation here is.  
+
+## ReimbursementCriterion
+Civars stuff is included in samv2, don't get me wrong. It's just absolutely badly documented. 
+This table is documented though, see RMBCRIT.

@@ -1,5 +1,6 @@
 package db
 
+import db.ReferenceTableModel.STDUNT.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 class ReferenceTableModel {
@@ -195,6 +196,36 @@ class ReferenceTableModel {
         val descriptionEng = varchar("descriptionEng", 255).nullable()
     }
 
+    //Appendix - unknown in the documentation
+    object APPENDIX: IntIdTable("APPENDIX") {
+        val code = varchar("code", 20)
+
+        val descriptionNl = varchar("descriptionNl", 255).nullable()
+        val descriptionFr = varchar("descriptionFr", 255).nullable()
+        val descriptionGer = varchar("descriptionGer", 255).nullable()
+        val descriptionEng = varchar("descriptionEng", 255).nullable()
+    }
+
+    //Formcategory - unknown in the documentation
+    object FORMCAT: IntIdTable("FORMCAT") {
+        val code = varchar("code", 20)
+
+        val descriptionNl = varchar("descriptionNl", 255).nullable()
+        val descriptionFr = varchar("descriptionFr", 255).nullable()
+        val descriptionGer = varchar("descriptionGer", 255).nullable()
+        val descriptionEng = varchar("descriptionEng", 255).nullable()
+    }
+
+    //Reimbursement Criterion
+    object RMBCRIT : IntIdTable("RMBCRIT") {
+        val category = varchar("category", 10)
+        val code = varchar("code", 10)
+
+        val descriptionNl = text("descriptionNl").nullable()
+        val descriptionFr = text("descriptionFr").nullable()
+        val descriptionGer = text("descriptionGer").nullable()
+        val descriptionEng = text("descriptionEng").nullable()
+    }
 
 
 }

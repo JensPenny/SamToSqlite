@@ -38,14 +38,23 @@ fun main() {
         .build()
         .registerKotlinModule()
 
-    parseReferenceXml(inputFactory, xmlMapper)
+    //Todo: make paths also variable
+    parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
+    parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml")
 }
 
+fun parseAmpXml(
+    inputFactory: XMLInputFactory,
+    xmlMapper: ObjectMapper,
+    path: String
+) {
+
+}
 fun parseReferenceXml(
     inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper
+    xmlMapper: ObjectMapper,
+    path: String
 ) {
-    val path = "res/latest/REF-1657801178464.xml" //todo make changable
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
     while (reader.hasNext()) {
@@ -55,7 +64,7 @@ fun parseReferenceXml(
             val startElement = event.asStartElement()
 
             when (startElement.name.localPart) {
-                "_AtcClassification" -> {
+                "AtcClassification" -> {
                     val atcClassificationString = fullElement(startElement, reader)
                     val atc = xmlMapper.readValue<ATC>(atcClassificationString)
                     tryPersist {
@@ -178,7 +187,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "_PharmaceuticalForm" -> {
+                "PharmaceuticalForm" -> {
                     val pharmaceuticalFormString = fullElement(startElement, reader)
                     val pharmaceuticalForm = xmlMapper.readValue<PharmaceuticalForm>(pharmaceuticalFormString)
 
@@ -196,7 +205,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "_RouteOfAdministration" -> {
+                "RouteOfAdministration" -> {
                     val routeOfAdmString = fullElement(startElement, reader)
                     val routeOfAdministration = xmlMapper.readValue<RouteOfAdministration>(routeOfAdmString)
                     tryPersist {
@@ -213,7 +222,7 @@ fun parseReferenceXml(
                     }
                 }
 
-                "_Substance" -> {
+                "Substance" -> {
                     val substanceString = fullElement(startElement, reader)
                     val substance = xmlMapper.readValue<Substance>(substanceString)
                     tryPersist {
@@ -378,16 +387,76 @@ fun parseReferenceXml(
                         transaction {
                             ReferenceTableModel.STDUNT.insert {
                                 it[name] = standardUnit.name
-                                it[descriptionNl] = standardUnit.description.nl
-                                it[descriptionFr] = standardUnit.description.fr
-                                it[descriptionEng] = standardUnit.description.en
-                                it[descriptionGer] = standardUnit.description.de
+                                it[descriptionNl] = standardUnit.description?.nl
+                                it[descriptionFr] = standardUnit.description?.fr
+                                it[descriptionEng] = standardUnit.description?.en
+                                it[descriptionGer] = standardUnit.description?.de
                             }
                         }
+                        logger.info { "Persisted standard unit $standardUnit" }
                     }
                 }
 
+                "Appendix" -> {
+                    val appendixString = fullElement(startElement, reader)
+                    val appendix = xmlMapper.readValue<Appendix>(appendixString)
 
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.APPENDIX.insert {
+                                it[code] = appendix.code
+                                it[descriptionNl] = appendix.description.nl
+                                it[descriptionFr] = appendix.description.fr
+                                it[descriptionEng] = appendix.description.en
+                                it[descriptionGer] = appendix.description.de
+                            }
+                        }
+                        logger.info { "Persisted appendix $appendix" }
+                    }
+                }
+
+                "FormCategory" -> {
+                    val formCatString = fullElement(startElement, reader)
+                    val formCategory = xmlMapper.readValue<FormCategory>(formCatString)
+
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.FORMCAT.insert {
+                                it[code] = formCategory.code
+                                it[descriptionNl] = formCategory.description.nl
+                                it[descriptionFr] = formCategory.description.fr
+                                it[descriptionEng] = formCategory.description.en
+                                it[descriptionGer] = formCategory.description.de
+                            }
+                        }
+                        logger.info { "Persisted formcategory $formCategory" }
+                    }
+                }
+
+                "Parameter" -> {
+                    val parameterString = fullElement(startElement, reader)
+
+                    logger.debug { "Did absolutely nothing with a parsed 'parameter'" }
+                }
+
+                "ReimbursementCriterion" -> {
+                    val reimbCritString = fullElement(startElement, reader)
+                    val reimbursementCriterion = xmlMapper.readValue<ReimbursementCriterion>(reimbCritString)
+
+                    tryPersist {
+                        transaction {
+                            ReferenceTableModel.RMBCRIT.insert {
+                                it[code] = reimbursementCriterion.code
+                                it[category] = reimbursementCriterion.category
+                                it[descriptionNl] = reimbursementCriterion.description.nl
+                                it[descriptionFr] = reimbursementCriterion.description.fr
+                                it[descriptionEng] = reimbursementCriterion.description.en
+                                it[descriptionGer] = reimbursementCriterion.description.de
+                            }
+                        }
+                        logger.info { "Persisted reimbursementcriterion $reimbursementCriterion" }
+                    }
+                }
 
                 else -> {
                     println("no handler for " + startElement.name.localPart)
