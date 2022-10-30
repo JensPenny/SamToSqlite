@@ -5,13 +5,29 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SchemaUtils.drop
 import org.jetbrains.exposed.sql.transactions.transaction
+import pojo.CompoundingIngredient
+
 class DBInitialization {
     fun createTables() {
         println("creating tables")
 
         createAmpTables()
-        createCompanyTables()
-        //createReferenceTables() //done
+        createCompoundingTables() //done
+        createCompanyTables() //done
+        createReferenceTables() //done
+    }
+
+    private fun createCompoundingTables() {
+        transaction {
+            drop(CompoundingTableModel.COMP_INGREDIENT)
+            create(CompoundingTableModel.COMP_INGREDIENT)
+            drop(CompoundingTableModel.COMP_INGREDIENT_SYNONYM)
+            create(CompoundingTableModel.COMP_INGREDIENT_SYNONYM)
+            drop(CompoundingTableModel.COMP_FORMULA)
+            create(CompoundingTableModel.COMP_FORMULA)
+            drop(CompoundingTableModel.COMP_FORMULA_SYNONYM)
+            create(CompoundingTableModel.COMP_FORMULA_SYNONYM)
+        }
     }
 
     private fun createReferenceTables() {

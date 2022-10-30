@@ -6,18 +6,6 @@ import org.jetbrains.exposed.dao.id.IntIdTable
  * Adds a couple of miscelanious tables, like the compounding parts, the nonmedicinal part and the units
  */
 class MiscTables {
-    //Compounding part
-
-    object COMP_INGREDIENT : IntIdTable("COMP_INGREDIENT") {
-        val cnk = varchar("cnk", 7)
-        val synonym = text("synonym").nullable()
-    }
-
-    object COMP_FORMULA : IntIdTable("COMP_FORMULA") {
-        val cnk = varchar("cnk", 7)
-        val synonym = text("synonym").nullable()
-        val formulary = text("formulary").nullable()
-    }
 
     //Nonmedicinal
     object NONMEDICINAL : IntIdTable("NONMEDICINAL") {

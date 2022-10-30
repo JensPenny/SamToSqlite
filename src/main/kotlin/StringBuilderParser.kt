@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import db.CompanyTableModel
+import db.CompoundingTableModel
 import db.DBInitialization
 import db.ReferenceTableModel
 import mu.KotlinLogging
@@ -42,7 +43,7 @@ fun main() {
 
     //Todo: make paths also variable
     //parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
-    //parseCompoundingXml(inputFactory, xmlMapper, "")
+    parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1657801181229.xml") //done
     parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
     parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml") //done
 }
@@ -53,6 +54,101 @@ fun parseAmpXml(
     path: String
 ) {
 
+}
+
+fun parseCompoundingXml(
+    inputFactory: XMLInputFactory,
+    xmlMapper: ObjectMapper,
+    path: String
+) {
+    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+
+    while (reader.hasNext()) {
+        val event = reader.nextEvent()
+
+        if (event.isStartElement) {
+            val startElement = event.asStartElement()
+
+            when (startElement.name.localPart) {
+                "ns2:CompoundingIngredient" -> {
+                    val compoundingIngredientString = fullElement(startElement, reader)
+                    val compoundingIngredient = xmlMapper.readValue<CompoundingIngredient>(compoundingIngredientString)
+
+                    tryPersist {
+                        transaction {
+                            CompoundingTableModel.COMP_INGREDIENT.insert {
+                                it[productId] = compoundingIngredient.ProductId
+                                it[codeSystem] = compoundingIngredient.codeType
+                                it[code] = compoundingIngredient.code
+                            }
+                        }
+                    }
+
+                    for (data in compoundingIngredient.data) {
+                        for (synonymObject in data.synonyms) {
+                            tryPersist {
+                                transaction {
+                                    CompoundingTableModel.COMP_INGREDIENT_SYNONYM.insert {
+                                        it[ingredientProductId] = compoundingIngredient.ProductId
+                                        it[language] = synonymObject.language
+                                        it[rank] = synonymObject.rank
+                                        it[synonym] = synonymObject.Synonym
+
+                                        it[validFrom] = LocalDate.parse(data.from)
+                                        if (data.to != null) {
+                                            it[validTo] = LocalDate.parse(data.to)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    logger.info { "Compounding ingredient parsed: $compoundingIngredient" }
+                }
+
+                "ns2:CompoundingFormula" -> {
+                    val compoundingFormulaString = fullElement(startElement, reader)
+                    val compoundingFormula = xmlMapper.readValue<CompoundingFormula>(compoundingFormulaString)
+
+                    tryPersist {
+                        transaction {
+                            CompoundingTableModel.COMP_FORMULA.insert {
+                                it[productId] = compoundingFormula.ProductId
+                                it[codeSystem] = compoundingFormula.codeType
+                                it[code] = compoundingFormula.code
+                            }
+                        }
+                    }
+
+                    for (data in compoundingFormula.data) {
+                        for (synonymObject in data.synonyms) {
+                            tryPersist {
+                                transaction {
+                                    CompoundingTableModel.COMP_FORMULA_SYNONYM.insert {
+                                        it[formulaProductId] = compoundingFormula.ProductId
+                                        it[language] = synonymObject.language
+                                        it[rank] = synonymObject.rank
+                                        it[synonym] = synonymObject.Synonym
+
+                                        it[validFrom] = LocalDate.parse(data.from)
+                                        if (data.to != null) {
+                                            it[validTo] = LocalDate.parse(data.to)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    logger.info { "Compounding formula: $compoundingFormula" }
+                }
+
+                else -> {
+                    println("no handler for " + startElement.name.localPart)
+                }
+
+            }
+        }
+    }
 }
 
 fun parseCompanyXml(
@@ -105,6 +201,10 @@ fun parseCompanyXml(
                     }
 
                     logger.info { "company parsed: $company" }
+                }
+
+                else -> {
+                    println("no handler for " + startElement.name.localPart)
                 }
             }
         }
