@@ -14,7 +14,15 @@ class DBInitialization {
         createAmpTables()
         createCompoundingTables() //done
         createCompanyTables() //done
+        createNonmedicinalTables() //done
         createReferenceTables() //done
+    }
+
+    private fun createNonmedicinalTables() {
+        transaction {
+            drop(NonmedicinalTableModel.NONMEDICINAL)
+            create(NonmedicinalTableModel.NONMEDICINAL)
+        }
     }
 
     private fun createCompoundingTables() {

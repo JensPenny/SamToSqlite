@@ -1,15 +1,20 @@
 package db
 
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.javatime.date
 
 /**
- * Adds a couple of miscelanious tables, like the compounding parts, the nonmedicinal part and the units
+ * Nonmedicinal table models
  */
-class MiscTables {
+class NonmedicinalTableModel {
 
     //Nonmedicinal
     object NONMEDICINAL : IntIdTable("NONMEDICINAL") {
+        val productId = varchar("productId", 100) //Not in docs, but is in export
         val cnk = varchar("cnk", 7)
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
 
         val nameNl = varchar("nameNl", 255)
         val nameFr = varchar("nameFr", 255)

@@ -7,10 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import db.CompanyTableModel
-import db.CompoundingTableModel
-import db.DBInitialization
-import db.ReferenceTableModel
+import db.*
 import mu.KotlinLogging
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.insert
@@ -45,6 +42,7 @@ fun main() {
     //parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
     parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1657801181229.xml") //done
     parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
+    parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1657801181711.xml")  //done
     parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml") //done
 }
 
@@ -54,6 +52,69 @@ fun parseAmpXml(
     path: String
 ) {
 
+}
+
+fun parseNonMedicinalXml(
+    inputFactory: XMLInputFactory,
+    xmlMapper: ObjectMapper,
+    path: String
+) {
+    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+
+    while (reader.hasNext()) {
+        val event = reader.nextEvent()
+
+        if (event.isStartElement) {
+            val startElement = event.asStartElement()
+
+            when (startElement.name.localPart) {
+                "ns3:NonMedicinalProduct" -> {
+                    val nonmedicinalString = fullElement(startElement, reader)
+                    val nonmedicinal = xmlMapper.readValue<Nonmedicinal>(nonmedicinalString)
+
+                    for (datablock in nonmedicinal.datablocks) {
+                        tryPersist {
+                            transaction {
+                                NonmedicinalTableModel.NONMEDICINAL.insert {
+                                    it[productId] = nonmedicinal.ProductId
+                                    it[cnk] = nonmedicinal.code
+
+                                    it[nameNl] = datablock.name.nl!!
+                                    it[nameFr] = datablock.name.fr!!
+                                    it[nameEng] = datablock.name.en
+                                    it[nameGer] = datablock.name.de
+
+                                    it[category] = datablock.category
+                                    it[commercialStatus] = datablock.commercialStatus
+
+                                    it[distributorNl] = datablock.distributor.nl
+                                    it[distributorFr] = datablock.distributor.fr
+                                    it[distributorEng] = datablock.distributor.en
+                                    it[distributorGer] = datablock.distributor.de
+
+                                    it[producerNl] = datablock.producer.nl!!
+                                    it[producerFr] = datablock.producer.fr!!
+                                    it[producerEng] = datablock.producer.en
+                                    it[producerGer] = datablock.producer.de
+
+                                    it[validFrom] = LocalDate.parse(datablock.from)
+                                    if (datablock.to != null) {
+                                        it[validTo] = LocalDate.parse(datablock.to)
+                                    }
+                                }
+                            }
+                        }
+
+                        logger.info { "Persisted nonmedicinal ${nonmedicinal.ProductId}-${nonmedicinal.code} $datablock" }
+                    }
+                }
+
+                else -> {
+                    println("no handler for " + startElement.name.localPart)
+                }
+            }
+        }
+    }
 }
 
 fun parseCompoundingXml(
@@ -145,7 +206,6 @@ fun parseCompoundingXml(
                 else -> {
                     println("no handler for " + startElement.name.localPart)
                 }
-
             }
         }
     }

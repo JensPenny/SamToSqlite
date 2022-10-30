@@ -16,6 +16,18 @@ data class TranslatedData(
     var de: String? = null,
 )
 
+//The same holder, but for no namespace
+data class TranslatedDataNoNS(
+    @set:JsonProperty("Nl")
+    var nl: String? = null,
+    @set:JsonProperty("Fr")
+    var fr: String? = null,
+    @set:JsonProperty("En")
+    var en: String? = null,
+    @set:JsonProperty("De")
+    var de: String? = null,
+)
+
 /**
  * Holder object for references to other objects by code-field
  */
