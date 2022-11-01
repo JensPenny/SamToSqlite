@@ -126,7 +126,7 @@ data class Dmpp(
     @set:JsonProperty("code")
     var code: String?,
 
-    @set:JsonProperty
+    @set:JsonProperty("codeType")
     var codeSystem: String?,
 
     @set:JsonAlias("DmppData", "ns4:Data")
@@ -241,7 +241,7 @@ data class AMPPData(
     var authorisationNr: String?,
 
     @set:JsonProperty("Orphan")
-    var orphan: String?,
+    var orphan: Boolean? = false,
 
     @set:JsonAlias("TranslatedData", "LeafletLink")
     var leafletLink: TranslatedData?,
@@ -265,16 +265,19 @@ data class AMPPData(
     var fmdProductCode: String?,
 
     @set:JsonProperty("FMDInScope")
-    var fmdInScope: String?,
+    var fmdInScope: Boolean? = false,
 
     @set:JsonProperty("AntiTemperingDevicePresent")
-    var antiTamperingDevicePresent: String?,
+    var antiTamperingDevicePresent: Boolean? = false,
 
     @set:JsonAlias("CodeReference", "ns4:Atc")
-    var atcCodeReference: CodeReference,
+    var atcCodeReference: List<CodeReference> = ArrayList(),
 
     @set:JsonAlias("CodeReference", "ns4:DeliveryModus")
     var deliveryModusReference: CodeReference,
+
+    @set:JsonAlias("CodeReference", "ns4:DeliveryModusSpecification")
+    var deliveryModusSpecReference: CodeReference?,
 
     @set:JsonAlias("TranslatedData", "AbbreviatedName")
     var abbreviatedName: TranslatedData?,
@@ -286,7 +289,7 @@ data class AMPPData(
     var crmLink: TranslatedData?,
 
     @set:JsonProperty("ExFactoryPrice")
-    var exFactorPrice: String?,
+    var exFactoryPrice: String?,
 
     @set:JsonProperty("ReimbursementCode")
     var reimbursementCode: String?,

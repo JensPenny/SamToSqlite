@@ -2,12 +2,15 @@
 
 There is a small error in translation. AntiTemperingDevicePresent stands for anti tampering device.  
 
-Content and strenght are the same element-wise, but have other implementations
+Content and strength are the same element-wise, but have other implementations
 
 Commercialization and underlying data objects are also weird. The elements can be empty. 
 Another thing is that Commercialization and SupplyProblem seem to be related. They seem to share fields in some cases, 
 like reason and impact.  
 For an example, see `<ns4:Ampp ctiExtended="000996-01">` that contains following commercialization-block:  
+
+There is a fun dmpp with an older data-segment where cheap is false, but cheapest is true. See drfGOPWJcLLfNA5X1jH+fJn2QmNorrRV2JsSPZ9dTbQ=. 
+This looks fixed though. 
 
 ```
             <ns4:Commercialization>
