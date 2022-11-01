@@ -3,6 +3,11 @@ package db
 import db.ReferenceTableModel.STDUNT.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 
+/**
+ * Collection of the reference tables.
+ * Most of these are pretty straightforward and reasonable.
+ * They get persisted once, we refer to these elements in other elements, even if they're fully expanded in the xml-files
+ */
 class ReferenceTableModel {
     //ATC Code
     object ATC : IntIdTable("ATC") {

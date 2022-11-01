@@ -35,10 +35,10 @@ data class AmpData(
     var to: String? = null,
 
     @set:JsonProperty("OfficialName")
-    var officialName: String? = null,
+    var officialName: String,
 
     @set:JsonProperty("Status")
-    var status: String? = null,
+    var status: String,
 
     @set:JsonAlias("TranslatedData", "Name")
     var name: TranslatedData = TranslatedData(),
@@ -47,10 +47,10 @@ data class AmpData(
     var blackTriangle: Boolean = false,
 
     @set:JsonProperty("MedicineType")
-    var medicineType: String? = null,
+    var medicineType: String,
 
-    @set:JsonAlias("AmpCompany", "ns4:Company")
-    var company: AmpCompany?,
+    @set:JsonAlias("AmpCompany", "ns4:Company") //Required
+    var company: AmpCompany,
 
     @set:JsonAlias("TranslatedData", "PrescriptionNameFamhp")
     var prescriptionNameFamhp: TranslatedData?,

@@ -1,10 +1,12 @@
 package db
 
-import db.CompanyTableModel.CPN.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
-//Compounding part
+/**
+ * Table models for compounding.
+ * Contains ingredients and formula's
+ */
 class CompoundingTableModel {
 
     //Compounding ingredient

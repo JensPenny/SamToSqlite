@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.javatime.date
 
 /**
  * Nonmedicinal table models
+ * Pretty straightforward. They have a product id that is undocumented, but most external references get done by CNK's
  */
 class NonmedicinalTableModel {
 

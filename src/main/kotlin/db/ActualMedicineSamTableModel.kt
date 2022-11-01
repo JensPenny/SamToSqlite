@@ -5,8 +5,6 @@ import org.jetbrains.exposed.sql.javatime.date
 
 /**
  * Collection of Samv2 tables in their pure form.
- * Don't blame me for their content, because it's really really dumb the way
- * this stuff is subdivided
  */
 class ActualMedicineSamTableModel {
 

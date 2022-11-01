@@ -52,6 +52,38 @@ fun parseAmpXml(
                     val ampString = fullElement(startElement, reader)
                     val amp = xmlMapper.readValue<AmpElement>(ampString)
 
+                    val ampCode = amp.code
+                    val vmpRef = amp.vmpCode
+
+                    for (ampData in amp.dataBlocks) {
+                        tryPersist {
+                            transaction {
+                                ActualMedicineSamTableModel.AMP_FAMHP.insert {
+                                    it[code] = ampCode
+                                    it[vmpCode] = vmpRef?.toInt()
+                                    it[companyActorNumber] = ampData.company.actorNr.toInt()
+                                    it[status] = ampData.status
+                                    it[blackTriangle] = ampData.blackTriangle
+                                    it[officialName] = ampData.officialName
+                                    it[nameNl] = ampData.name.nl!!
+                                    it[nameFr] = ampData.name.fr!!
+                                    it[nameEnglish] = ampData.name.en
+                                    it[nameGerman] = ampData.name.de
+                                    it[medicineType] = ampData.medicineType
+
+                                    it[validFrom] = LocalDate.parse(ampData.from)
+                                    if (ampData.to != null) {
+                                        it[validTo] = LocalDate.parse(ampData.to)
+                                    }
+                                }
+
+                                ActualMedicineSamTableModel.AMP_BCPI.insert {
+                                    it[code] = ampCode
+                                }
+                            }
+                        }
+                    }
+
                 }
 
                 else -> {
