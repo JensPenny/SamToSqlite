@@ -95,10 +95,17 @@ class DBInitialization {
 
     private fun createAmpTables() {
         transaction {
-            drop(ActualMedicineSamTableModel.AMP_FAMHP)
-            create(ActualMedicineSamTableModel.AMP_FAMHP)
-            drop(ActualMedicineSamTableModel.AMP_BCPI)
-            create(ActualMedicineSamTableModel.AMP_BCPI)
+            drop(
+                ActualMedicineSamTableModel.AMP_FAMHP,
+                ActualMedicineSamTableModel.AMP_BCPI,
+                inBatch = true
+            )
+
+            create(
+                ActualMedicineSamTableModel.AMP_FAMHP,
+                ActualMedicineSamTableModel.AMP_BCPI,
+                inBatch = true
+            )
         }
     }
 

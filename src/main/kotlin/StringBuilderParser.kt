@@ -1,18 +1,14 @@
-import com.ctc.wstx.stax.WstxOutputFactory
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import db.*
 import mu.KotlinLogging
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.*
+import xml.createXmlInputFactory
+import xml.createXmlMapper
 import java.io.FileInputStream
 import java.io.StringWriter
 import java.time.LocalDate
@@ -27,19 +23,11 @@ fun main() {
     dbInit.createDB()
     dbInit.createTables()
 
-    val inputFactory = XmlFactory.builder().xmlInputFactory()
-    inputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false)
-
-    val xmlMapper = XmlMapper.builder(XmlFactory(inputFactory, WstxOutputFactory()))
-        .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .addModule(JacksonXmlModule())
-        .defaultUseWrapper(false)
-        .build()
-        .registerKotlinModule()
+    val inputFactory = createXmlInputFactory()
+    val xmlMapper = createXmlMapper(inputFactory)
 
     //Todo: make paths also variable
-    //parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
+    parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
     parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1657801181229.xml") //done
     parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
     parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1657801181711.xml")  //done
@@ -51,7 +39,27 @@ fun parseAmpXml(
     xmlMapper: ObjectMapper,
     path: String
 ) {
+    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
+    while (reader.hasNext()) {
+        val event = reader.nextEvent()
+
+        if (event.isStartElement) {
+            val startElement = event.asStartElement()
+
+            when (startElement.name.localPart) {
+                "ns4:Amp" -> {
+                    val ampString = fullElement(startElement, reader)
+                    val amp = xmlMapper.readValue<AmpElement>(ampString)
+
+                }
+
+                else -> {
+                    println("no handler for " + startElement.name.localPart)
+                }
+            }
+        }
+    }
 }
 
 fun parseNonMedicinalXml(
