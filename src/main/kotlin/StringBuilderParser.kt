@@ -15,6 +15,7 @@ import java.time.LocalDate
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 
 val logger = KotlinLogging.logger {}
 
@@ -27,11 +28,11 @@ fun main() {
     val xmlMapper = createXmlMapper(inputFactory)
 
     //Todo: make paths also variable
-    parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
-    //parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1657801181229.xml") //done
-    //parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
-    //parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1657801181711.xml")  //done
-    //parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml") //done
+    parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml")
+    parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1667395564754.xml") //done
+    parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1667395271162.xml")   //done
+    parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1667395565095.xml")  //done
+    parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1667395561910.xml") //done
 }
 
 fun parseAmpXml(
@@ -100,7 +101,7 @@ fun parseAmpXml(
 
                                 }
                             }
-                            logger.info { "Persisted amp ${amp}" }
+                            //logger.info { "Persisted amp ${amp}" }
                         }
                     }
 
@@ -177,8 +178,136 @@ fun parseAmpXml(
 
                     for (amppElement in amp.amppElements) {
                         for (amppDataBlock in amppElement.amppDataBlocks) {
+                            tryPersist {
+                                transaction {
+                                    ActualMedicineSamTableModel.AMPP_FAMHP.insert {
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[ampCode] = amp.code
+                                        it[deliveryModusCode] = amppDataBlock.deliveryModusReference.codeReference
+                                        it[deliveryModusSpecificationCode] = amppDataBlock.deliveryModusSpecReference?.codeReference
+                                        it[authorizationNumber] = amppDataBlock.authorisationNr
+                                        it[orphan] = amppDataBlock.orphan
+                                        it[leafletLinkNl] = amppDataBlock.leafletLink?.nl
+                                        it[leafletLinkFr] = amppDataBlock.leafletLink?.fr
+                                        it[leafletLinkEng] = amppDataBlock.leafletLink?.en
+                                        it[leafletLinkGer] = amppDataBlock.leafletLink?.de
+                                        it[spcLinkNl] = amppDataBlock.spcLink?.nl
+                                        it[spcLinkFr] = amppDataBlock.spcLink?.fr
+                                        it[spcLinkEng] = amppDataBlock.spcLink?.en
+                                        it[spcLinkGer] = amppDataBlock.spcLink?.de
+                                        it[rmaPatientLinkNl] = amppDataBlock.rmaPatientLink?.nl
+                                        it[rmaPatientLinkFr] = amppDataBlock.rmaPatientLink?.fr
+                                        it[rmaPatientLinkEng] = amppDataBlock.rmaPatientLink?.en
+                                        it[rmaPatientLinkGer] = amppDataBlock.rmaPatientLink?.de
+                                        it[rmaProfessionalLinkNl] = amppDataBlock.rmaProfessionalLink?.nl
+                                        it[rmaProfessionalLinkFr] = amppDataBlock.rmaProfessionalLink?.fr
+                                        it[rmaProfessionalLinkEng] = amppDataBlock.rmaProfessionalLink?.en
+                                        it[rmaProfessionalLinkGer] = amppDataBlock.rmaProfessionalLink?.de
+                                        it[parallelCircuit] = amppDataBlock.parallelCircuit
+                                        //it[parallelDistributor] = amppDataBlock.parallelDistributor
+                                        it[packMultiplier] = amppDataBlock.packMultiplier?.toInt()
+                                        it[packAmount] = amppDataBlock.packAmount?.PackAmount
+                                        it[packAmountUnit] = amppDataBlock.packAmount?.unit
+                                        it[packDisplayValue] = amppDataBlock.packDisplayValue
+                                        //it[gtin] = amppDataBlock.gtin
+                                        it[status] = amppDataBlock.status
+                                        it[fmdProductCode] = amppDataBlock.fmdProductCode
+                                        it[fmdInScope] = amppDataBlock.fmdInScope
+                                        it[antiTamperingDevicePresent] = amppDataBlock.antiTamperingDevicePresent
+                                        it[prescriptionNameNl] = amppDataBlock.prescriptionNameFamhp?.nl
+                                        it[prescriptionNameFr] = amppDataBlock.prescriptionNameFamhp?.fr
+                                        it[prescriptionNameEng] = amppDataBlock.prescriptionNameFamhp?.en
+                                        it[prescriptionNameGer] = amppDataBlock.prescriptionNameFamhp?.de
+
+                                        it[validFrom] = LocalDate.parse(amppDataBlock.from)
+                                        if (amppDataBlock.to != null) {
+                                            it[validTo] = LocalDate.parse(amppDataBlock.to)
+                                        }
+                                    }
+
+                                    ActualMedicineSamTableModel.AMPP_BCFI.insert {
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[singleUse] = amppDataBlock.singleUse
+                                        it[speciallyRegulated] = amppDataBlock.speciallyRegulated
+                                        it[abbreviatedNameNl] = amppDataBlock.abbreviatedName?.nl
+                                        it[abbreviatedNameFr] = amppDataBlock.abbreviatedName?.fr
+                                        it[abbreviatedNameEng] = amppDataBlock.abbreviatedName?.en
+                                        it[abbreviatedNameGer] = amppDataBlock.abbreviatedName?.de
+                                        it[noteNl] = amppDataBlock.note?.nl
+                                        it[noteFr] = amppDataBlock.note?.fr
+                                        it[noteEng] = amppDataBlock.note?.en
+                                        it[noteGer] = amppDataBlock.note?.de
+                                        it[posologyNoteNl] = amppDataBlock.posologyNote?.nl
+                                        it[posologyNoteFr] = amppDataBlock.posologyNote?.fr
+                                        it[posologyNoteEng] = amppDataBlock.posologyNote?.en
+                                        it[posologyNoteGer] = amppDataBlock.posologyNote?.de
+                                        it[crmLinkNl] = amppDataBlock.crmLink?.nl
+                                        it[crmLinkFr] = amppDataBlock.crmLink?.fr
+                                        it[crmLinkEng] = amppDataBlock.crmLink?.en
+                                        it[crmLinkGer] = amppDataBlock.crmLink?.de
+
+                                        it[validFrom] = LocalDate.parse(amppDataBlock.from)
+                                        if (amppDataBlock.to != null) {
+                                            it[validTo] = LocalDate.parse(amppDataBlock.to)
+                                        }
+                                    }
+
+                                    ActualMedicineSamTableModel.AMPP_NIHDI.insert {
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[exfactory_price] = amppDataBlock.exFactoryPrice
+                                        it[reimbursementCode] = amppDataBlock.reimbursementCode
+                                        //it[cheap] = amppDataBlock.cheap
+                                        //it[cheapest] = amppDataBlock.cheapest
+                                        it[index] = amppDataBlock.index
+                                        it[bigPackage] = amppDataBlock.bigPackage
+
+                                        it[validFrom] = LocalDate.parse(amppDataBlock.from)
+                                        if (amppDataBlock.to != null) {
+                                            it[validTo] = LocalDate.parse(amppDataBlock.to)
+                                        }
+                                    }
+
+                                    /** lol not used atm
+                                    ActualMedicineSamTableModel.AMPP_NIHDI_BIS.insert {
+
+                                    }
+                                    */
+
+                                    ActualMedicineSamTableModel.AMPP_ECON.insert {
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[officialExFactoryPrice] = amppDataBlock.officialExFactoryPrice
+                                        it[realExFactoryPrice] = amppDataBlock.realExFactoryPrice
+
+                                        if (amppDataBlock.pricingDecisionDate != null){
+                                            it[decisionDate] = LocalDate.parse(amppDataBlock.pricingDecisionDate)
+                                        }
+
+                                        it[validFrom] = LocalDate.parse(amppDataBlock.from)
+                                        if (amppDataBlock.to != null) {
+                                            it[validTo] = LocalDate.parse(amppDataBlock.to)
+                                        }
+                                    }
+                                }
+                            }
+                            //Log persisted ampp
+                        }
+
+                        for (amppComponent in amppElement.amppComponents) {
 
                         }
+
+                        for (dmpp in amppElement.dmpps) {
+
+                        }
+
+                        for (commercialization in amppElement.commercialization) {
+
+                        }
+
+                        for (supplyProblem in amppElement.supplyProblems) {
+
+                        }
+
                     }
                 }
 

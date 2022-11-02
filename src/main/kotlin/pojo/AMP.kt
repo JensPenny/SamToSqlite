@@ -68,7 +68,7 @@ data class AmpData(
 @JsonRootName("Ampp")
 data class AMPPElement(
     @set:JsonProperty("ctiExtended")
-    var ctiExtended: String?,
+    var ctiExtended: String,
 
     @set:JsonAlias("AMPPData", "ns4:Data")
     var amppDataBlocks: List<AMPPData> = ArrayList(),
@@ -238,10 +238,10 @@ data class AMPPData(
     var to: String? = null,
 
     @set:JsonProperty("AuthorisationNr")
-    var authorisationNr: String?,
+    var authorisationNr: String,
 
     @set:JsonProperty("Orphan")
-    var orphan: Boolean? = false,
+    var orphan: Boolean,
 
     @set:JsonAlias("TranslatedData", "LeafletLink")
     var leafletLink: TranslatedData?,
@@ -249,8 +249,20 @@ data class AMPPData(
     @set:JsonAlias("TranslatedData", "SpcLink")
     var spcLink: TranslatedData?,
 
+    @set:JsonAlias("TranslatedData", "RmaPatientLink")
+    var rmaPatientLink: TranslatedData?,
+
+    @set:JsonAlias("TranslatedData", "RmaProfessionalLink")
+    var rmaProfessionalLink: TranslatedData?,
+
     @set:JsonProperty("ParallelCircuit")
     var parallelCircuit: String?,
+
+    @set:JsonProperty("PackMultiplier")
+    var packMultiplier: String?,
+
+    @set:JsonAlias("PackAmount", "PackAmount")
+    var packAmount: PackAmount?,
 
     @set:JsonProperty("PackDisplayValue")
     var packDisplayValue: String?,
@@ -266,6 +278,12 @@ data class AMPPData(
 
     @set:JsonProperty("FMDInScope")
     var fmdInScope: Boolean? = false,
+
+    @set:JsonProperty("SingleUse")
+    var singleUse: Boolean?,
+
+    @set:JsonProperty("SpeciallyRegulated")
+    var speciallyRegulated:String?,
 
     @set:JsonProperty("AntiTemperingDevicePresent")
     var antiTamperingDevicePresent: Boolean? = false,
@@ -288,11 +306,23 @@ data class AMPPData(
     @set:JsonAlias("TranslatedData", "CrmLink")
     var crmLink: TranslatedData?,
 
+    @set:JsonAlias("TranslatedData", "Note")
+    var note: TranslatedData?,
+
+    @set:JsonAlias("TranslatedData", "PosologyNote")
+    var posologyNote: TranslatedData?,
+
     @set:JsonProperty("ExFactoryPrice")
     var exFactoryPrice: String?,
 
     @set:JsonProperty("ReimbursementCode")
     var reimbursementCode: String?,
+
+    @set:JsonProperty("BigPackage")
+    var bigPackage: Boolean?,
+
+    @set:JsonProperty("Index")
+    var index: String?,
 
     @set:JsonProperty("OfficialExFactoryPrice")
     var officialExFactoryPrice: String?,
@@ -415,4 +445,12 @@ data class ContentElement(
     var Content: String?,
 )
 
+@JsonRootName("PackAmount")
+data class PackAmount(
+    @set:JsonProperty("unit")
+    var unit: String?,
+
+    @set:JacksonXmlText
+    var PackAmount: String?,
+)
 

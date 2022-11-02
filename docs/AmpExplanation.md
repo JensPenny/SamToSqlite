@@ -45,19 +45,33 @@ I have no idea why the table AMPC_FAMHP exists. The explanation in the docs say 
 ``
 But why wouldn't you just leave the rest nullable in that case? Makes no sense. 
 
-##Amp data quirks
+## Amp data quirks
 * `abbreviatedName` should be mandatory, but some data elements don't contain this data
 * The same for the other non-null fields here
 
-##AmpComponent quirks
+## AmpComponent quirks
 * Ampcomponent has a `crushable` property in the docs, but this is never filled in the actual export
 * Ampcomponent has a `modified release type` property in the docs. This is never used, but modified release couplings are made through the link 
 between ampcomponent and pharmaceutical form. The docs should reflect this though. 
 * For the property `Note`: I don't think that any note is filled in on AMP-Component level. 
 * Property `Concentration` is documented but doesn't exist in the export. 
-* Property `Osmotic Concentration` is docunented but doesn't exist in the export. 
+* Property `Osmotic Concentration` is documented but doesn't exist in the export. 
 * Property `Caloric value` is documented but doesn't exist in the export. 
 
 Two reference-tables are noted but aren't really spoonfed by the documentation. These are: 
 * AMPC_TO_PHARMFORM: a table that links an amp component to 1 or more pharmaceutical forms
 * AMPC_TO_ROA: a table that links an amp component to 1 or more routes of administration.
+
+## AMPP quirks
+* The full dataset of one ampp is split between a whopping 5 tables(!!). Cobble these together by cti-extended to get an actual idea of an ampp. 
+* A good part here is that the creators split the dmpp and other sub-elements in the top-level ampp item, so these don't fall under the
+validity of the primary ampp datablocks. 
+* The documentation on the `ampCode` field references a sequence number, but I don't think that applies here. 
+* Property `rmaKeyMessages` is documented but doesn't exist in the export. 
+* Property `parallelDistributor` is documented but doesn't exist in the export. Even not when parallelcircuit = 2.
+* Property `gtin` is documented but doesn't exist in the export. Shame, since it's a pretty usefull field
+* `exfactoryprice` is not optional for the docs, but since it's only used for reimbursable medication it's de facto optional.
+* The docs say that `cheap` and `cheapest` have moved from dmpp to ampp. The docs lie. 
+* Property `contraceptive` is documented but doesn't exist in the export.
+* None of the fields for `AMPP_NIHDI_BIS` are available. Shame, since DDD is useful!
+* 

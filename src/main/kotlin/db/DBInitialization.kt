@@ -102,6 +102,11 @@ class DBInitialization {
                 ActualMedicineSamTableModel.AMPC_BCPI,
                 ActualMedicineSamTableModel.AMPC_TO_ROA,
                 ActualMedicineSamTableModel.AMPC_TO_PHARMFORM,
+                ActualMedicineSamTableModel.AMPP_FAMHP,
+                ActualMedicineSamTableModel.AMPP_BCFI,
+                ActualMedicineSamTableModel.AMPP_NIHDI,
+                ActualMedicineSamTableModel.AMPP_NIHDI_BIS,
+                ActualMedicineSamTableModel.AMPP_ECON,
                 inBatch = true
             )
 
@@ -112,6 +117,11 @@ class DBInitialization {
                 ActualMedicineSamTableModel.AMPC_BCPI,
                 ActualMedicineSamTableModel.AMPC_TO_ROA,
                 ActualMedicineSamTableModel.AMPC_TO_PHARMFORM,
+                ActualMedicineSamTableModel.AMPP_FAMHP,
+                ActualMedicineSamTableModel.AMPP_BCFI,
+                ActualMedicineSamTableModel.AMPP_NIHDI,
+                ActualMedicineSamTableModel.AMPP_NIHDI_BIS,
+                ActualMedicineSamTableModel.AMPP_ECON,
                 inBatch = true
             )
         }

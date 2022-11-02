@@ -151,18 +151,17 @@ class ActualMedicineSamTableModel {
         val parallelCircuit = varchar("parallelCircuit", 1).nullable()
         val parallelDistributor = varchar("parallelDistributor", 255).nullable()
         val packMultiplier = integer("packMultiplier").nullable()
-        val packAmount = integer("packAmount").nullable()
+        val packAmount = varchar("packAmount", 20).nullable()
         val packAmountUnit = varchar("packAmountUnit", 20).nullable()
         val packDisplayValue = varchar("packDisplayValue", 255).nullable()
         val gtin = varchar("gtin", 20).nullable()
         val status = varchar("status", 10).nullable()
         val fmdProductCode = text("fmdProductCode").nullable() //Is an array
         val fmdInScope = bool("fmdInScope").nullable()
-        val antiTamperingDevicePresent =
-            bool("antiTamperingDevicePresent").nullable() //anti tempering in docs, but is wrong
+        val antiTamperingDevicePresent = bool("antiTamperingDevicePresent").nullable() //anti tempering in docs, but is wrong
 
-        val prescriptionNameNl = text("prescriptionNameNl")
-        val prescriptionNameFr = text("prescriptionNameFr")
+        val prescriptionNameNl = text("prescriptionNameNl").nullable()
+        val prescriptionNameFr = text("prescriptionNameFr").nullable()
         val prescriptionNameGer = text("prescriptionNameGer").nullable()
         val prescriptionNameEng = text("prescriptionNameEng").nullable()
 
@@ -180,8 +179,8 @@ class ActualMedicineSamTableModel {
         val singleUse = bool("singleUse").nullable()
         val speciallyRegulated = varchar("speciallyRegulated", 1).nullable()
 
-        val abbreviatedNameNl = varchar("abbreviatedNameNl", 255)
-        val abbreviatedNameFr = varchar("abbreviatedNameFr", 255)
+        val abbreviatedNameNl = varchar("abbreviatedNameNl", 255).nullable()
+        val abbreviatedNameFr = varchar("abbreviatedNameFr", 255).nullable()
         val abbreviatedNameGer = varchar("abbreviatedNameGer", 255).nullable()
         val abbreviatedNameEng = varchar("abbreviatedNameEng", 255).nullable()
 
@@ -190,15 +189,15 @@ class ActualMedicineSamTableModel {
         val noteGer = varchar("noteGer", 255).nullable()
         val noteEng = varchar("noteEng", 255).nullable()
 
-        val posologyNoteNl = varchar("posologyNoteNl", 255).nullable()
-        val posologyNoteFr = varchar("posologyNoteFr", 255).nullable()
-        val posologyNoteGer = varchar("posologyNoteGer", 255).nullable()
-        val posologyNoteEng = varchar("posologyNoteEng", 255).nullable()
+        val posologyNoteNl = text("posologyNoteNl").nullable()
+        val posologyNoteFr = text("posologyNoteFr").nullable()
+        val posologyNoteGer = text("posologyNoteGer").nullable()
+        val posologyNoteEng = text("posologyNoteEng").nullable()
 
-        val crmLinkNl = varchar("crmLinkNl", 255).nullable()
-        val crmLinkFr = varchar("crmLinkFr", 255).nullable()
-        val crmLinkGer = varchar("crmLinkGer", 255).nullable()
-        val crmLinkEng = varchar("crmLinkEng", 255).nullable()
+        val crmLinkNl = text("crmLinkNl").nullable()
+        val crmLinkFr = text("crmLinkFr").nullable()
+        val crmLinkGer = text("crmLinkGer").nullable()
+        val crmLinkEng = text("crmLinkEng").nullable()
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
@@ -206,11 +205,11 @@ class ActualMedicineSamTableModel {
 
     object AMPP_NIHDI : IntIdTable("AMPP_NIHDI") {
         val ctiExtended = varchar("ctiExtended", 9)
-        val exfactory_price = integer("exfactory_price")
+        val exfactory_price = varchar("exfactory_price", 20).nullable()
         val reimbursementCode = varchar("reimbursementCode", 10).nullable()
         val cheap = bool("cheap").nullable()
         val cheapest = bool("cheapest").nullable()
-        val index = integer("index").nullable()
+        val index = varchar("index", 20).nullable()
         val bigPackage = bool("bigPackage").nullable()
         val contraceptive = bool("contraceptive").nullable()
 
@@ -220,7 +219,7 @@ class ActualMedicineSamTableModel {
 
     object AMPP_NIHDI_BIS : IntIdTable("AMPP_NIHDI_BIS") {
         val ctiExtended = varchar("ctiExtended", 9)
-        val definedDailyDose = integer("definedDailyDose").nullable()
+        val definedDailyDose = varchar("definedDailyDose", 20).nullable()
         val definedDailyDoseUnit = varchar("definedDailyDoseUnit", 20).nullable()
 
         val validFrom = date("validFrom")
@@ -230,9 +229,9 @@ class ActualMedicineSamTableModel {
     object AMPP_ECON : IntIdTable("AMPP_ECON") {
         val ctiExtended = varchar("ctiExtended", 9)
 
-        val officialExFactoryPrice = integer("officialExFactoryPrice")
-        val realExFactoryPrice = integer("realExFactoryPrice").nullable()
-        val decisionDate = date("decisionDate")
+        val officialExFactoryPrice = varchar("officialExFactoryPrice", 20).nullable()
+        val realExFactoryPrice = varchar("realExFactoryPrice", 20).nullable()
+        val decisionDate = date("decisionDate").nullable()
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()

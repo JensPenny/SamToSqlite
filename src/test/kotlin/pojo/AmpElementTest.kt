@@ -83,8 +83,8 @@ class AmpElementTest {
         assertEquals("1961-07-02", ingredientData.from)
         assertNull(ingredientData.to)
         assertEquals("ACTIVE_SUBSTANCE", ingredientData.type)
-        assertEquals("mg/mL", ingredientData.strength.unit)
-        assertEquals("5.0000", ingredientData.strength.Strength)
+        assertEquals("mg/mL", ingredientData.strength?.unit)
+        assertEquals("5.0000", ingredientData.strength?.Strength)
         assertEquals("359", ingredientData.substanceCode.codeReference)
     }
 
