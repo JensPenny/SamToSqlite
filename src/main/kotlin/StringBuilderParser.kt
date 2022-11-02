@@ -52,15 +52,12 @@ fun parseAmpXml(
                     val ampString = fullElement(startElement, reader)
                     val amp = xmlMapper.readValue<AmpElement>(ampString)
 
-                    val ampCode = amp.code
-                    val vmpRef = amp.vmpCode
-
                     for (ampData in amp.dataBlocks) {
                         tryPersist {
                             transaction {
                                 ActualMedicineSamTableModel.AMP_FAMHP.insert {
-                                    it[code] = ampCode
-                                    it[vmpCode] = vmpRef?.toInt()
+                                    it[code] = amp.code
+                                    it[vmpCode] = amp.vmpCode?.toInt()
                                     it[companyActorNumber] = ampData.company.actorNr.toInt()
                                     it[status] = ampData.status
                                     it[blackTriangle] = ampData.blackTriangle
@@ -70,6 +67,10 @@ fun parseAmpXml(
                                     it[nameEnglish] = ampData.name.en
                                     it[nameGerman] = ampData.name.de
                                     it[medicineType] = ampData.medicineType
+                                    it[prescriptionNameNl] = ampData.prescriptionNameFamhp!!.nl!!
+                                    it[prescriptionNameFr] = ampData.prescriptionNameFamhp!!.fr!!
+                                    it[prescriptionNameEng] = ampData.prescriptionNameFamhp?.en
+                                    it[prescriptionNameGer] = ampData.prescriptionNameFamhp?.de
 
                                     it[validFrom] = LocalDate.parse(ampData.from)
                                     if (ampData.to != null) {
@@ -78,12 +79,106 @@ fun parseAmpXml(
                                 }
 
                                 ActualMedicineSamTableModel.AMP_BCPI.insert {
-                                    it[code] = ampCode
+                                    it[code] = amp.code
+                                    it[abbreviatedNameNl] = ampData.abbreviatedName!!.nl!!
+                                    it[abbreviatedNameFr] = ampData.abbreviatedName!!.fr!!
+                                    it[abbreviatedNameEng] = ampData.abbreviatedName?.en
+                                    it[abbreviatedNameGer] = ampData.abbreviatedName?.de
+                                    it[proprietarySuffixNl] = ampData.proprietarySuffix!!.nl!!
+                                    it[proprietarySuffixFr] = ampData.proprietarySuffix!!.fr!!
+                                    it[proprietarySuffixEng] = ampData.proprietarySuffix?.en
+                                    it[proprietarySuffixGer] = ampData.proprietarySuffix?.de
+                                    it[prescriptionNameNl] = ampData.prescriptionName!!.nl!!
+                                    it[prescriptionNameFr] = ampData.prescriptionName!!.fr!!
+                                    it[prescriptionNameEng] = ampData.prescriptionName?.en
+                                    it[prescriptionNameGer] = ampData.prescriptionName?.de
+
+                                    it[validFrom] = LocalDate.parse(ampData.from)
+                                    if (ampData.to != null) {
+                                        it[validTo] = LocalDate.parse(ampData.to)
+                                    }
+
                                 }
                             }
                         }
                     }
 
+                    for (ampComponent in amp.ampComponents) {
+                        for (ampComponentData in ampComponent.dataBlocks) {
+                            tryPersist {
+                                transaction {
+                                    ActualMedicineSamTableModel.AMPC_FAMHP.insert {
+                                        it[ampCode] = amp.code
+                                        it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
+
+                                        it[validFrom] = LocalDate.parse(ampComponentData.from)
+                                        if (ampComponentData.to != null) {
+                                            it[validTo] = LocalDate.parse(ampComponentData.to)
+                                        }
+                                    }
+
+                                    ActualMedicineSamTableModel.AMPC_BCPI.insert {
+                                        it[ampCode] = amp.code
+                                        it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
+                                        it[vmpcCode] = ampComponent.vmpComponentCode
+                                        it[dividable] = ampComponentData.dividable
+                                        it[scored] = ampComponentData.scored
+                                        //it[crushable] = ampComponentData.crushable
+                                        it[containsAlcohol] = ampComponentData.containsAlcohol
+                                        it[sugarFree] = ampComponentData.sugarFree
+                                        //it[modifiedReleaseType] = ampComponentData.modifiedReleaseType
+                                        it[specificDrugDevice] = ampComponentData.specificDrugDevice
+                                        it[dimensions] = ampComponentData.dimensions
+                                        it[nameNl] = ampComponentData.name.nl!!
+                                        it[nameFr] = ampComponentData.name.fr!!
+                                        it[nameEng] = ampComponentData.name.en
+                                        it[nameGer] = ampComponentData.name.de
+                                        //it[noteNl] = ampComponentData.note
+                                        //it[concentration] = ampComponentData.concentration
+                                        //it[osmoticConcentration] = ampComponentData.osmoticConcentration
+                                        //it[caloricValue] = ampComponentData.caloricValue
+
+                                        it[validFrom] = LocalDate.parse(ampComponentData.from)
+                                        if (ampComponentData.to != null) {
+                                            it[validTo] = LocalDate.parse(ampComponentData.to)
+                                        }
+                                    }
+
+                                    for (pharmaceuticalFormReference in ampComponentData.pharmaceuticalFormReferences) {
+                                        ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.insert {
+                                            it[ampCode] = amp.code
+                                            it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
+                                            it[pharmaFormCode] = pharmaceuticalFormReference.codeReference
+
+                                            it[validFrom] = LocalDate.parse(ampComponentData.from)
+                                            if (ampComponentData.to != null) {
+                                                it[validTo] = LocalDate.parse(ampComponentData.to)
+                                            }
+                                        }
+                                    }
+
+                                    for (roaReference in ampComponentData.routesOfAdministration) {
+                                        ActualMedicineSamTableModel.AMPC_TO_ROA.insert {
+                                            it[ampCode] = amp.code
+                                            it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
+                                            it[roaCode] = roaReference.codeReference
+
+                                            it[validFrom] = LocalDate.parse(ampComponentData.from)
+                                            if (ampComponentData.to != null) {
+                                                it[validTo] = LocalDate.parse(ampComponentData.to)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    for (amppElement in amp.amppElements) {
+                        for (amppDataBlock in amppElement.amppDataBlocks) {
+
+                        }
+                    }
                 }
 
                 else -> {

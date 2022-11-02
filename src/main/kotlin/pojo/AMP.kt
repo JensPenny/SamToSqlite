@@ -315,7 +315,7 @@ data class AmpCompany(
 data class AMPComponentElement(
 
     @set:JsonProperty("sequenceNr")
-    var sequenceNumber: String? = null,
+    var sequenceNumber: String,
 
     @set:JsonProperty("vmpComponentCode")
     var vmpComponentCode: String? = null,
@@ -342,11 +342,23 @@ data class AmpComponentData(
     @set:JsonAlias("CodeReference", "ns4:RouteOfAdministration")
     var routesOfAdministration: List<CodeReference>,
 
+    @set:JsonProperty("Dividable")
+    var dividable: String?,
+
+    @set:JsonProperty("ContainsAlcohol")
+    var containsAlcohol: String?,
+
+    @set:JsonProperty("SugarFree")
+    var sugarFree: Boolean,
+
     @set:JsonProperty("Scored")
     var scored: String?,
 
     @set:JsonProperty("SpecificDrugDevice")
     var specificDrugDevice: String?,
+
+    @set:JsonProperty("Dimensions")
+    var dimensions: String?,
 
     @set:JsonAlias("TranslatedData", "Name")
     var name: TranslatedData = TranslatedData(),

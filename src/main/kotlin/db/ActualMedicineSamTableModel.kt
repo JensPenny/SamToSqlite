@@ -1,5 +1,6 @@
 package db
 
+import db.ActualMedicineSamTableModel.RACTIEQ.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
@@ -29,12 +30,12 @@ class ActualMedicineSamTableModel {
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
 
-        /*      rare shit in de docs - prescription en prescriptiontranslations?
-                val prescriptionNameNl = text("prescriptionNameNl")
-                val prescriptionNameFr = text("prescriptionNameFr")
-                val prescriptionNameGer = text("prescriptionNameGer").nullable()
-                val prescriptionNameEng = text("prescriptionNameEng").nullable()
-        */
+        //rare shit in de docs - prescription en prescriptiontranslations? Lijken 'prescriptionnamefamhp' te zijn?
+        val prescriptionNameNl = text("prescriptionNameNl")
+        val prescriptionNameFr = text("prescriptionNameFr")
+        val prescriptionNameGer = text("prescriptionNameGer").nullable()
+        val prescriptionNameEng = text("prescriptionNameEng").nullable()
+
     }
 
     object AMP_BCPI : IntIdTable("AMP_BCPI") {
@@ -79,22 +80,41 @@ class ActualMedicineSamTableModel {
         val scored = varchar("scored", 1).nullable()
         val crushable = varchar("crushable", 1).nullable()
         val containsAlcohol = varchar("containsAlcohol", 1).nullable()
-        val sugarFree = varchar("sugarFree", 1).nullable()
+        val sugarFree = bool("sugarFree").nullable()
         val modifiedReleaseType = varchar("modifiedReleaseType", 2).nullable()
         val specificDrugDevice = varchar("specificDrugDevice", 2).nullable()
         val dimensions = varchar("dimensions", 50).nullable()
-        val nameNl = varchar("nameNl", 255)
-        val nameFr = varchar("nameFr", 255)
+        val nameNl = varchar("nameNl", 255).nullable()
+        val nameFr = varchar("nameFr", 255).nullable()
         val nameGer = varchar("nameGer", 255).nullable()
         val nameEng = varchar("nameEng", 255).nullable()
-        val noteNl = text("noteNl")
-        val noteFr = text("noteFr")
+        val noteNl = text("noteNl").nullable()
+        val noteFr = text("noteFr").nullable()
         val noteGer = text("noteGer").nullable()
         val noteEng = text("noteEng").nullable()
-        val concentration = text("concentration") //Is this actually text?
-        val osmoticConcentration = integer("osmoticConcentration")
-        val caloricValue = integer("caloricValue")
+        val concentration = text("concentration").nullable() //Is this actually text?
+        val osmoticConcentration = integer("osmoticConcentration").nullable()
+        val caloricValue = integer("caloricValue").nullable()
 
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Linking tables
+    //Linking table amp component to form
+    object AMPC_TO_PHARMFORM : IntIdTable("AMPC_TO_PHARMFORM") {
+        val ampCode = varchar("ampCode", 12)
+        val sequenceNumber = integer("sequenceNumber")
+        val pharmaFormCode = varchar("pharmaCode", 10)
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Linking table amp component to route of administration
+    object AMPC_TO_ROA : IntIdTable("AMPC_TO_ROA") {
+        val ampCode = varchar("ampCode", 12)
+        val sequenceNumber = integer("sequenceNumber")
+        val roaCode = varchar("roaCode", 10)
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
     }
@@ -355,21 +375,6 @@ class ActualMedicineSamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
-    }
-
-    //Linking tables
-    //Linking table amp component to form
-    object AMPC_TO_PHARMFORM : IntIdTable("AMPC_TO_PHARMFORM") {
-        val ampCode = varchar("ampCode", 12)
-        val sequenceNumber = integer("sequenceNumber")
-        val pharmaFormCode = varchar("pharmaCode", 10)
-    }
-
-    //Linking table amp component to route of administration
-    object AMPC_TO_ROA : IntIdTable("AMPC_TO_ROA") {
-        val ampCode = varchar("ampCode", 12)
-        val sequenceNumber = integer("sequenceNumber")
-        val roaCode = varchar("roaCode", 10)
     }
 
 }
