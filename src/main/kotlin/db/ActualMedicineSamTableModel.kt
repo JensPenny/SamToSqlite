@@ -31,8 +31,8 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
 
         //rare shit in de docs - prescription en prescriptiontranslations? Lijken 'prescriptionnamefamhp' te zijn?
-        val prescriptionNameNl = text("prescriptionNameNl")
-        val prescriptionNameFr = text("prescriptionNameFr")
+        val prescriptionNameNl = text("prescriptionNameNl").nullable()
+        val prescriptionNameFr = text("prescriptionNameFr").nullable()
         val prescriptionNameGer = text("prescriptionNameGer").nullable()
         val prescriptionNameEng = text("prescriptionNameEng").nullable()
 
@@ -40,16 +40,16 @@ class ActualMedicineSamTableModel {
 
     object AMP_BCPI : IntIdTable("AMP_BCPI") {
         val code = varchar("code", 12)
-        val abbreviatedNameNl = varchar("abbreviatedNameNl", 255)
-        val abbreviatedNameFr = varchar("abbreviatedNameFr", 255)
+        val abbreviatedNameNl = varchar("abbreviatedNameNl", 255).nullable()
+        val abbreviatedNameFr = varchar("abbreviatedNameFr", 255).nullable()
         val abbreviatedNameGer = varchar("abbreviatedNameGer", 255).nullable()
         val abbreviatedNameEng = varchar("abbreviatedNameEng", 255).nullable()
-        val proprietarySuffixNl = varchar("proprietarySuffNl", 255)
-        val proprietarySuffixFr = varchar("proprietarySuffFr", 255)
+        val proprietarySuffixNl = varchar("proprietarySuffNl", 255).nullable()
+        val proprietarySuffixFr = varchar("proprietarySuffFr", 255).nullable()
         val proprietarySuffixGer = varchar("proprietarySuffGer", 255).nullable()
         val proprietarySuffixEng = varchar("proprietarySuffEng", 255).nullable()
-        val prescriptionNameNl = text("prescriptionNameNl")
-        val prescriptionNameFr = text("prescriptionNameFr")
+        val prescriptionNameNl = text("prescriptionNameNl").nullable()
+        val prescriptionNameFr = text("prescriptionNameFr").nullable()
         val prescriptionNameGer = text("prescriptionNameGer").nullable()
         val prescriptionNameEng = text("prescriptionNameEng").nullable()
 

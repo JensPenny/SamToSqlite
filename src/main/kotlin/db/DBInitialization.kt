@@ -98,12 +98,20 @@ class DBInitialization {
             drop(
                 ActualMedicineSamTableModel.AMP_FAMHP,
                 ActualMedicineSamTableModel.AMP_BCPI,
+                ActualMedicineSamTableModel.AMPC_FAMHP,
+                ActualMedicineSamTableModel.AMPC_BCPI,
+                ActualMedicineSamTableModel.AMPC_TO_ROA,
+                ActualMedicineSamTableModel.AMPC_TO_PHARMFORM,
                 inBatch = true
             )
 
             create(
                 ActualMedicineSamTableModel.AMP_FAMHP,
                 ActualMedicineSamTableModel.AMP_BCPI,
+                ActualMedicineSamTableModel.AMPC_FAMHP,
+                ActualMedicineSamTableModel.AMPC_BCPI,
+                ActualMedicineSamTableModel.AMPC_TO_ROA,
+                ActualMedicineSamTableModel.AMPC_TO_PHARMFORM,
                 inBatch = true
             )
         }

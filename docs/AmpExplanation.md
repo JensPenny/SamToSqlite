@@ -45,6 +45,10 @@ I have no idea why the table AMPC_FAMHP exists. The explanation in the docs say 
 ``
 But why wouldn't you just leave the rest nullable in that case? Makes no sense. 
 
+##Amp data quirks
+* `abbreviatedName` should be mandatory, but some data elements don't contain this data
+* The same for the other non-null fields here
+
 ##AmpComponent quirks
 * Ampcomponent has a `crushable` property in the docs, but this is never filled in the actual export
 * Ampcomponent has a `modified release type` property in the docs. This is never used, but modified release couplings are made through the link 

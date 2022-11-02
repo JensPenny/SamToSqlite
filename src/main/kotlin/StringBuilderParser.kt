@@ -28,10 +28,10 @@ fun main() {
 
     //Todo: make paths also variable
     parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1657800909670.xml")
-    parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1657801181229.xml") //done
-    parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
-    parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1657801181711.xml")  //done
-    parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml") //done
+    //parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1657801181229.xml") //done
+    //parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1657800906435.xml")   //done
+    //parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1657801181711.xml")  //done
+    //parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1657801178464.xml") //done
 }
 
 fun parseAmpXml(
@@ -67,8 +67,8 @@ fun parseAmpXml(
                                     it[nameEnglish] = ampData.name.en
                                     it[nameGerman] = ampData.name.de
                                     it[medicineType] = ampData.medicineType
-                                    it[prescriptionNameNl] = ampData.prescriptionNameFamhp!!.nl!!
-                                    it[prescriptionNameFr] = ampData.prescriptionNameFamhp!!.fr!!
+                                    it[prescriptionNameNl] = ampData.prescriptionNameFamhp?.nl
+                                    it[prescriptionNameFr] = ampData.prescriptionNameFamhp?.fr
                                     it[prescriptionNameEng] = ampData.prescriptionNameFamhp?.en
                                     it[prescriptionNameGer] = ampData.prescriptionNameFamhp?.de
 
@@ -80,16 +80,16 @@ fun parseAmpXml(
 
                                 ActualMedicineSamTableModel.AMP_BCPI.insert {
                                     it[code] = amp.code
-                                    it[abbreviatedNameNl] = ampData.abbreviatedName!!.nl!!
-                                    it[abbreviatedNameFr] = ampData.abbreviatedName!!.fr!!
+                                    it[abbreviatedNameNl] = ampData.abbreviatedName?.nl
+                                    it[abbreviatedNameFr] = ampData.abbreviatedName?.fr
                                     it[abbreviatedNameEng] = ampData.abbreviatedName?.en
                                     it[abbreviatedNameGer] = ampData.abbreviatedName?.de
-                                    it[proprietarySuffixNl] = ampData.proprietarySuffix!!.nl!!
-                                    it[proprietarySuffixFr] = ampData.proprietarySuffix!!.fr!!
+                                    it[proprietarySuffixNl] = ampData.proprietarySuffix?.nl
+                                    it[proprietarySuffixFr] = ampData.proprietarySuffix?.fr
                                     it[proprietarySuffixEng] = ampData.proprietarySuffix?.en
                                     it[proprietarySuffixGer] = ampData.proprietarySuffix?.de
-                                    it[prescriptionNameNl] = ampData.prescriptionName!!.nl!!
-                                    it[prescriptionNameFr] = ampData.prescriptionName!!.fr!!
+                                    it[prescriptionNameNl] = ampData.prescriptionName?.nl
+                                    it[prescriptionNameFr] = ampData.prescriptionName?.fr
                                     it[prescriptionNameEng] = ampData.prescriptionName?.en
                                     it[prescriptionNameGer] = ampData.prescriptionName?.de
 
@@ -100,6 +100,7 @@ fun parseAmpXml(
 
                                 }
                             }
+                            logger.info { "Persisted amp ${amp}" }
                         }
                     }
 
@@ -129,8 +130,8 @@ fun parseAmpXml(
                                         //it[modifiedReleaseType] = ampComponentData.modifiedReleaseType
                                         it[specificDrugDevice] = ampComponentData.specificDrugDevice
                                         it[dimensions] = ampComponentData.dimensions
-                                        it[nameNl] = ampComponentData.name.nl!!
-                                        it[nameFr] = ampComponentData.name.fr!!
+                                        it[nameNl] = ampComponentData.name.nl
+                                        it[nameFr] = ampComponentData.name.fr
                                         it[nameEng] = ampComponentData.name.en
                                         it[nameGer] = ampComponentData.name.de
                                         //it[noteNl] = ampComponentData.note

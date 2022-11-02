@@ -384,7 +384,7 @@ data class RealActualIngredientData(
     var type: String? = null,
 
     @set:JsonAlias("IngredientStrength", "Strength")
-    var strength: IngredientStrength,
+    var strength: IngredientStrength?,
 
     @set:JsonAlias("CodeReference", "ns4:Substance")
     var substanceCode: CodeReference,
