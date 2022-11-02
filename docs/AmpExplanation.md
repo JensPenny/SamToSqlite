@@ -8,10 +8,6 @@ Commercialization and underlying data objects are also weird. The elements can b
 Another thing is that Commercialization and SupplyProblem seem to be related. They seem to share fields in some cases, 
 like reason and impact.  
 For an example, see `<ns4:Ampp ctiExtended="000996-01">` that contains following commercialization-block:  
-
-There is a fun dmpp with an older data-segment where cheap is false, but cheapest is true. See drfGOPWJcLLfNA5X1jH+fJn2QmNorrRV2JsSPZ9dTbQ=. 
-This looks fixed though. 
-
 ```
             <ns4:Commercialization>
                 <ns4:Data from="2007-04-01" to="2020-10-20">
@@ -35,3 +31,7 @@ This looks fixed though.
                 </ns4:Data>
             </ns4:Commercialization>
 ```
+
+There is a fun dmpp with an older data-segment where cheap is false, but cheapest is true. See drfGOPWJcLLfNA5X1jH+fJn2QmNorrRV2JsSPZ9dTbQ=. 
+This looks fixed though. 
+
