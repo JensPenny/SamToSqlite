@@ -2,10 +2,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import db.*
-import mu.KotlinLogging
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import pojo.*
 import xml.createXmlInputFactory
 import xml.createXmlMapper
@@ -15,10 +15,12 @@ import java.time.LocalDate
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
-import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
-val logger = KotlinLogging.logger {}
+private val logger = LoggerFactory.getLogger("SamV2Exporter")
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val dbInit = DBInitialization()
     dbInit.createDB()
@@ -27,12 +29,38 @@ fun main() {
     val inputFactory = createXmlInputFactory()
     val xmlMapper = createXmlMapper(inputFactory)
 
+    logger.info("Starting export")
     //Todo: make paths also variable
-    parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml")
-    parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1667395564754.xml") //done
-    parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1667395271162.xml")   //done
-    parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1667395565095.xml")  //done
-    parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1667395561910.xml") //done
+
+    val fullTime = measureTime {
+
+
+        val ampParseTime = measureTime { parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml") }
+
+        //done
+        val compoundingTime =
+            measureTime { parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1667395564754.xml") }
+
+        //done
+        val cpnParseTime = measureTime { parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1667395271162.xml") }
+
+        //done
+        val nonmedicinalTime =
+            measureTime { parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1667395565095.xml") }
+
+        //done
+        val refParseTime =
+            measureTime { parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1667395561910.xml") }
+
+        //Pooling logresults to make this stuff more readable
+        logger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
+        logger.info("CMP file parsed in ${compoundingTime.inWholeMinutes}:${compoundingTime.inWholeSeconds - (compoundingTime.inWholeMinutes * 60)}")
+        logger.info("CPN file parsed in ${cpnParseTime.inWholeMinutes}:${cpnParseTime.inWholeSeconds - (cpnParseTime.inWholeMinutes * 60)}")
+        logger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
+        logger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
+    }
+    logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
+
 }
 
 fun parseAmpXml(
@@ -53,9 +81,9 @@ fun parseAmpXml(
                     val ampString = fullElement(startElement, reader)
                     val amp = xmlMapper.readValue<AmpElement>(ampString)
 
-                    for (ampData in amp.dataBlocks) {
-                        tryPersist {
-                            transaction {
+                    tryPersist {
+                        transaction {
+                            for (ampData in amp.dataBlocks) {
                                 ActualMedicineSamTableModel.AMP_FAMHP.insert {
                                     it[code] = amp.code
                                     it[vmpCode] = amp.vmpCode?.toInt()
@@ -98,17 +126,12 @@ fun parseAmpXml(
                                     if (ampData.to != null) {
                                         it[validTo] = LocalDate.parse(ampData.to)
                                     }
-
+                                    //logger.info { "Persisted amp ${amp}" }
                                 }
                             }
-                            //logger.info { "Persisted amp ${amp}" }
-                        }
-                    }
 
-                    for (ampComponent in amp.ampComponents) {
-                        for (ampComponentData in ampComponent.dataBlocks) {
-                            tryPersist {
-                                transaction {
+                            for (ampComponent in amp.ampComponents) {
+                                for (ampComponentData in ampComponent.dataBlocks) {
                                     ActualMedicineSamTableModel.AMPC_FAMHP.insert {
                                         it[ampCode] = amp.code
                                         it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
@@ -171,20 +194,19 @@ fun parseAmpXml(
                                             }
                                         }
                                     }
+
                                 }
                             }
-                        }
-                    }
 
-                    for (amppElement in amp.amppElements) {
-                        for (amppDataBlock in amppElement.amppDataBlocks) {
-                            tryPersist {
-                                transaction {
+                            for (amppElement in amp.amppElements) {
+                                for (amppDataBlock in amppElement.amppDataBlocks) {
                                     ActualMedicineSamTableModel.AMPP_FAMHP.insert {
                                         it[ctiExtended] = amppElement.ctiExtended
                                         it[ampCode] = amp.code
-                                        it[deliveryModusCode] = amppDataBlock.deliveryModusReference.codeReference
-                                        it[deliveryModusSpecificationCode] = amppDataBlock.deliveryModusSpecReference?.codeReference
+                                        it[deliveryModusCode] =
+                                            amppDataBlock.deliveryModusReference.codeReference
+                                        it[deliveryModusSpecificationCode] =
+                                            amppDataBlock.deliveryModusSpecReference?.codeReference
                                         it[authorizationNumber] = amppDataBlock.authorisationNr
                                         it[orphan] = amppDataBlock.orphan
                                         it[leafletLinkNl] = amppDataBlock.leafletLink?.nl
@@ -213,7 +235,8 @@ fun parseAmpXml(
                                         it[status] = amppDataBlock.status
                                         it[fmdProductCode] = amppDataBlock.fmdProductCode
                                         it[fmdInScope] = amppDataBlock.fmdInScope
-                                        it[antiTamperingDevicePresent] = amppDataBlock.antiTamperingDevicePresent
+                                        it[antiTamperingDevicePresent] =
+                                            amppDataBlock.antiTamperingDevicePresent
                                         it[prescriptionNameNl] = amppDataBlock.prescriptionNameFamhp?.nl
                                         it[prescriptionNameFr] = amppDataBlock.prescriptionNameFamhp?.fr
                                         it[prescriptionNameEng] = amppDataBlock.prescriptionNameFamhp?.en
@@ -271,15 +294,16 @@ fun parseAmpXml(
                                     ActualMedicineSamTableModel.AMPP_NIHDI_BIS.insert {
 
                                     }
-                                    */
+                                     */
 
                                     ActualMedicineSamTableModel.AMPP_ECON.insert {
                                         it[ctiExtended] = amppElement.ctiExtended
                                         it[officialExFactoryPrice] = amppDataBlock.officialExFactoryPrice
                                         it[realExFactoryPrice] = amppDataBlock.realExFactoryPrice
 
-                                        if (amppDataBlock.pricingDecisionDate != null){
-                                            it[decisionDate] = LocalDate.parse(amppDataBlock.pricingDecisionDate)
+                                        if (amppDataBlock.pricingDecisionDate != null) {
+                                            it[decisionDate] =
+                                                LocalDate.parse(amppDataBlock.pricingDecisionDate)
                                         }
 
                                         it[validFrom] = LocalDate.parse(amppDataBlock.from)
@@ -287,27 +311,28 @@ fun parseAmpXml(
                                             it[validTo] = LocalDate.parse(amppDataBlock.to)
                                         }
                                     }
+
+                                    //Log persisted ampp
                                 }
+
+                                for (amppComponent in amppElement.amppComponents) {
+
+                                }
+
+                                for (dmpp in amppElement.dmpps) {
+
+                                }
+
+                                for (commercialization in amppElement.commercialization) {
+
+                                }
+
+                                for (supplyProblem in amppElement.supplyProblems) {
+
+                                }
+
                             }
-                            //Log persisted ampp
                         }
-
-                        for (amppComponent in amppElement.amppComponents) {
-
-                        }
-
-                        for (dmpp in amppElement.dmpps) {
-
-                        }
-
-                        for (commercialization in amppElement.commercialization) {
-
-                        }
-
-                        for (supplyProblem in amppElement.supplyProblems) {
-
-                        }
-
                     }
                 }
 
@@ -337,9 +362,10 @@ fun parseNonMedicinalXml(
                     val nonmedicinalString = fullElement(startElement, reader)
                     val nonmedicinal = xmlMapper.readValue<Nonmedicinal>(nonmedicinalString)
 
-                    for (datablock in nonmedicinal.datablocks) {
-                        tryPersist {
-                            transaction {
+                    tryPersist {
+                        transaction {
+
+                            for (datablock in nonmedicinal.datablocks) {
                                 NonmedicinalTableModel.NONMEDICINAL.insert {
                                     it[productId] = nonmedicinal.ProductId
                                     it[cnk] = nonmedicinal.code
@@ -369,8 +395,6 @@ fun parseNonMedicinalXml(
                                 }
                             }
                         }
-
-                        logger.info { "Persisted nonmedicinal ${nonmedicinal.ProductId}-${nonmedicinal.code} $datablock" }
                     }
                 }
 
@@ -398,7 +422,8 @@ fun parseCompoundingXml(
             when (startElement.name.localPart) {
                 "ns2:CompoundingIngredient" -> {
                     val compoundingIngredientString = fullElement(startElement, reader)
-                    val compoundingIngredient = xmlMapper.readValue<CompoundingIngredient>(compoundingIngredientString)
+                    val compoundingIngredient =
+                        xmlMapper.readValue<CompoundingIngredient>(compoundingIngredientString)
 
                     tryPersist {
                         transaction {
@@ -407,13 +432,9 @@ fun parseCompoundingXml(
                                 it[codeSystem] = compoundingIngredient.codeType
                                 it[code] = compoundingIngredient.code
                             }
-                        }
-                    }
 
-                    for (data in compoundingIngredient.data) {
-                        for (synonymObject in data.synonyms) {
-                            tryPersist {
-                                transaction {
+                            for (data in compoundingIngredient.data) {
+                                for (synonymObject in data.synonyms) {
                                     CompoundingTableModel.COMP_INGREDIENT_SYNONYM.insert {
                                         it[ingredientProductId] = compoundingIngredient.ProductId
                                         it[language] = synonymObject.language
@@ -429,7 +450,6 @@ fun parseCompoundingXml(
                             }
                         }
                     }
-                    logger.info { "Compounding ingredient parsed: $compoundingIngredient" }
                 }
 
                 "ns2:CompoundingFormula" -> {
@@ -443,13 +463,9 @@ fun parseCompoundingXml(
                                 it[codeSystem] = compoundingFormula.codeType
                                 it[code] = compoundingFormula.code
                             }
-                        }
-                    }
 
-                    for (data in compoundingFormula.data) {
-                        for (synonymObject in data.synonyms) {
-                            tryPersist {
-                                transaction {
+                            for (data in compoundingFormula.data) {
+                                for (synonymObject in data.synonyms) {
                                     CompoundingTableModel.COMP_FORMULA_SYNONYM.insert {
                                         it[formulaProductId] = compoundingFormula.ProductId
                                         it[language] = synonymObject.language
@@ -465,7 +481,6 @@ fun parseCompoundingXml(
                             }
                         }
                     }
-                    logger.info { "Compounding formula: $compoundingFormula" }
                 }
 
                 else -> {
@@ -496,8 +511,8 @@ fun parseCompanyXml(
                     val company = xmlMapper.readValue<Company>(companyString)
 
                     tryPersist {
-                        for (datablock in company.data) {
-                            transaction {
+                        transaction {
+                            for (datablock in company.data) {
                                 CompanyTableModel.CPN.insert {
                                     it[actorNumber] = company.actorNr
                                     it[authorisationNumber] = datablock.authorisationNr
@@ -524,8 +539,6 @@ fun parseCompanyXml(
                             }
                         }
                     }
-
-                    logger.info { "company parsed: $company" }
                 }
 
                 else -> {
@@ -561,7 +574,6 @@ fun parseReferenceXml(
                                 it[description] = atc.description
                             }
                         }
-                        logger.info { "Persisted ATC: : ${atc.atcCode} - ${atc.description}" }
                     }
                 }
 
@@ -578,13 +590,13 @@ fun parseReferenceXml(
                                 it[descriptionNameGer] = deliveryModus.description.de
                             }
                         }
-                        logger.info { "Persisted Deliverymodus $deliveryModus" }
                     }
                 }
 
                 "DeliveryModusSpecification" -> {
                     val deliveryModeSpecString = fullElement(startElement, reader)
-                    val deliveryModeSpec = xmlMapper.readValue<DeliveryModusSpecification>(deliveryModeSpecString)
+                    val deliveryModeSpec =
+                        xmlMapper.readValue<DeliveryModusSpecification>(deliveryModeSpecString)
                     tryPersist {
                         transaction {
                             ReferenceTableModel.DLVMS.insert {
@@ -595,7 +607,6 @@ fun parseReferenceXml(
                                 it[descriptionNameGer] = deliveryModeSpec.description.de
                             }
                         }
-                        logger.info { "Persisted DeliverymodusSpec $deliveryModeSpec" }
                     }
                 }
 
@@ -614,7 +625,6 @@ fun parseReferenceXml(
                                 it[edqmDefinition] = deviceType.edqmDefinition
                             }
                         }
-                        logger.info { "Persisted deviceType $deviceType" }
                     }
                 }
 
@@ -633,7 +643,6 @@ fun parseReferenceXml(
                                 it[edqmDefinition] = packaging.edqmDefinition
                             }
                         }
-                        logger.info { "Persisted package $packaging" }
                     }
                 }
 
@@ -650,7 +659,6 @@ fun parseReferenceXml(
                                 it[nameGer] = material.name.de
                             }
                         }
-                        logger.info { "Persisted Packaging Material $material" }
                     }
                 }
 
@@ -670,7 +678,6 @@ fun parseReferenceXml(
                                 it[edqmDefinition] = packagingType.edqmDefinition
                             }
                         }
-                        logger.info { "Persisted Package Type $packagingType" }
                     }
                 }
 
@@ -688,7 +695,6 @@ fun parseReferenceXml(
                                 it[nameGerman] = pharmaceuticalForm.name.de
                             }
                         }
-                        logger.info { "Persisted Pharmaceutical Form $pharmaceuticalForm" }
                     }
                 }
 
@@ -705,7 +711,6 @@ fun parseReferenceXml(
                                 it[nameGer] = routeOfAdministration.name.de
                             }
                         }
-                        logger.info { "Persisted Route of Administration $routeOfAdministration" }
                     }
                 }
 
@@ -727,7 +732,6 @@ fun parseReferenceXml(
                                 it[noteGer] = substance.note?.de
                             }
                         }
-                        logger.info { "Persisted Substance $substance" }
                     }
                 }
 
@@ -744,7 +748,6 @@ fun parseReferenceXml(
                                 it[descriptionGer] = noSwitchReason.description.de
                             }
                         }
-                        logger.info { "Persisted no-switch reason $noSwitchReason" }
                     }
                 }
 
@@ -771,7 +774,6 @@ fun parseReferenceXml(
                                 it[descriptionGer] = virtualForm.description?.de
                             }
                         }
-                        logger.info { "Persisted vitualForm $virtualForm" }
                     }
                 }
 
@@ -794,13 +796,13 @@ fun parseReferenceXml(
                                 it[descriptionGer] = wada.description?.de
                             }
                         }
-                        logger.info { "Persisted wada $wada" }
                     }
                 }
 
                 "NoGenericPrescriptionReason" -> {
                     val noGenPrescrReasonStr = fullElement(startElement, reader)
-                    val noGenPrescrReason = xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
+                    val noGenPrescrReason =
+                        xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
 
                     tryPersist {
                         transaction {
@@ -812,7 +814,6 @@ fun parseReferenceXml(
                                 it[descriptionGer] = noGenPrescrReason.description.de
                             }
                         }
-                        logger.info { "Persisted no-generic prescription reason $noGenPrescrReason" }
                     }
                 }
 
@@ -828,7 +829,6 @@ fun parseReferenceXml(
                                 it[virtualFormCode] = standardForm.virtualFormReference.codeReference
                             }
                         }
-                        logger.info { "Persisted standard form $standardForm" }
                     }
                 }
 
@@ -841,10 +841,10 @@ fun parseReferenceXml(
                             ReferenceTableModel.STDROA.insert {
                                 it[standard] = standardRoute.standard
                                 it[code] = standardRoute.code
-                                it[routeOfAdministrationCode] = standardRoute.routeOfAdminReference.codeReference
+                                it[routeOfAdministrationCode] =
+                                    standardRoute.routeOfAdminReference.codeReference
                             }
                         }
-                        logger.info { "Persisted standard route $standardRoute" }
                     }
                 }
 
@@ -862,7 +862,6 @@ fun parseReferenceXml(
                                 }
                             }
                         }
-                        logger.info { "Persisted standard substance $standardSubstance" }
                     }
                 }
 
@@ -880,7 +879,6 @@ fun parseReferenceXml(
                                 it[descriptionGer] = standardUnit.description?.de
                             }
                         }
-                        logger.info { "Persisted standard unit $standardUnit" }
                     }
                 }
 
@@ -898,7 +896,6 @@ fun parseReferenceXml(
                                 it[descriptionGer] = appendix.description.de
                             }
                         }
-                        logger.info { "Persisted appendix $appendix" }
                     }
                 }
 
@@ -916,14 +913,13 @@ fun parseReferenceXml(
                                 it[descriptionGer] = formCategory.description.de
                             }
                         }
-                        logger.info { "Persisted formcategory $formCategory" }
                     }
                 }
 
                 "Parameter" -> {
                     val parameterString = fullElement(startElement, reader)
 
-                    logger.debug { "Did absolutely nothing with a parsed 'parameter'" }
+                    logger.debug("Did absolutely nothing with a parsed 'parameter'")
                 }
 
                 "ReimbursementCriterion" -> {
@@ -941,7 +937,6 @@ fun parseReferenceXml(
                                 it[descriptionGer] = reimbursementCriterion.description.de
                             }
                         }
-                        logger.info { "Persisted reimbursementcriterion $reimbursementCriterion" }
                     }
                 }
 
