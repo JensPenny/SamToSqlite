@@ -963,6 +963,59 @@ fun parseReferenceXml(
                             logger.debug("Did absolutely nothing with a parsed 'parameter'")
                         }
 
+                        "ProfessionalCode" -> {
+                            val professionalCodeString = fullElement(startElement, reader)
+                            val professionalCode = xmlMapper.readValue<ProfessionalCode>(professionalCodeString)
+
+                            ReferenceTableModel.PROFESSIONALCODE.insert {
+                                it[professionalCv] = professionalCode.professionalCv
+                                it[professionalName] = professionalCode.nameId
+                            }
+                        }
+
+                        "AppendixType" -> {
+                            val appendixString = fullElement(startElement, reader)
+                            val appendix = xmlMapper.readValue<AppendixType>(appendixString)
+
+                            ReferenceTableModel.APPENDIX_TYPE.insert {
+                                it[appendixTypeId] = appendix.appendixTypeId.toInt()
+                                it[nameId] = appendix.nameId.toInt()
+                            }
+                        }
+
+                        "FormType" -> {
+                            val formTypeString = fullElement(startElement, reader)
+                            val formType = xmlMapper.readValue<FormType>(formTypeString)
+
+                            ReferenceTableModel.FORM_TYPE.insert {
+                                it[formTypeId] = formType.formTypeId.toInt()
+                                it[nameId] = formType.nameId.toInt()
+                            }
+                        }
+
+                        "NameType" -> {
+                            val nameTypeString = fullElement(startElement, reader)
+                            val nameType = xmlMapper.readValue<NameType>(nameTypeString)
+
+                            ReferenceTableModel.NAME_TYPE.insert {
+                                it[nameTypeCV] = nameType.nameTypeCv
+                                it[nameId] = nameType.nameId.toInt()
+                                it[ReferenceTableModel.NAME_TYPE.nameType] = nameType.nameType
+                                it[nameTypeSequence] = nameType.nameTypeSeq?.toInt()
+                            }
+                        }
+
+                        "LegalReferencePathToParagraph" -> {
+                            val legalReferenceString = fullElement(startElement, reader)
+                            val legalReference = xmlMapper.readValue<LegalReferencePathToParagraph>(legalReferenceString)
+
+                            ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH.insert {
+                                it[legalReferencePath] = legalReference.legalReferencePath
+                                it[chapterName] = legalReference.chapterName
+                                it[paragraphName] = legalReference.paragraphName
+                            }
+                        }
+
                         "ReimbursementCriterion" -> {
                             val reimbCritString = fullElement(startElement, reader)
                             val reimbursementCriterion = xmlMapper.readValue<ReimbursementCriterion>(reimbCritString)

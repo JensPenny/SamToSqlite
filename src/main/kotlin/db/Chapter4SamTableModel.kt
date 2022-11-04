@@ -92,13 +92,6 @@ class Chapter4SamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    //Professional code
-    object PROFFESSIONALCODE : IntIdTable("PROFESSIONALCODE") {
-        val professionalCv = varchar("professionalCv", 10)
-        val nameId = integer("nameId")
-        val professionalName = varchar("professionalName", 50).nullable()
-    }
-
     //Professional Authorisation
     object PROF_AUTHORISATION : IntIdTable("PROF_AUTHIRISATION") {
         val professionalAuthorisationId = integer("professionalAuthorisationId")
@@ -109,18 +102,6 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
-    }
-
-    //Form Type
-    object FORM_TYPE : IntIdTable("FORM_TABLE") {
-        val formTypeId = integer("formTypeId")
-        val nameId = integer("nameId")
-    }
-
-    //Appendix Type
-    object APPENDIX_TYPE : IntIdTable("APPENDIX_TYPE") {
-        val appendixTypeId = integer("appendixTypeId")
-        val nameId = integer("nameId")
     }
 
     //Added document
@@ -161,11 +142,22 @@ class Chapter4SamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    object NAME_TYPE : IntIdTable("NAME_TYPE") {
-        val nameTypeCV = varchar("nameTypeCV", 6)
-        val nameId = integer("nameId")
-        val nameType = varchar("nameType", 50).nullable()
-        val nameTypeSequence = integer("nameTypeSequence").nullable()
+    //Legal Reference
+    object LGLREF : IntIdTable("LGLREF") {
+        val legalReferencePath = varchar("legalReferencePath", 79)
+        val type = varchar("type", 30)
+
+        val titleNl = varchar("titleNl", 255).nullable()
+        val titleFr = varchar("titleFr", 255).nullable()
+        val titleGerman = varchar("titleGer", 255).nullable()
+        val titleEnglish = varchar("titleEng", 255).nullable()
+
+        val firstPublishedOn = date("firstPublishedOn").nullable()
+        val lastModifiedOn = date("lastModifiedOn").nullable()
+        val legalReferenceTrace = text("legalReferenceTrace").nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
     }
 
     object NAME_TRANSLATION : IntIdTable("NAME_TRANSLATION") {
@@ -180,11 +172,5 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
-    }
-
-    object LEGAL_REF_TO_PARAGRAPH : IntIdTable("LEGAL_REF_TO_PARAGRAPH") {
-        val legalReferencePath = varchar("legalReferencePath", 79)
-        val chapterName = varchar("chapterName", 10)
-        val paragraphName = varchar("paragraphName", 10)
     }
 }

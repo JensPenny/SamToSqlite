@@ -299,3 +299,57 @@ data class ReimbursementCriterion(
     @set:JsonAlias("TranslatedData", "Description")
     var description: TranslatedData,
 )
+
+@JsonRootName("ProfessionalCode")
+data class ProfessionalCode(
+    @set:JsonProperty("ProfessionalCV")
+    var professionalCv: String,
+
+    @set:JsonProperty("NameId")
+    var nameId: String,
+)
+
+@JsonRootName("AppendixType")
+data class AppendixType(
+    @set:JsonProperty("AppendixTypeId")
+    var appendixTypeId: String,
+
+    @set:JsonProperty("NameId")
+    var nameId: String,
+)
+
+@JsonRootName("FormType")
+data class FormType(
+    @set:JsonProperty("FormTypeId")
+    var formTypeId: String,
+
+    @set:JsonProperty("NameId")
+    var nameId: String,
+)
+
+@JsonRootName("NameType")
+data class NameType(
+    @set:JsonProperty("NameTypeCV")
+    var nameTypeCv: String,
+
+    @set:JsonProperty("NameId")
+    var nameId: String,
+
+    @set:JsonProperty("NameType")
+    var nameType: String?,
+
+    @set:JsonProperty("NameTypeSeq")
+    var nameTypeSeq: String?,
+)
+
+@JsonRootName("LegalReferencePathToParagraph")
+data class LegalReferencePathToParagraph(
+    @set:JsonProperty("LegalReferencePath")
+    var legalReferencePath: String,
+
+    @set:JsonProperty("ChapterName")
+    var chapterName: String,
+
+    @set:JsonProperty("ParagraphName")
+    var paragraphName: String,
+)

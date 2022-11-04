@@ -2,6 +2,7 @@ package db
 
 import db.ReferenceTableModel.STDUNT.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.javatime.date
 
 /**
  * Collection of the reference tables.
@@ -232,5 +233,36 @@ class ReferenceTableModel {
         val descriptionEng = text("descriptionEng").nullable()
     }
 
+    //Professional code
+    object PROFESSIONALCODE : IntIdTable("PROFESSIONALCODE") {
+        val professionalCv = varchar("professionalCv", 10)
+        val nameId = integer("nameId")
+        val professionalName = varchar("professionalName", 50).nullable()
+    }
 
+    //Appendix Type
+    object APPENDIX_TYPE : IntIdTable("APPENDIX_TYPE") {
+        val appendixTypeId = integer("appendixTypeId")
+        val nameId = integer("nameId")
+    }
+
+    //Form Type
+    object FORM_TYPE : IntIdTable("FORM_TABLE") {
+        val formTypeId = integer("formTypeId")
+        val nameId = integer("nameId")
+    }
+
+    //Nametype
+    object NAME_TYPE : IntIdTable("NAME_TYPE") {
+        val nameTypeCV = varchar("nameTypeCV", 6)
+        val nameId = integer("nameId")
+        val nameType = varchar("nameType", 50).nullable()
+        val nameTypeSequence = integer("nameTypeSequence").nullable()
+    }
+
+    object LEGAL_REF_TO_PARAGRAPH : IntIdTable("LEGAL_REF_TO_PARAGRAPH") {
+        val legalReferencePath = varchar("legalReferencePath", 79)
+        val chapterName = varchar("chapterName", 10)
+        val paragraphName = varchar("paragraphName", 10)
+    }
 }

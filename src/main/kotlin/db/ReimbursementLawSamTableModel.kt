@@ -1,7 +1,6 @@
 package db
 
 import db.ReimbursementLawSamTableModel.LGLBAS.nullable
-import db.ReimbursementLawSamTableModel.LGLREF.nullable
 import db.ReimbursementLawSamTableModel.LGLTXT.nullable
 import db.ReimbursementLawSamTableModel.RMBCTX.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
@@ -23,24 +22,6 @@ class ReimbursementLawSamTableModel {
 
         val type = varchar("type", 30)
         val effectiveOn = date("effectiveOn").nullable()
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
-    }
-
-    //Legal Reference
-    object LGLREF : IntIdTable("LGLREF") {
-        val legalReferencePath = varchar("legalReferencePath", 79)
-        val type = varchar("type", 30)
-
-        val titleNl = varchar("titleNl", 255).nullable()
-        val titleFr = varchar("titleFr", 255).nullable()
-        val titleGerman = varchar("titleGer", 255).nullable()
-        val titleEnglish = varchar("titleEng", 255).nullable()
-
-        val firstPublishedOn = date("firstPublishedOn").nullable()
-        val lastModifiedOn = date("lastModifiedOn").nullable()
-        val legalReferenceTrace = text("legalReferenceTrace").nullable()
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
