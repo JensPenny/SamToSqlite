@@ -1,6 +1,7 @@
 package pojo
 
 import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
@@ -82,8 +83,32 @@ data class AMPPElement(
     @set:JsonAlias("SupplyProblem", "ns4:SupplyProblem")
     var supplyProblems: List<SupplyProblem> = ArrayList(),
 
+    @set:JsonAlias("DerogationImport", "ns4:DerogationImport")
+    var derogationImport: List<DerogationImport> = ArrayList(),
+
     @set:JsonAlias("Dmpp", "ns4:Dmpp")
     var dmpps: List<Dmpp> = ArrayList(),
+)
+
+@JsonRootName("ns4:DerogationImport")
+data class DerogationImport(
+    @set:JsonProperty("sequenceNr")
+    var sequenceNumber: String,
+
+    @set:JsonAlias("DerogationData", "ns4:Data")
+    var derogationData: List<DerogationData> = ArrayList(),
+)
+
+@JsonRootName("ns4:Data")
+data class DerogationData(
+    @set:JsonProperty("from")
+    var from: String,
+
+    @set:JsonProperty("to")
+    var to: String? = null,
+
+    @set:JsonAlias("TranslatedData", "Note")
+    var note: TranslatedData?,
 )
 
 @JsonRootName("ns4:SupplyProblem")
@@ -107,8 +132,26 @@ data class SupplyProblemData(
     @set:JsonProperty("ReportedBy")
     var reportedBy: String?,
 
+    @set:JsonProperty("ReportedOn")
+    var reportedOn: String?,
+
+    @set:JsonProperty("ContactName")
+    var contactName: String?,
+
+    @set:JsonProperty("ContactMail")
+    var contactMail: String?,
+
+    @set:JsonProperty("Phone")
+    var phone: String?,
+
+    @set:JsonProperty("ContactCompany")
+    var contactCompany: String?,
+
     @set:JsonAlias("TranslatedData", "Reason")
     var reason: TranslatedData?,
+
+    @set:JsonAlias("TranslatedData", "Impact")
+    var impact: TranslatedData?,
 
     @set:JsonAlias("TranslatedData", "AdditionalInformation")
     var additionalInformation: TranslatedData?,

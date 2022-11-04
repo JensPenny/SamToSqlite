@@ -79,8 +79,13 @@ validity of the primary ampp datablocks.
 * Property `contraceptive` is documented but doesn't exist in the export.
 * None of the fields for `AMPP_NIHDI_BIS` are available. Shame, since DDD is useful!
 
-## DMPP Quirks
+## DMPP quirks
 * DMPP has a product id that is undocumented, but looks useful. It's exported as a varchar 100
 * Property `reimbursementRequiresPriorAgreement` is documented but doesn't exist in the export.
 * Property `cheapestCeilingPricesStatus5` is documented but doesn't exist in the export.
-* 
+
+## Commercialization quirks
+* I have no idea if the additionalinformation in the docs is the reason in the export, but I'm going to assume it is. 
+
+## Supplyproblem quirks
+* Property `limitedAvailability` is documented but doesn't exist in the export.

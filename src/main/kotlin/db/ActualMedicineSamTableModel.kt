@@ -368,8 +368,8 @@ class ActualMedicineSamTableModel {
         val ctiExtended = varchar("ctiExtended", 9)
         val sequenceNumber = integer("sequenceNumber")
 
-        val noteNl = text("noteNl")
-        val noteFr = text("noteFr")
+        val noteNl = text("noteNl").nullable()
+        val noteFr = text("noteFr").nullable()
         val noteGer = text("noteGer").nullable()
         val noteEng = text("noteEng").nullable()
 
