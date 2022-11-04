@@ -598,19 +598,25 @@ fun parseCompanyXml(
 
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
-    while (reader.hasNext()) {
-        val event = reader.nextEvent()
+    val commitAfterAmount = 100
+    var currentCounter = 0
 
-        if (event.isStartElement) {
-            val startElement = event.asStartElement()
+    tryPersist {
+        transaction {
 
-            when (startElement.name.localPart) {
-                "ns2:Company" -> {
-                    val companyString = fullElement(startElement, reader)
-                    val company = xmlMapper.readValue<Company>(companyString)
+            while (reader.hasNext()) {
+                val event = reader.nextEvent()
 
-                    tryPersist {
-                        transaction {
+                if (event.isStartElement) {
+                    val startElement = event.asStartElement()
+
+                    when (startElement.name.localPart) {
+                        "ns2:Company" -> {
+                            val companyString = fullElement(startElement, reader)
+                            val company = xmlMapper.readValue<Company>(companyString)
+
+                            currentCounter++
+
                             for (datablock in company.data) {
                                 CompanyTableModel.CPN.insert {
                                     it[actorNumber] = company.actorNr
@@ -636,16 +642,21 @@ fun parseCompanyXml(
                                     }
                                 }
                             }
+
+                            if (currentCounter == commitAfterAmount) {
+                                commit()
+                            }
+                        }
+
+                        else -> {
+                            println("no handler for " + startElement.name.localPart)
                         }
                     }
-                }
-
-                else -> {
-                    println("no handler for " + startElement.name.localPart)
                 }
             }
         }
     }
+
 }
 
 
@@ -656,31 +667,36 @@ fun parseReferenceXml(
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
-    while (reader.hasNext()) {
-        val event = reader.nextEvent()
+    val commitAfterAmount = 100
+    var currentCounter = 0
 
-        if (event.isStartElement) {
-            val startElement = event.asStartElement()
+    tryPersist {
+        transaction {
+            while (reader.hasNext()) {
+                val event = reader.nextEvent()
 
-            when (startElement.name.localPart) {
-                "AtcClassification" -> {
-                    val atcClassificationString = fullElement(startElement, reader)
-                    val atc = xmlMapper.readValue<ATC>(atcClassificationString)
-                    tryPersist {
-                        transaction {
+                if (event.isStartElement) {
+                    val startElement = event.asStartElement()
+
+                    if (currentCounter == commitAfterAmount) {
+                        commit()
+                        currentCounter = 1
+                    } else {
+                        currentCounter++
+                    }
+                    when (startElement.name.localPart) {
+                        "AtcClassification" -> {
+                            val atcClassificationString = fullElement(startElement, reader)
+                            val atc = xmlMapper.readValue<ATC>(atcClassificationString)
                             ReferenceTableModel.ATC.insert {
                                 it[code] = atc.atcCode
                                 it[description] = atc.description
                             }
                         }
-                    }
-                }
 
-                "DeliveryModus" -> {
-                    val deliveryModusString = fullElement(startElement, reader)
-                    val deliveryModus = xmlMapper.readValue<DeliveryModus>(deliveryModusString)
-                    tryPersist {
-                        transaction {
+                        "DeliveryModus" -> {
+                            val deliveryModusString = fullElement(startElement, reader)
+                            val deliveryModus = xmlMapper.readValue<DeliveryModus>(deliveryModusString)
                             ReferenceTableModel.DLVM.insert {
                                 it[code] = deliveryModus.code
                                 it[descriptionNameNl] = deliveryModus.description.nl!!
@@ -689,15 +705,11 @@ fun parseReferenceXml(
                                 it[descriptionNameGer] = deliveryModus.description.de
                             }
                         }
-                    }
-                }
 
-                "DeliveryModusSpecification" -> {
-                    val deliveryModeSpecString = fullElement(startElement, reader)
-                    val deliveryModeSpec =
-                        xmlMapper.readValue<DeliveryModusSpecification>(deliveryModeSpecString)
-                    tryPersist {
-                        transaction {
+                        "DeliveryModusSpecification" -> {
+                            val deliveryModeSpecString = fullElement(startElement, reader)
+                            val deliveryModeSpec =
+                                xmlMapper.readValue<DeliveryModusSpecification>(deliveryModeSpecString)
                             ReferenceTableModel.DLVMS.insert {
                                 it[code] = deliveryModeSpec.code
                                 it[descriptionNameNl] = deliveryModeSpec.description.nl!!
@@ -706,14 +718,10 @@ fun parseReferenceXml(
                                 it[descriptionNameGer] = deliveryModeSpec.description.de
                             }
                         }
-                    }
-                }
 
-                "DeviceType" -> {
-                    val deviceTypeString = fullElement(startElement, reader)
-                    val deviceType = xmlMapper.readValue<DeviceType>(deviceTypeString)
-                    tryPersist {
-                        transaction {
+                        "DeviceType" -> {
+                            val deviceTypeString = fullElement(startElement, reader)
+                            val deviceType = xmlMapper.readValue<DeviceType>(deviceTypeString)
                             ReferenceTableModel.DVCTP.insert {
                                 it[code] = deviceType.code
                                 it[nameNl] = deviceType.name.nl!!
@@ -724,14 +732,10 @@ fun parseReferenceXml(
                                 it[edqmDefinition] = deviceType.edqmDefinition
                             }
                         }
-                    }
-                }
 
-                "PackagingClosure" -> {
-                    val packagingString = fullElement(startElement, reader)
-                    val packaging = xmlMapper.readValue<PackagingClosure>(packagingString)
-                    tryPersist {
-                        transaction {
+                        "PackagingClosure" -> {
+                            val packagingString = fullElement(startElement, reader)
+                            val packaging = xmlMapper.readValue<PackagingClosure>(packagingString)
                             ReferenceTableModel.PCKCL.insert {
                                 it[code] = packaging.code
                                 it[nameNl] = packaging.name.nl!!
@@ -742,14 +746,10 @@ fun parseReferenceXml(
                                 it[edqmDefinition] = packaging.edqmDefinition
                             }
                         }
-                    }
-                }
 
-                "PackagingMaterial" -> {
-                    val materialString = fullElement(startElement, reader)
-                    val material = xmlMapper.readValue<PackagingMaterial>(materialString)
-                    tryPersist {
-                        transaction {
+                        "PackagingMaterial" -> {
+                            val materialString = fullElement(startElement, reader)
+                            val material = xmlMapper.readValue<PackagingMaterial>(materialString)
                             ReferenceTableModel.PCKMT.insert {
                                 it[code] = material.code
                                 it[nameNl] = material.name.nl!!
@@ -758,15 +758,11 @@ fun parseReferenceXml(
                                 it[nameGer] = material.name.de
                             }
                         }
-                    }
-                }
 
-                "PackagingType" -> {
-                    val packagingTypeString = fullElement(startElement, reader)
-                    val packagingType = xmlMapper.readValue<PackagingType>(packagingTypeString)
+                        "PackagingType" -> {
+                            val packagingTypeString = fullElement(startElement, reader)
+                            val packagingType = xmlMapper.readValue<PackagingType>(packagingTypeString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.PCKTP.insert {
                                 it[code] = packagingType.code
                                 it[nameNl] = packagingType.name.nl!!
@@ -777,15 +773,11 @@ fun parseReferenceXml(
                                 it[edqmDefinition] = packagingType.edqmDefinition
                             }
                         }
-                    }
-                }
 
-                "PharmaceuticalForm" -> {
-                    val pharmaceuticalFormString = fullElement(startElement, reader)
-                    val pharmaceuticalForm = xmlMapper.readValue<PharmaceuticalForm>(pharmaceuticalFormString)
+                        "PharmaceuticalForm" -> {
+                            val pharmaceuticalFormString = fullElement(startElement, reader)
+                            val pharmaceuticalForm = xmlMapper.readValue<PharmaceuticalForm>(pharmaceuticalFormString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.PHFRM.insert {
                                 it[code] = pharmaceuticalForm.code
                                 it[nameNl] = pharmaceuticalForm.name.nl!!
@@ -794,14 +786,10 @@ fun parseReferenceXml(
                                 it[nameGerman] = pharmaceuticalForm.name.de
                             }
                         }
-                    }
-                }
 
-                "RouteOfAdministration" -> {
-                    val routeOfAdmString = fullElement(startElement, reader)
-                    val routeOfAdministration = xmlMapper.readValue<RouteOfAdministration>(routeOfAdmString)
-                    tryPersist {
-                        transaction {
+                        "RouteOfAdministration" -> {
+                            val routeOfAdmString = fullElement(startElement, reader)
+                            val routeOfAdministration = xmlMapper.readValue<RouteOfAdministration>(routeOfAdmString)
                             ReferenceTableModel.ROA.insert {
                                 it[code] = routeOfAdministration.code
                                 it[nameNl] = routeOfAdministration.name.nl!!
@@ -810,14 +798,10 @@ fun parseReferenceXml(
                                 it[nameGer] = routeOfAdministration.name.de
                             }
                         }
-                    }
-                }
 
-                "Substance" -> {
-                    val substanceString = fullElement(startElement, reader)
-                    val substance = xmlMapper.readValue<Substance>(substanceString)
-                    tryPersist {
-                        transaction {
+                        "Substance" -> {
+                            val substanceString = fullElement(startElement, reader)
+                            val substance = xmlMapper.readValue<Substance>(substanceString)
                             ReferenceTableModel.SBST.insert {
                                 it[code] = substance.code
                                 it[chemicalForm] = substance.chemicalForm
@@ -831,14 +815,10 @@ fun parseReferenceXml(
                                 it[noteGer] = substance.note?.de
                             }
                         }
-                    }
-                }
 
-                "NoSwitchReason" -> {
-                    val noSwitchReasonString = fullElement(startElement, reader)
-                    val noSwitchReason = xmlMapper.readValue<NoSwitchReason>(noSwitchReasonString)
-                    tryPersist {
-                        transaction {
+                        "NoSwitchReason" -> {
+                            val noSwitchReasonString = fullElement(startElement, reader)
+                            val noSwitchReason = xmlMapper.readValue<NoSwitchReason>(noSwitchReasonString)
                             ReferenceTableModel.NOSWR.insert {
                                 it[code] = noSwitchReason.code
                                 it[descriptionNl] = noSwitchReason.description.nl
@@ -847,14 +827,10 @@ fun parseReferenceXml(
                                 it[descriptionGer] = noSwitchReason.description.de
                             }
                         }
-                    }
-                }
 
-                "VirtualForm" -> {
-                    val virtualFormString = fullElement(startElement, reader)
-                    val virtualForm = xmlMapper.readValue<VirtualForm>(virtualFormString)
-                    tryPersist {
-                        transaction {
+                        "VirtualForm" -> {
+                            val virtualFormString = fullElement(startElement, reader)
+                            val virtualForm = xmlMapper.readValue<VirtualForm>(virtualFormString)
                             ReferenceTableModel.VTFRM.insert {
                                 it[code] = virtualForm.code
                                 it[abbreviatedNl] = virtualForm.abbreviation.nl!!
@@ -873,14 +849,10 @@ fun parseReferenceXml(
                                 it[descriptionGer] = virtualForm.description?.de
                             }
                         }
-                    }
-                }
 
-                "Wada" -> {
-                    val wadaString = fullElement(startElement, reader)
-                    val wada = xmlMapper.readValue<Wada>(wadaString)
-                    tryPersist {
-                        transaction {
+                        "Wada" -> {
+                            val wadaString = fullElement(startElement, reader)
+                            val wada = xmlMapper.readValue<Wada>(wadaString)
                             ReferenceTableModel.WADA.insert {
                                 it[code] = wada.code
 
@@ -895,16 +867,12 @@ fun parseReferenceXml(
                                 it[descriptionGer] = wada.description?.de
                             }
                         }
-                    }
-                }
 
-                "NoGenericPrescriptionReason" -> {
-                    val noGenPrescrReasonStr = fullElement(startElement, reader)
-                    val noGenPrescrReason =
-                        xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
+                        "NoGenericPrescriptionReason" -> {
+                            val noGenPrescrReasonStr = fullElement(startElement, reader)
+                            val noGenPrescrReason =
+                                xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.NOGNPR.insert {
                                 it[code] = noGenPrescrReason.code
                                 it[descriptionNl] = noGenPrescrReason.description.nl
@@ -913,30 +881,22 @@ fun parseReferenceXml(
                                 it[descriptionGer] = noGenPrescrReason.description.de
                             }
                         }
-                    }
-                }
 
-                "StandardForm" -> {
-                    val standardFormString = fullElement(startElement, reader)
-                    val standardForm = xmlMapper.readValue<StandardForm>(standardFormString)
+                        "StandardForm" -> {
+                            val standardFormString = fullElement(startElement, reader)
+                            val standardForm = xmlMapper.readValue<StandardForm>(standardFormString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.STDFRM.insert {
                                 it[standard] = standardForm.standard
                                 it[code] = standardForm.code
                                 it[virtualFormCode] = standardForm.virtualFormReference.codeReference
                             }
                         }
-                    }
-                }
 
-                "StandardRoute" -> {
-                    val standardRouteString = fullElement(startElement, reader)
-                    val standardRoute = xmlMapper.readValue<StandardRoute>(standardRouteString)
+                        "StandardRoute" -> {
+                            val standardRouteString = fullElement(startElement, reader)
+                            val standardRoute = xmlMapper.readValue<StandardRoute>(standardRouteString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.STDROA.insert {
                                 it[standard] = standardRoute.standard
                                 it[code] = standardRoute.code
@@ -944,15 +904,11 @@ fun parseReferenceXml(
                                     standardRoute.routeOfAdminReference.codeReference
                             }
                         }
-                    }
-                }
 
-                "StandardSubstance" -> {
-                    val standardSubstanceString = fullElement(startElement, reader)
-                    val standardSubstance = xmlMapper.readValue<StandardSubstance>(standardSubstanceString)
+                        "StandardSubstance" -> {
+                            val standardSubstanceString = fullElement(startElement, reader)
+                            val standardSubstance = xmlMapper.readValue<StandardSubstance>(standardSubstanceString)
 
-                    tryPersist {
-                        transaction {
                             for (singleReference in standardSubstance.substanceReference) {
                                 ReferenceTableModel.STDSBST.insert {
                                     it[standard] = standardSubstance.standard
@@ -961,15 +917,11 @@ fun parseReferenceXml(
                                 }
                             }
                         }
-                    }
-                }
 
-                "StandardUnit" -> {
-                    val standardUnitString = fullElement(startElement, reader)
-                    val standardUnit = xmlMapper.readValue<StandardUnit>(standardUnitString)
+                        "StandardUnit" -> {
+                            val standardUnitString = fullElement(startElement, reader)
+                            val standardUnit = xmlMapper.readValue<StandardUnit>(standardUnitString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.STDUNT.insert {
                                 it[name] = standardUnit.name
                                 it[descriptionNl] = standardUnit.description?.nl
@@ -978,15 +930,11 @@ fun parseReferenceXml(
                                 it[descriptionGer] = standardUnit.description?.de
                             }
                         }
-                    }
-                }
 
-                "Appendix" -> {
-                    val appendixString = fullElement(startElement, reader)
-                    val appendix = xmlMapper.readValue<Appendix>(appendixString)
+                        "Appendix" -> {
+                            val appendixString = fullElement(startElement, reader)
+                            val appendix = xmlMapper.readValue<Appendix>(appendixString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.APPENDIX.insert {
                                 it[code] = appendix.code
                                 it[descriptionNl] = appendix.description.nl
@@ -995,15 +943,11 @@ fun parseReferenceXml(
                                 it[descriptionGer] = appendix.description.de
                             }
                         }
-                    }
-                }
 
-                "FormCategory" -> {
-                    val formCatString = fullElement(startElement, reader)
-                    val formCategory = xmlMapper.readValue<FormCategory>(formCatString)
+                        "FormCategory" -> {
+                            val formCatString = fullElement(startElement, reader)
+                            val formCategory = xmlMapper.readValue<FormCategory>(formCatString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.FORMCAT.insert {
                                 it[code] = formCategory.code
                                 it[descriptionNl] = formCategory.description.nl
@@ -1012,21 +956,17 @@ fun parseReferenceXml(
                                 it[descriptionGer] = formCategory.description.de
                             }
                         }
-                    }
-                }
 
-                "Parameter" -> {
-                    val parameterString = fullElement(startElement, reader)
+                        "Parameter" -> {
+                            val parameterString = fullElement(startElement, reader)
 
-                    logger.debug("Did absolutely nothing with a parsed 'parameter'")
-                }
+                            logger.debug("Did absolutely nothing with a parsed 'parameter'")
+                        }
 
-                "ReimbursementCriterion" -> {
-                    val reimbCritString = fullElement(startElement, reader)
-                    val reimbursementCriterion = xmlMapper.readValue<ReimbursementCriterion>(reimbCritString)
+                        "ReimbursementCriterion" -> {
+                            val reimbCritString = fullElement(startElement, reader)
+                            val reimbursementCriterion = xmlMapper.readValue<ReimbursementCriterion>(reimbCritString)
 
-                    tryPersist {
-                        transaction {
                             ReferenceTableModel.RMBCRIT.insert {
                                 it[code] = reimbursementCriterion.code
                                 it[category] = reimbursementCriterion.category
@@ -1036,11 +976,11 @@ fun parseReferenceXml(
                                 it[descriptionGer] = reimbursementCriterion.description.de
                             }
                         }
-                    }
-                }
 
-                else -> {
-                    println("no handler for " + startElement.name.localPart)
+                        else -> {
+                            println("no handler for " + startElement.name.localPart)
+                        }
+                    }
                 }
             }
         }
