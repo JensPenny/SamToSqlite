@@ -75,7 +75,7 @@ class AmppElementTest {
         assertNull(amppComponentData.to)
         assertEquals("1", amppComponentData.ampcSequenceNr)
         assertEquals("ACTIVE_COMPONENT", amppComponentData.contentType)
-        assertEquals("26", amppComponentData.packagingType.codeReference)
+        assertEquals("26", amppComponentData.packagingType?.codeReference)
 
         val equivalent = amppComponent.ampComponentEquivalents[0]
         assertEquals("1", equivalent.sequenceNumber)
