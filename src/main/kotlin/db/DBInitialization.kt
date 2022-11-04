@@ -40,49 +40,65 @@ class DBInitialization {
 
     private fun createReferenceTables() {
         transaction {
-            drop(ReferenceTableModel.ATC)
-            create(ReferenceTableModel.ATC)
-            drop(ReferenceTableModel.DLVM)
-            create(ReferenceTableModel.DLVM)
-            drop(ReferenceTableModel.DLVMS)
-            create(ReferenceTableModel.DLVMS)
-            drop(ReferenceTableModel.DVCTP)
-            create(ReferenceTableModel.DVCTP)
-            drop(ReferenceTableModel.PCKCL)
-            create(ReferenceTableModel.PCKCL)
-            drop(ReferenceTableModel.PCKMT)
-            create(ReferenceTableModel.PCKMT)
-            drop(ReferenceTableModel.PCKTP)
-            create(ReferenceTableModel.PCKTP)
-            drop(ReferenceTableModel.PHFRM)
-            create(ReferenceTableModel.PHFRM)
-            drop(ReferenceTableModel.ROA)
-            create(ReferenceTableModel.ROA)
-            drop(ReferenceTableModel.SBST)
-            create(ReferenceTableModel.SBST)
-            drop(ReferenceTableModel.NOSWR)
-            create(ReferenceTableModel.NOSWR)
-            drop(ReferenceTableModel.VTFRM)
-            create(ReferenceTableModel.VTFRM)
-            drop(ReferenceTableModel.WADA)
-            create(ReferenceTableModel.WADA)
-            drop(ReferenceTableModel.NOGNPR)
-            create(ReferenceTableModel.NOGNPR)
-            drop(ReferenceTableModel.STDFRM)
-            create(ReferenceTableModel.STDFRM)
-            drop(ReferenceTableModel.STDROA)
-            create(ReferenceTableModel.STDROA)
-            drop(ReferenceTableModel.STDSBST)
-            create(ReferenceTableModel.STDSBST)
-            drop(ReferenceTableModel.STDUNT)
-            create(ReferenceTableModel.STDUNT)
-            drop(ReferenceTableModel.APPENDIX)
-            create(ReferenceTableModel.APPENDIX)
-            drop(ReferenceTableModel.FORMCAT)
-            create(ReferenceTableModel.FORMCAT)
-            //Parameter should come here, if it's a bit less shit
-            drop(ReferenceTableModel.RMBCRIT)
-            create(ReferenceTableModel.RMBCRIT)
+            drop(
+                ReferenceTableModel.ATC,
+                ReferenceTableModel.DLVM,
+                ReferenceTableModel.DLVMS,
+                ReferenceTableModel.DVCTP,
+                ReferenceTableModel.PCKCL,
+                ReferenceTableModel.PCKMT,
+                ReferenceTableModel.PCKTP,
+                ReferenceTableModel.PHFRM,
+                ReferenceTableModel.ROA,
+                ReferenceTableModel.SBST,
+                ReferenceTableModel.NOSWR,
+                ReferenceTableModel.VTFRM,
+                ReferenceTableModel.WADA,
+                ReferenceTableModel.NOGNPR,
+                ReferenceTableModel.STDFRM,
+                ReferenceTableModel.STDROA,
+                ReferenceTableModel.STDSBST,
+                ReferenceTableModel.STDUNT,
+                ReferenceTableModel.APPENDIX,
+                ReferenceTableModel.FORMCAT,
+                ReferenceTableModel.RMBCRIT,
+                ReferenceTableModel.PROFESSIONALCODE,
+                ReferenceTableModel.APPENDIX_TYPE,
+                ReferenceTableModel.FORM_TYPE,
+                ReferenceTableModel.NAME_TYPE,
+                ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH,
+                inBatch = true
+            )
+
+            create(
+                ReferenceTableModel.ATC,
+                ReferenceTableModel.DLVM,
+                ReferenceTableModel.DLVMS,
+                ReferenceTableModel.DVCTP,
+                ReferenceTableModel.PCKCL,
+                ReferenceTableModel.PCKMT,
+                ReferenceTableModel.PCKTP,
+                ReferenceTableModel.PHFRM,
+                ReferenceTableModel.ROA,
+                ReferenceTableModel.SBST,
+                ReferenceTableModel.NOSWR,
+                ReferenceTableModel.VTFRM,
+                ReferenceTableModel.WADA,
+                ReferenceTableModel.NOGNPR,
+                ReferenceTableModel.STDFRM,
+                ReferenceTableModel.STDROA,
+                ReferenceTableModel.STDSBST,
+                ReferenceTableModel.STDUNT,
+                ReferenceTableModel.APPENDIX,
+                ReferenceTableModel.FORMCAT,
+                ReferenceTableModel.RMBCRIT,
+                ReferenceTableModel.PROFESSIONALCODE,
+                ReferenceTableModel.APPENDIX_TYPE,
+                ReferenceTableModel.FORM_TYPE,
+                ReferenceTableModel.NAME_TYPE,
+                ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH,
+                inBatch = true
+            )
         }
     }
 
@@ -112,6 +128,9 @@ class DBInitialization {
                 ActualMedicineSamTableModel.DMPP,
                 ActualMedicineSamTableModel.RACTING,
                 ActualMedicineSamTableModel.RACTIEQ,
+                ActualMedicineSamTableModel.SPPROB,
+                ActualMedicineSamTableModel.CMRCL,
+                ActualMedicineSamTableModel.DRGIMP,
                 inBatch = true
             )
 
@@ -132,6 +151,9 @@ class DBInitialization {
                 ActualMedicineSamTableModel.DMPP,
                 ActualMedicineSamTableModel.RACTING,
                 ActualMedicineSamTableModel.RACTIEQ,
+                ActualMedicineSamTableModel.SPPROB,
+                ActualMedicineSamTableModel.CMRCL,
+                ActualMedicineSamTableModel.DRGIMP,
                 inBatch = true
             )
         }

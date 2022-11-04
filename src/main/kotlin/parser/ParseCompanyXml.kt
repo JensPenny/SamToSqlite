@@ -41,26 +41,26 @@ fun parseCompanyXml(
 
                             for (datablock in company.data) {
                                 CompanyTableModel.CPN.insert {
-                                    it[CompanyTableModel.CPN.actorNumber] = company.actorNr
-                                    it[CompanyTableModel.CPN.authorisationNumber] = datablock.authorisationNr
-                                    it[CompanyTableModel.CPN.vatCountryCode] = datablock.vat?.countryCode
-                                    it[CompanyTableModel.CPN.vatNumber] = datablock.vat?.VatNr
-                                    it[CompanyTableModel.CPN.europeanNumber] = null
-                                    it[CompanyTableModel.CPN.denomination] = datablock.denomination
-                                    it[CompanyTableModel.CPN.legalForm] = datablock.legalForm
-                                    it[CompanyTableModel.CPN.building] = datablock.building
-                                    it[CompanyTableModel.CPN.streetName] = datablock.streetName
-                                    it[CompanyTableModel.CPN.streetNum] = datablock.streetNum
-                                    it[CompanyTableModel.CPN.postbox] = datablock.postbox
-                                    it[CompanyTableModel.CPN.postcode] = datablock.postcode
-                                    it[CompanyTableModel.CPN.city] = datablock.city
-                                    it[CompanyTableModel.CPN.countryCode] = datablock.countryCode
-                                    it[CompanyTableModel.CPN.phone] = datablock.phone
-                                    it[CompanyTableModel.CPN.language] = datablock.language
-                                    it[CompanyTableModel.CPN.website] = datablock.website
-                                    it[CompanyTableModel.CPN.validFrom] = LocalDate.parse(datablock.from)
+                                    it[actorNumber] = company.actorNr
+                                    it[authorisationNumber] = datablock.authorisationNr
+                                    it[vatCountryCode] = datablock.vat?.countryCode
+                                    it[vatNumber] = datablock.vat?.VatNr
+                                    it[europeanNumber] = null
+                                    it[denomination] = datablock.denomination
+                                    it[legalForm] = datablock.legalForm
+                                    it[building] = datablock.building
+                                    it[streetName] = datablock.streetName
+                                    it[streetNum] = datablock.streetNum
+                                    it[postbox] = datablock.postbox
+                                    it[postcode] = datablock.postcode
+                                    it[city] = datablock.city
+                                    it[countryCode] = datablock.countryCode
+                                    it[phone] = datablock.phone
+                                    it[language] = datablock.language
+                                    it[website] = datablock.website
+                                    it[validFrom] = LocalDate.parse(datablock.from)
                                     if (datablock.to != null) {
-                                        it[CompanyTableModel.CPN.validTo] = LocalDate.parse(datablock.to)
+                                        it[validTo] = LocalDate.parse(datablock.to)
                                     }
                                 }
                             }

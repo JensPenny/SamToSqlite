@@ -86,6 +86,8 @@ validity of the primary ampp datablocks.
 
 ## Commercialization quirks
 * I have no idea if the additionalinformation in the docs is the reason in the export, but I'm going to assume it is. 
+* This will probably get fixed, but end of commercialization has a max length of 50 chars. 061311-01 contains `Remplacement par un autre médicament/conditionnement`. 
+This is 52 chars. To fix this we raised the max. length for all end reasons to 60 chars. 
 
 ## Supplyproblem quirks
 * Property `limitedAvailability` is documented but doesn't exist in the export.

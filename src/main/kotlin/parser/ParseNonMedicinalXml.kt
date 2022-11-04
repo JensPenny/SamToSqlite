@@ -38,31 +38,31 @@ fun parseNonMedicinalXml(
 
                             for (datablock in nonmedicinal.datablocks) {
                                 NonmedicinalTableModel.NONMEDICINAL.insert {
-                                    it[NonmedicinalTableModel.NONMEDICINAL.productId] = nonmedicinal.ProductId
-                                    it[NonmedicinalTableModel.NONMEDICINAL.cnk] = nonmedicinal.code
+                                    it[productId] = nonmedicinal.ProductId
+                                    it[cnk] = nonmedicinal.code
 
-                                    it[NonmedicinalTableModel.NONMEDICINAL.nameNl] = datablock.name.nl!!
-                                    it[NonmedicinalTableModel.NONMEDICINAL.nameFr] = datablock.name.fr!!
-                                    it[NonmedicinalTableModel.NONMEDICINAL.nameEng] = datablock.name.en
-                                    it[NonmedicinalTableModel.NONMEDICINAL.nameGer] = datablock.name.de
+                                    it[nameNl] = datablock.name.nl!!
+                                    it[nameFr] = datablock.name.fr!!
+                                    it[nameEng] = datablock.name.en
+                                    it[nameGer] = datablock.name.de
 
-                                    it[NonmedicinalTableModel.NONMEDICINAL.category] = datablock.category
-                                    it[NonmedicinalTableModel.NONMEDICINAL.commercialStatus] =
+                                    it[category] = datablock.category
+                                    it[commercialStatus] =
                                         datablock.commercialStatus
 
-                                    it[NonmedicinalTableModel.NONMEDICINAL.distributorNl] = datablock.distributor.nl
-                                    it[NonmedicinalTableModel.NONMEDICINAL.distributorFr] = datablock.distributor.fr
-                                    it[NonmedicinalTableModel.NONMEDICINAL.distributorEng] = datablock.distributor.en
-                                    it[NonmedicinalTableModel.NONMEDICINAL.distributorGer] = datablock.distributor.de
+                                    it[distributorNl] = datablock.distributor.nl
+                                    it[distributorFr] = datablock.distributor.fr
+                                    it[distributorEng] = datablock.distributor.en
+                                    it[distributorGer] = datablock.distributor.de
 
-                                    it[NonmedicinalTableModel.NONMEDICINAL.producerNl] = datablock.producer.nl!!
-                                    it[NonmedicinalTableModel.NONMEDICINAL.producerFr] = datablock.producer.fr!!
-                                    it[NonmedicinalTableModel.NONMEDICINAL.producerEng] = datablock.producer.en
-                                    it[NonmedicinalTableModel.NONMEDICINAL.producerGer] = datablock.producer.de
+                                    it[producerNl] = datablock.producer.nl!!
+                                    it[producerFr] = datablock.producer.fr!!
+                                    it[producerEng] = datablock.producer.en
+                                    it[producerGer] = datablock.producer.de
 
-                                    it[NonmedicinalTableModel.NONMEDICINAL.validFrom] = LocalDate.parse(datablock.from)
+                                    it[validFrom] = LocalDate.parse(datablock.from)
                                     if (datablock.to != null) {
-                                        it[NonmedicinalTableModel.NONMEDICINAL.validTo] = LocalDate.parse(datablock.to)
+                                        it[validTo] = LocalDate.parse(datablock.to)
                                     }
                                 }
 

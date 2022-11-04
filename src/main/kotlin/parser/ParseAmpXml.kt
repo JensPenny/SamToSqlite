@@ -30,63 +30,63 @@ fun parseAmpXml(
                         transaction {
                             for (ampData in amp.dataBlocks) {
                                 ActualMedicineSamTableModel.AMP_FAMHP.insert {
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.code] = amp.code
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.vmpCode] = amp.vmpCode?.toInt()
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.companyActorNumber] =
+                                    it[code] = amp.code
+                                    it[vmpCode] = amp.vmpCode?.toInt()
+                                    it[companyActorNumber] =
                                         ampData.company.actorNr.toInt()
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.status] = ampData.status
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.blackTriangle] = ampData.blackTriangle
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.officialName] = ampData.officialName
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.nameNl] = ampData.name.nl!!
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.nameFr] = ampData.name.fr!!
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.nameEnglish] = ampData.name.en
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.nameGerman] = ampData.name.de
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.medicineType] = ampData.medicineType
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.prescriptionNameNl] =
+                                    it[status] = ampData.status
+                                    it[blackTriangle] = ampData.blackTriangle
+                                    it[officialName] = ampData.officialName
+                                    it[nameNl] = ampData.name.nl!!
+                                    it[nameFr] = ampData.name.fr!!
+                                    it[nameEnglish] = ampData.name.en
+                                    it[nameGerman] = ampData.name.de
+                                    it[medicineType] = ampData.medicineType
+                                    it[prescriptionNameNl] =
                                         ampData.prescriptionNameFamhp?.nl
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.prescriptionNameFr] =
+                                    it[prescriptionNameFr] =
                                         ampData.prescriptionNameFamhp?.fr
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.prescriptionNameEng] =
+                                    it[prescriptionNameEng] =
                                         ampData.prescriptionNameFamhp?.en
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.prescriptionNameGer] =
+                                    it[prescriptionNameGer] =
                                         ampData.prescriptionNameFamhp?.de
 
-                                    it[ActualMedicineSamTableModel.AMP_FAMHP.validFrom] = LocalDate.parse(ampData.from)
+                                    it[validFrom] = LocalDate.parse(ampData.from)
                                     if (ampData.to != null) {
-                                        it[ActualMedicineSamTableModel.AMP_FAMHP.validTo] = LocalDate.parse(ampData.to)
+                                        it[validTo] = LocalDate.parse(ampData.to)
                                     }
                                 }
 
                                 ActualMedicineSamTableModel.AMP_BCPI.insert {
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.code] = amp.code
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.abbreviatedNameNl] =
+                                    it[code] = amp.code
+                                    it[abbreviatedNameNl] =
                                         ampData.abbreviatedName?.nl
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.abbreviatedNameFr] =
+                                    it[abbreviatedNameFr] =
                                         ampData.abbreviatedName?.fr
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.abbreviatedNameEng] =
+                                    it[abbreviatedNameEng] =
                                         ampData.abbreviatedName?.en
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.abbreviatedNameGer] =
+                                    it[abbreviatedNameGer] =
                                         ampData.abbreviatedName?.de
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.proprietarySuffixNl] =
+                                    it[proprietarySuffixNl] =
                                         ampData.proprietarySuffix?.nl
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.proprietarySuffixFr] =
+                                    it[proprietarySuffixFr] =
                                         ampData.proprietarySuffix?.fr
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.proprietarySuffixEng] =
+                                    it[proprietarySuffixEng] =
                                         ampData.proprietarySuffix?.en
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.proprietarySuffixGer] =
+                                    it[proprietarySuffixGer] =
                                         ampData.proprietarySuffix?.de
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.prescriptionNameNl] =
+                                    it[prescriptionNameNl] =
                                         ampData.prescriptionName?.nl
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.prescriptionNameFr] =
+                                    it[prescriptionNameFr] =
                                         ampData.prescriptionName?.fr
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.prescriptionNameEng] =
+                                    it[prescriptionNameEng] =
                                         ampData.prescriptionName?.en
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.prescriptionNameGer] =
+                                    it[prescriptionNameGer] =
                                         ampData.prescriptionName?.de
 
-                                    it[ActualMedicineSamTableModel.AMP_BCPI.validFrom] = LocalDate.parse(ampData.from)
+                                    it[validFrom] = LocalDate.parse(ampData.from)
                                     if (ampData.to != null) {
-                                        it[ActualMedicineSamTableModel.AMP_BCPI.validTo] = LocalDate.parse(ampData.to)
+                                        it[validTo] = LocalDate.parse(ampData.to)
                                     }
                                     //logger.info { "Persisted amp ${amp}" }
                                 }
@@ -95,64 +95,64 @@ fun parseAmpXml(
                             for (ampComponent in amp.ampComponents) {
                                 for (ampComponentData in ampComponent.dataBlocks) {
                                     ActualMedicineSamTableModel.AMPC_FAMHP.insert {
-                                        it[ActualMedicineSamTableModel.AMPC_FAMHP.ampCode] = amp.code
-                                        it[ActualMedicineSamTableModel.AMPC_FAMHP.sequenceNumber] =
+                                        it[ampCode] = amp.code
+                                        it[sequenceNumber] =
                                             ampComponent.sequenceNumber.toInt()
 
-                                        it[ActualMedicineSamTableModel.AMPC_FAMHP.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(ampComponentData.from)
                                         if (ampComponentData.to != null) {
-                                            it[ActualMedicineSamTableModel.AMPC_FAMHP.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(ampComponentData.to)
                                         }
                                     }
 
                                     ActualMedicineSamTableModel.AMPC_BCPI.insert {
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.ampCode] = amp.code
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.sequenceNumber] =
+                                        it[ampCode] = amp.code
+                                        it[sequenceNumber] =
                                             ampComponent.sequenceNumber.toInt()
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.vmpcCode] =
+                                        it[vmpcCode] =
                                             ampComponent.vmpComponentCode
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.dividable] = ampComponentData.dividable
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.scored] = ampComponentData.scored
+                                        it[dividable] = ampComponentData.dividable
+                                        it[scored] = ampComponentData.scored
                                         //it[crushable] = ampComponentData.crushable
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.containsAlcohol] =
+                                        it[containsAlcohol] =
                                             ampComponentData.containsAlcohol
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.sugarFree] = ampComponentData.sugarFree
+                                        it[sugarFree] = ampComponentData.sugarFree
                                         //it[modifiedReleaseType] = ampComponentData.modifiedReleaseType
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.specificDrugDevice] =
+                                        it[specificDrugDevice] =
                                             ampComponentData.specificDrugDevice
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.dimensions] =
+                                        it[dimensions] =
                                             ampComponentData.dimensions
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.nameNl] = ampComponentData.name.nl
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.nameFr] = ampComponentData.name.fr
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.nameEng] = ampComponentData.name.en
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.nameGer] = ampComponentData.name.de
+                                        it[nameNl] = ampComponentData.name.nl
+                                        it[nameFr] = ampComponentData.name.fr
+                                        it[nameEng] = ampComponentData.name.en
+                                        it[nameGer] = ampComponentData.name.de
                                         //it[noteNl] = ampComponentData.note
                                         //it[concentration] = ampComponentData.concentration
                                         //it[osmoticConcentration] = ampComponentData.osmoticConcentration
                                         //it[caloricValue] = ampComponentData.caloricValue
 
-                                        it[ActualMedicineSamTableModel.AMPC_BCPI.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(ampComponentData.from)
                                         if (ampComponentData.to != null) {
-                                            it[ActualMedicineSamTableModel.AMPC_BCPI.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(ampComponentData.to)
                                         }
                                     }
 
                                     for (pharmaceuticalFormReference in ampComponentData.pharmaceuticalFormReferences) {
                                         ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.insert {
-                                            it[ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.ampCode] = amp.code
-                                            it[ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.sequenceNumber] =
+                                            it[ampCode] = amp.code
+                                            it[sequenceNumber] =
                                                 ampComponent.sequenceNumber.toInt()
-                                            it[ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.pharmaFormCode] =
+                                            it[pharmaFormCode] =
                                                 pharmaceuticalFormReference.codeReference
 
-                                            it[ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(ampComponentData.from)
                                             if (ampComponentData.to != null) {
-                                                it[ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(ampComponentData.to)
                                             }
                                         }
@@ -160,16 +160,16 @@ fun parseAmpXml(
 
                                     for (roaReference in ampComponentData.routesOfAdministration) {
                                         ActualMedicineSamTableModel.AMPC_TO_ROA.insert {
-                                            it[ActualMedicineSamTableModel.AMPC_TO_ROA.ampCode] = amp.code
-                                            it[ActualMedicineSamTableModel.AMPC_TO_ROA.sequenceNumber] =
+                                            it[ampCode] = amp.code
+                                            it[sequenceNumber] =
                                                 ampComponent.sequenceNumber.toInt()
-                                            it[ActualMedicineSamTableModel.AMPC_TO_ROA.roaCode] =
+                                            it[roaCode] =
                                                 roaReference.codeReference
 
-                                            it[ActualMedicineSamTableModel.AMPC_TO_ROA.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(ampComponentData.from)
                                             if (ampComponentData.to != null) {
-                                                it[ActualMedicineSamTableModel.AMPC_TO_ROA.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(ampComponentData.to)
                                             }
                                         }
@@ -179,26 +179,26 @@ fun parseAmpXml(
                                 for (ingredient in ampComponent.ingredients) {
                                     for (ingredientData in ingredient.dataBlocks) {
                                         ActualMedicineSamTableModel.RACTING.insert {
-                                            it[ActualMedicineSamTableModel.RACTING.ampCode] = amp.code
-                                            it[ActualMedicineSamTableModel.RACTING.sequenceNumber] =
+                                            it[ampCode] = amp.code
+                                            it[sequenceNumber] =
                                                 ampComponent.sequenceNumber.toInt()
-                                            it[ActualMedicineSamTableModel.RACTING.rank] = ingredient.rank.toInt()
-                                            it[ActualMedicineSamTableModel.RACTING.type] = ingredientData.type
-                                            it[ActualMedicineSamTableModel.RACTING.substanceCode] =
+                                            it[rank] = ingredient.rank.toInt()
+                                            it[type] = ingredientData.type
+                                            it[substanceCode] =
                                                 ingredientData.substanceCode.codeReference
                                             //it[knownEffect] = ingredientData
-                                            it[ActualMedicineSamTableModel.RACTING.strengthUnit] =
+                                            it[strengthUnit] =
                                                 ingredientData.strength?.unit
-                                            it[ActualMedicineSamTableModel.RACTING.strengthQuantity] =
+                                            it[strengthQuantity] =
                                                 ingredientData.strength?.Strength
-                                            it[ActualMedicineSamTableModel.RACTING.strengthDescription] =
+                                            it[strengthDescription] =
                                                 ingredientData.strengthDescription
                                             //it[additionalInformation] =
 
-                                            it[ActualMedicineSamTableModel.RACTING.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(ingredientData.from)
                                             if (ingredientData.to != null) {
-                                                it[ActualMedicineSamTableModel.RACTING.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(ingredientData.to)
                                             }
                                         }
@@ -206,28 +206,28 @@ fun parseAmpXml(
                                     for (actualIngredientEquivalent in ingredient.actualIngredientEquivalents) {
                                         for (dataBlock in actualIngredientEquivalent.dataBlocks) {
                                             ActualMedicineSamTableModel.RACTIEQ.insert {
-                                                it[ActualMedicineSamTableModel.RACTIEQ.ampCode] = amp.code
-                                                it[ActualMedicineSamTableModel.RACTIEQ.ampcSequenceNumber] =
+                                                it[ampCode] = amp.code
+                                                it[ampcSequenceNumber] =
                                                     ampComponent.sequenceNumber.toInt()
-                                                it[ActualMedicineSamTableModel.RACTIEQ.rank] = ingredient.rank.toInt()
-                                                it[ActualMedicineSamTableModel.RACTIEQ.sequenceNumber] =
+                                                it[rank] = ingredient.rank.toInt()
+                                                it[sequenceNumber] =
                                                     actualIngredientEquivalent.sequenceNumber.toInt()
-                                                it[ActualMedicineSamTableModel.RACTIEQ.type] = dataBlock.type
-                                                it[ActualMedicineSamTableModel.RACTIEQ.substanceCode] =
+                                                it[type] = dataBlock.type
+                                                it[substanceCode] =
                                                     dataBlock.substanceCode?.codeReference
                                                 //it[knownEffect] = dataBlock
-                                                it[ActualMedicineSamTableModel.RACTIEQ.strengthQuantity] =
+                                                it[strengthQuantity] =
                                                     dataBlock.strength?.Strength
-                                                it[ActualMedicineSamTableModel.RACTIEQ.strengthUnit] =
+                                                it[strengthUnit] =
                                                     dataBlock.strength?.unit
-                                                it[ActualMedicineSamTableModel.RACTIEQ.strengthDescription] =
+                                                it[strengthDescription] =
                                                     dataBlock.strengthDescription
                                                 //it[additionalInformation] = dataBlock.a
 
-                                                it[ActualMedicineSamTableModel.RACTIEQ.validFrom] =
+                                                it[validFrom] =
                                                     LocalDate.parse(dataBlock.from)
                                                 if (dataBlock.to != null) {
-                                                    it[ActualMedicineSamTableModel.RACTIEQ.validTo] =
+                                                    it[validTo] =
                                                         LocalDate.parse(dataBlock.to)
                                                 }
                                             }
@@ -239,133 +239,133 @@ fun parseAmpXml(
                             for (amppElement in amp.amppElements) {
                                 for (amppDataBlock in amppElement.amppDataBlocks) {
                                     ActualMedicineSamTableModel.AMPP_FAMHP.insert {
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.ctiExtended] = amppElement.ctiExtended
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.ampCode] = amp.code
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.deliveryModusCode] =
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[ampCode] = amp.code
+                                        it[deliveryModusCode] =
                                             amppDataBlock.deliveryModusReference.codeReference
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.deliveryModusSpecificationCode] =
+                                        it[deliveryModusSpecificationCode] =
                                             amppDataBlock.deliveryModusSpecReference?.codeReference
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.authorizationNumber] =
+                                        it[authorizationNumber] =
                                             amppDataBlock.authorisationNr
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.orphan] = amppDataBlock.orphan
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.leafletLinkNl] =
+                                        it[orphan] = amppDataBlock.orphan
+                                        it[leafletLinkNl] =
                                             amppDataBlock.leafletLink?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.leafletLinkFr] =
+                                        it[leafletLinkFr] =
                                             amppDataBlock.leafletLink?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.leafletLinkEng] =
+                                        it[leafletLinkEng] =
                                             amppDataBlock.leafletLink?.en
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.leafletLinkGer] =
+                                        it[leafletLinkGer] =
                                             amppDataBlock.leafletLink?.de
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.spcLinkNl] = amppDataBlock.spcLink?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.spcLinkFr] = amppDataBlock.spcLink?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.spcLinkEng] =
+                                        it[spcLinkNl] = amppDataBlock.spcLink?.nl
+                                        it[spcLinkFr] = amppDataBlock.spcLink?.fr
+                                        it[spcLinkEng] =
                                             amppDataBlock.spcLink?.en
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.spcLinkGer] =
+                                        it[spcLinkGer] =
                                             amppDataBlock.spcLink?.de
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaPatientLinkNl] =
+                                        it[rmaPatientLinkNl] =
                                             amppDataBlock.rmaPatientLink?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaPatientLinkFr] =
+                                        it[rmaPatientLinkFr] =
                                             amppDataBlock.rmaPatientLink?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaPatientLinkEng] =
+                                        it[rmaPatientLinkEng] =
                                             amppDataBlock.rmaPatientLink?.en
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaPatientLinkGer] =
+                                        it[rmaPatientLinkGer] =
                                             amppDataBlock.rmaPatientLink?.de
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaProfessionalLinkNl] =
+                                        it[rmaProfessionalLinkNl] =
                                             amppDataBlock.rmaProfessionalLink?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaProfessionalLinkFr] =
+                                        it[rmaProfessionalLinkFr] =
                                             amppDataBlock.rmaProfessionalLink?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaProfessionalLinkEng] =
+                                        it[rmaProfessionalLinkEng] =
                                             amppDataBlock.rmaProfessionalLink?.en
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.rmaProfessionalLinkGer] =
+                                        it[rmaProfessionalLinkGer] =
                                             amppDataBlock.rmaProfessionalLink?.de
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.parallelCircuit] =
+                                        it[parallelCircuit] =
                                             amppDataBlock.parallelCircuit
                                         //it[parallelDistributor] = amppDataBlock.parallelDistributor
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.packMultiplier] =
+                                        it[packMultiplier] =
                                             amppDataBlock.packMultiplier?.toInt()
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.packAmount] =
+                                        it[packAmount] =
                                             amppDataBlock.packAmount?.PackAmount
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.packAmountUnit] =
+                                        it[packAmountUnit] =
                                             amppDataBlock.packAmount?.unit
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.packDisplayValue] =
+                                        it[packDisplayValue] =
                                             amppDataBlock.packDisplayValue
                                         //it[gtin] = amppDataBlock.gtin
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.status] = amppDataBlock.status
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.fmdProductCode] =
+                                        it[status] = amppDataBlock.status
+                                        it[fmdProductCode] =
                                             amppDataBlock.fmdProductCode
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.fmdInScope] = amppDataBlock.fmdInScope
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.antiTamperingDevicePresent] =
+                                        it[fmdInScope] = amppDataBlock.fmdInScope
+                                        it[antiTamperingDevicePresent] =
                                             amppDataBlock.antiTamperingDevicePresent
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.prescriptionNameNl] =
+                                        it[prescriptionNameNl] =
                                             amppDataBlock.prescriptionNameFamhp?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.prescriptionNameFr] =
+                                        it[prescriptionNameFr] =
                                             amppDataBlock.prescriptionNameFamhp?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.prescriptionNameEng] =
+                                        it[prescriptionNameEng] =
                                             amppDataBlock.prescriptionNameFamhp?.en
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.prescriptionNameGer] =
+                                        it[prescriptionNameGer] =
                                             amppDataBlock.prescriptionNameFamhp?.de
 
-                                        it[ActualMedicineSamTableModel.AMPP_FAMHP.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(amppDataBlock.from)
                                         if (amppDataBlock.to != null) {
-                                            it[ActualMedicineSamTableModel.AMPP_FAMHP.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(amppDataBlock.to)
                                         }
                                     }
 
                                     ActualMedicineSamTableModel.AMPP_BCFI.insert {
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.ctiExtended] = amppElement.ctiExtended
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.singleUse] = amppDataBlock.singleUse
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.speciallyRegulated] =
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[singleUse] = amppDataBlock.singleUse
+                                        it[speciallyRegulated] =
                                             amppDataBlock.speciallyRegulated
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.abbreviatedNameNl] =
+                                        it[abbreviatedNameNl] =
                                             amppDataBlock.abbreviatedName?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.abbreviatedNameFr] =
+                                        it[abbreviatedNameFr] =
                                             amppDataBlock.abbreviatedName?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.abbreviatedNameEng] =
+                                        it[abbreviatedNameEng] =
                                             amppDataBlock.abbreviatedName?.en
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.abbreviatedNameGer] =
+                                        it[abbreviatedNameGer] =
                                             amppDataBlock.abbreviatedName?.de
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.noteNl] = amppDataBlock.note?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.noteFr] = amppDataBlock.note?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.noteEng] = amppDataBlock.note?.en
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.noteGer] = amppDataBlock.note?.de
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.posologyNoteNl] =
+                                        it[noteNl] = amppDataBlock.note?.nl
+                                        it[noteFr] = amppDataBlock.note?.fr
+                                        it[noteEng] = amppDataBlock.note?.en
+                                        it[noteGer] = amppDataBlock.note?.de
+                                        it[posologyNoteNl] =
                                             amppDataBlock.posologyNote?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.posologyNoteFr] =
+                                        it[posologyNoteFr] =
                                             amppDataBlock.posologyNote?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.posologyNoteEng] =
+                                        it[posologyNoteEng] =
                                             amppDataBlock.posologyNote?.en
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.posologyNoteGer] =
+                                        it[posologyNoteGer] =
                                             amppDataBlock.posologyNote?.de
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.crmLinkNl] = amppDataBlock.crmLink?.nl
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.crmLinkFr] = amppDataBlock.crmLink?.fr
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.crmLinkEng] = amppDataBlock.crmLink?.en
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.crmLinkGer] = amppDataBlock.crmLink?.de
+                                        it[crmLinkNl] = amppDataBlock.crmLink?.nl
+                                        it[crmLinkFr] = amppDataBlock.crmLink?.fr
+                                        it[crmLinkEng] = amppDataBlock.crmLink?.en
+                                        it[crmLinkGer] = amppDataBlock.crmLink?.de
 
-                                        it[ActualMedicineSamTableModel.AMPP_BCFI.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(amppDataBlock.from)
                                         if (amppDataBlock.to != null) {
-                                            it[ActualMedicineSamTableModel.AMPP_BCFI.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(amppDataBlock.to)
                                         }
                                     }
 
                                     ActualMedicineSamTableModel.AMPP_NIHDI.insert {
-                                        it[ActualMedicineSamTableModel.AMPP_NIHDI.ctiExtended] = amppElement.ctiExtended
-                                        it[ActualMedicineSamTableModel.AMPP_NIHDI.exfactory_price] =
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[exfactory_price] =
                                             amppDataBlock.exFactoryPrice
-                                        it[ActualMedicineSamTableModel.AMPP_NIHDI.reimbursementCode] =
+                                        it[reimbursementCode] =
                                             amppDataBlock.reimbursementCode
                                         //it[cheap] = amppDataBlock.cheap
                                         //it[cheapest] = amppDataBlock.cheapest
-                                        it[ActualMedicineSamTableModel.AMPP_NIHDI.index] = amppDataBlock.index
-                                        it[ActualMedicineSamTableModel.AMPP_NIHDI.bigPackage] = amppDataBlock.bigPackage
+                                        it[index] = amppDataBlock.index
+                                        it[bigPackage] = amppDataBlock.bigPackage
 
-                                        it[ActualMedicineSamTableModel.AMPP_NIHDI.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(amppDataBlock.from)
                                         if (amppDataBlock.to != null) {
-                                            it[ActualMedicineSamTableModel.AMPP_NIHDI.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(amppDataBlock.to)
                                         }
                                     }
@@ -383,21 +383,21 @@ fun parseAmpXml(
                                      */
 
                                     ActualMedicineSamTableModel.AMPP_ECON.insert {
-                                        it[ActualMedicineSamTableModel.AMPP_ECON.ctiExtended] = amppElement.ctiExtended
-                                        it[ActualMedicineSamTableModel.AMPP_ECON.officialExFactoryPrice] =
+                                        it[ctiExtended] = amppElement.ctiExtended
+                                        it[officialExFactoryPrice] =
                                             amppDataBlock.officialExFactoryPrice
-                                        it[ActualMedicineSamTableModel.AMPP_ECON.realExFactoryPrice] =
+                                        it[realExFactoryPrice] =
                                             amppDataBlock.realExFactoryPrice
 
                                         if (amppDataBlock.pricingDecisionDate != null) {
-                                            it[ActualMedicineSamTableModel.AMPP_ECON.decisionDate] =
+                                            it[decisionDate] =
                                                 LocalDate.parse(amppDataBlock.pricingDecisionDate)
                                         }
 
-                                        it[ActualMedicineSamTableModel.AMPP_ECON.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(amppDataBlock.from)
                                         if (amppDataBlock.to != null) {
-                                            it[ActualMedicineSamTableModel.AMPP_ECON.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(amppDataBlock.to)
                                         }
                                     }
@@ -406,26 +406,26 @@ fun parseAmpXml(
                                 for (amppComponent in amppElement.amppComponents) {
                                     for (amppComponentDataBlock in amppComponent.amppComponentDataBlocks) {
                                         ActualMedicineSamTableModel.AMPPC.insert {
-                                            it[ActualMedicineSamTableModel.AMPPC.ctiExtended] = amppElement.ctiExtended
-                                            it[ActualMedicineSamTableModel.AMPPC.sequenceNumber] =
+                                            it[ctiExtended] = amppElement.ctiExtended
+                                            it[sequenceNumber] =
                                                 amppComponent.sequenceNumber.toInt()
-                                            it[ActualMedicineSamTableModel.AMPPC.ampcSequenceNumber] =
+                                            it[ampcSequenceNumber] =
                                                 amppComponentDataBlock.ampcSequenceNr?.toInt()
-                                            it[ActualMedicineSamTableModel.AMPPC.deviceTypeCode] =
+                                            it[deviceTypeCode] =
                                                 amppComponentDataBlock.deviceType?.codeReference
-                                            it[ActualMedicineSamTableModel.AMPPC.packagingTypeCode] =
+                                            it[packagingTypeCode] =
                                                 amppComponentDataBlock.packagingType?.codeReference
-                                            it[ActualMedicineSamTableModel.AMPPC.contentType] =
+                                            it[contentType] =
                                                 amppComponentDataBlock.contentType
-                                            it[ActualMedicineSamTableModel.AMPPC.contentMultiplier] =
+                                            it[contentMultiplier] =
                                                 amppComponentDataBlock.contentMultiplier?.toInt()
-                                            it[ActualMedicineSamTableModel.AMPPC.packSpecification] =
+                                            it[packSpecification] =
                                                 amppComponentDataBlock.packSpecification
 
-                                            it[ActualMedicineSamTableModel.AMPPC.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(amppComponentDataBlock.from)
                                             if (amppComponentDataBlock.to != null) {
-                                                it[ActualMedicineSamTableModel.AMPPC.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(amppComponentDataBlock.to)
                                             }
                                         }
@@ -433,21 +433,21 @@ fun parseAmpXml(
                                     for (ampComponentEquivalent in amppComponent.ampComponentEquivalents) {
                                         for (amppCompEquiData in ampComponentEquivalent.amppComponentEquivalentDataBlocks) {
                                             ActualMedicineSamTableModel.AMPPCES.insert {
-                                                it[ActualMedicineSamTableModel.AMPPCES.ctiExtended] =
+                                                it[ctiExtended] =
                                                     amppElement.ctiExtended
-                                                it[ActualMedicineSamTableModel.AMPPCES.amppcSequenceNumber] =
+                                                it[amppcSequenceNumber] =
                                                     amppComponent.sequenceNumber.toInt()
-                                                it[ActualMedicineSamTableModel.AMPPCES.sequenceNumber] =
+                                                it[sequenceNumber] =
                                                     ampComponentEquivalent.sequenceNumber.toInt()
-                                                it[ActualMedicineSamTableModel.AMPPCES.contentQuantity] =
+                                                it[contentQuantity] =
                                                     amppCompEquiData.content?.Content
-                                                it[ActualMedicineSamTableModel.AMPPCES.contentUnit] =
+                                                it[contentUnit] =
                                                     amppCompEquiData.content?.unit
 
-                                                it[ActualMedicineSamTableModel.AMPPCES.validFrom] =
+                                                it[validFrom] =
                                                     LocalDate.parse(amppCompEquiData.from)
                                                 if (amppCompEquiData.to != null) {
-                                                    it[ActualMedicineSamTableModel.AMPPCES.validTo] =
+                                                    it[validTo] =
                                                         LocalDate.parse(amppCompEquiData.to)
                                                 }
                                             }
@@ -458,21 +458,21 @@ fun parseAmpXml(
                                 for (dmpp in amppElement.dmpps) {
                                     for (dmppDataBlock in dmpp.dmppDataBlocks) {
                                         ActualMedicineSamTableModel.DMPP.insert {
-                                            it[ActualMedicineSamTableModel.DMPP.code] = dmpp.code
-                                            it[ActualMedicineSamTableModel.DMPP.codeType] = dmpp.codeSystem
-                                            it[ActualMedicineSamTableModel.DMPP.productId] = dmpp.productId
-                                            it[ActualMedicineSamTableModel.DMPP.deliveryEnvironment] =
+                                            it[code] = dmpp.code
+                                            it[codeType] = dmpp.codeSystem
+                                            it[productId] = dmpp.productId
+                                            it[deliveryEnvironment] =
                                                 dmpp.deliveryEnvironment
-                                            it[ActualMedicineSamTableModel.DMPP.price] = dmppDataBlock.price
-                                            it[ActualMedicineSamTableModel.DMPP.reimbursable] =
+                                            it[price] = dmppDataBlock.price
+                                            it[reimbursable] =
                                                 dmppDataBlock.reimbursable
                                             //it[reimbursementRequiresPriorAgreement] = dmppDataBlock.
                                             //it[cheapestCeilingPricesStatus5] = dmppDataBlock.ch
 
-                                            it[ActualMedicineSamTableModel.DMPP.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(dmppDataBlock.from)
                                             if (dmppDataBlock.to != null) {
-                                                it[ActualMedicineSamTableModel.DMPP.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(dmppDataBlock.to)
                                             }
                                         }
@@ -482,38 +482,38 @@ fun parseAmpXml(
                                 for (commercialization in amppElement.commercialization) {
                                     for (commercializationDataBlock in commercialization.commercializationDataBlocks) {
                                         ActualMedicineSamTableModel.CMRCL.insert {
-                                            it[ActualMedicineSamTableModel.CMRCL.ctiExtended] = amppElement.ctiExtended
-                                            it[ActualMedicineSamTableModel.CMRCL.endOfCommercializationNl] =
+                                            it[ctiExtended] = amppElement.ctiExtended
+                                            it[endOfCommercializationNl] =
                                                 commercializationDataBlock.endOfCommercialization?.nl
-                                            it[ActualMedicineSamTableModel.CMRCL.endOfCommercializationFr] =
+                                            it[endOfCommercializationFr] =
                                                 commercializationDataBlock.endOfCommercialization?.fr
-                                            it[ActualMedicineSamTableModel.CMRCL.endOfCommercializationEng] =
+                                            it[endOfCommercializationEng] =
                                                 commercializationDataBlock.endOfCommercialization?.en
-                                            it[ActualMedicineSamTableModel.CMRCL.endOfCommercializationGer] =
+                                            it[endOfCommercializationGer] =
                                                 commercializationDataBlock.endOfCommercialization?.de
 
-                                            it[ActualMedicineSamTableModel.CMRCL.reasonEndOfCommercializationNl] =
+                                            it[reasonEndOfCommercializationNl] =
                                                 commercializationDataBlock.reason?.nl
-                                            it[ActualMedicineSamTableModel.CMRCL.reasonEndOfCommercializationFr] =
+                                            it[reasonEndOfCommercializationFr] =
                                                 commercializationDataBlock.reason?.fr
-                                            it[ActualMedicineSamTableModel.CMRCL.reasonEndOfCommercializationEng] =
+                                            it[reasonEndOfCommercializationEng] =
                                                 commercializationDataBlock.reason?.en
-                                            it[ActualMedicineSamTableModel.CMRCL.reasonEndOfCommercializationGer] =
+                                            it[reasonEndOfCommercializationGer] =
                                                 commercializationDataBlock.reason?.de
 
-                                            it[ActualMedicineSamTableModel.CMRCL.additionalInformationNl] =
+                                            it[additionalInformationNl] =
                                                 commercializationDataBlock.impact?.nl
-                                            it[ActualMedicineSamTableModel.CMRCL.additionalInformationFr] =
+                                            it[additionalInformationFr] =
                                                 commercializationDataBlock.impact?.fr
-                                            it[ActualMedicineSamTableModel.CMRCL.additionalInformationEng] =
+                                            it[additionalInformationEng] =
                                                 commercializationDataBlock.impact?.en
-                                            it[ActualMedicineSamTableModel.CMRCL.additionalInformationGer] =
+                                            it[additionalInformationGer] =
                                                 commercializationDataBlock.impact?.de
 
-                                            it[ActualMedicineSamTableModel.CMRCL.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(commercializationDataBlock.from)
                                             if (commercializationDataBlock.to != null) {
-                                                it[ActualMedicineSamTableModel.CMRCL.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(commercializationDataBlock.to)
                                             }
                                         }
@@ -523,55 +523,55 @@ fun parseAmpXml(
                                 for (supplyProblem in amppElement.supplyProblems) {
                                     for (supplyDataBlock in supplyProblem.supplyDataBlocks) {
                                         ActualMedicineSamTableModel.SPPROB.insert {
-                                            it[ActualMedicineSamTableModel.SPPROB.ctiExtended] = amppElement.ctiExtended
+                                            it[ctiExtended] = amppElement.ctiExtended
                                             if (supplyDataBlock.expectedEnd != null) {
-                                                it[ActualMedicineSamTableModel.SPPROB.expectedEndDate] =
+                                                it[expectedEndDate] =
                                                     LocalDate.parse(supplyDataBlock.expectedEnd)
                                             }
-                                            it[ActualMedicineSamTableModel.SPPROB.reportedBy] =
+                                            it[reportedBy] =
                                                 supplyDataBlock.reportedBy
                                             if (supplyDataBlock.reportedOn != null) {
-                                                it[ActualMedicineSamTableModel.SPPROB.reportedOn] =
+                                                it[reportedOn] =
                                                     LocalDate.parse(supplyDataBlock.reportedOn)
                                             }
 
-                                            it[ActualMedicineSamTableModel.SPPROB.contactName] =
+                                            it[contactName] =
                                                 supplyDataBlock.contactName
-                                            it[ActualMedicineSamTableModel.SPPROB.contactCompany] =
+                                            it[contactCompany] =
                                                 supplyDataBlock.contactCompany
-                                            it[ActualMedicineSamTableModel.SPPROB.contactMail] =
+                                            it[contactMail] =
                                                 supplyDataBlock.contactMail
-                                            it[ActualMedicineSamTableModel.SPPROB.contactPhone] = supplyDataBlock.phone
+                                            it[contactPhone] = supplyDataBlock.phone
 
-                                            it[ActualMedicineSamTableModel.SPPROB.reasonNl] = supplyDataBlock.reason?.nl
-                                            it[ActualMedicineSamTableModel.SPPROB.reasonFr] = supplyDataBlock.reason?.fr
-                                            it[ActualMedicineSamTableModel.SPPROB.reasonEng] =
+                                            it[reasonNl] = supplyDataBlock.reason?.nl
+                                            it[reasonFr] = supplyDataBlock.reason?.fr
+                                            it[reasonEng] =
                                                 supplyDataBlock.reason?.en
-                                            it[ActualMedicineSamTableModel.SPPROB.reasonGer] =
+                                            it[reasonGer] =
                                                 supplyDataBlock.reason?.de
 
-                                            it[ActualMedicineSamTableModel.SPPROB.additionalInformationNl] =
+                                            it[additionalInformationNl] =
                                                 supplyDataBlock.additionalInformation?.nl
-                                            it[ActualMedicineSamTableModel.SPPROB.additionalInformationFr] =
+                                            it[additionalInformationFr] =
                                                 supplyDataBlock.additionalInformation?.fr
-                                            it[ActualMedicineSamTableModel.SPPROB.additionalInformationEng] =
+                                            it[additionalInformationEng] =
                                                 supplyDataBlock.additionalInformation?.en
-                                            it[ActualMedicineSamTableModel.SPPROB.additionalInformationGer] =
+                                            it[additionalInformationGer] =
                                                 supplyDataBlock.additionalInformation?.de
 
-                                            it[ActualMedicineSamTableModel.SPPROB.impactNl] = supplyDataBlock.impact?.nl
-                                            it[ActualMedicineSamTableModel.SPPROB.impactFr] = supplyDataBlock.impact?.fr
-                                            it[ActualMedicineSamTableModel.SPPROB.impactEng] =
+                                            it[impactNl] = supplyDataBlock.impact?.nl
+                                            it[impactFr] = supplyDataBlock.impact?.fr
+                                            it[impactEng] =
                                                 supplyDataBlock.impact?.en
-                                            it[ActualMedicineSamTableModel.SPPROB.impactGer] =
+                                            it[impactGer] =
                                                 supplyDataBlock.impact?.de
 
                                             //it[limitedAvailability] = supplyDataBlock.
 
-                                            it[ActualMedicineSamTableModel.SPPROB.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(supplyDataBlock.from)
                                             if (supplyDataBlock.to != null) {
-                                                it[ActualMedicineSamTableModel.SPPROB.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(supplyDataBlock.to)
                                             }
                                         }
@@ -581,20 +581,20 @@ fun parseAmpXml(
                                 for (derogationImport in amppElement.derogationImport) {
                                     for (derogationDatablock in derogationImport.derogationData) {
                                         ActualMedicineSamTableModel.DRGIMP.insert {
-                                            it[ActualMedicineSamTableModel.DRGIMP.ctiExtended] = amppElement.ctiExtended
-                                            it[ActualMedicineSamTableModel.DRGIMP.sequenceNumber] =
+                                            it[ctiExtended] = amppElement.ctiExtended
+                                            it[sequenceNumber] =
                                                 derogationImport.sequenceNumber.toInt()
-                                            it[ActualMedicineSamTableModel.DRGIMP.noteNl] = derogationDatablock.note?.nl
-                                            it[ActualMedicineSamTableModel.DRGIMP.noteFr] = derogationDatablock.note?.fr
-                                            it[ActualMedicineSamTableModel.DRGIMP.noteEng] =
+                                            it[noteNl] = derogationDatablock.note?.nl
+                                            it[noteFr] = derogationDatablock.note?.fr
+                                            it[noteEng] =
                                                 derogationDatablock.note?.en
-                                            it[ActualMedicineSamTableModel.DRGIMP.noteGer] =
+                                            it[noteGer] =
                                                 derogationDatablock.note?.de
 
-                                            it[ActualMedicineSamTableModel.DRGIMP.validFrom] =
+                                            it[validFrom] =
                                                 LocalDate.parse(derogationDatablock.from)
                                             if (derogationDatablock.to != null) {
-                                                it[ActualMedicineSamTableModel.DRGIMP.validTo] =
+                                                it[validTo] =
                                                     LocalDate.parse(derogationDatablock.to)
                                             }
                                         }

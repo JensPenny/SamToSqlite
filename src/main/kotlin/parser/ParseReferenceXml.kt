@@ -40,8 +40,8 @@ fun parseReferenceXml(
                             val atcClassificationString = fullElement(startElement, reader)
                             val atc = xmlMapper.readValue<ATC>(atcClassificationString)
                             ReferenceTableModel.ATC.insert {
-                                it[ReferenceTableModel.ATC.code] = atc.atcCode
-                                it[ReferenceTableModel.ATC.description] = atc.description
+                                it[code] = atc.atcCode
+                                it[description] = atc.description
                             }
                         }
 
@@ -49,11 +49,11 @@ fun parseReferenceXml(
                             val deliveryModusString = fullElement(startElement, reader)
                             val deliveryModus = xmlMapper.readValue<DeliveryModus>(deliveryModusString)
                             ReferenceTableModel.DLVM.insert {
-                                it[ReferenceTableModel.DLVM.code] = deliveryModus.code
-                                it[ReferenceTableModel.DLVM.descriptionNameNl] = deliveryModus.description.nl!!
-                                it[ReferenceTableModel.DLVM.descriptionNameFr] = deliveryModus.description.fr!!
-                                it[ReferenceTableModel.DLVM.descriptionNameEng] = deliveryModus.description.en
-                                it[ReferenceTableModel.DLVM.descriptionNameGer] = deliveryModus.description.de
+                                it[code] = deliveryModus.code
+                                it[descriptionNameNl] = deliveryModus.description.nl!!
+                                it[descriptionNameFr] = deliveryModus.description.fr!!
+                                it[descriptionNameEng] = deliveryModus.description.en
+                                it[descriptionNameGer] = deliveryModus.description.de
                             }
                         }
 
@@ -62,11 +62,11 @@ fun parseReferenceXml(
                             val deliveryModeSpec =
                                 xmlMapper.readValue<DeliveryModusSpecification>(deliveryModeSpecString)
                             ReferenceTableModel.DLVMS.insert {
-                                it[ReferenceTableModel.DLVMS.code] = deliveryModeSpec.code
-                                it[ReferenceTableModel.DLVMS.descriptionNameNl] = deliveryModeSpec.description.nl!!
-                                it[ReferenceTableModel.DLVMS.descriptionNameFr] = deliveryModeSpec.description.fr!!
-                                it[ReferenceTableModel.DLVMS.descriptionNameEng] = deliveryModeSpec.description.en
-                                it[ReferenceTableModel.DLVMS.descriptionNameGer] = deliveryModeSpec.description.de
+                                it[code] = deliveryModeSpec.code
+                                it[descriptionNameNl] = deliveryModeSpec.description.nl!!
+                                it[descriptionNameFr] = deliveryModeSpec.description.fr!!
+                                it[descriptionNameEng] = deliveryModeSpec.description.en
+                                it[descriptionNameGer] = deliveryModeSpec.description.de
                             }
                         }
 
@@ -74,13 +74,13 @@ fun parseReferenceXml(
                             val deviceTypeString = fullElement(startElement, reader)
                             val deviceType = xmlMapper.readValue<DeviceType>(deviceTypeString)
                             ReferenceTableModel.DVCTP.insert {
-                                it[ReferenceTableModel.DVCTP.code] = deviceType.code
-                                it[ReferenceTableModel.DVCTP.nameNl] = deviceType.name.nl!!
-                                it[ReferenceTableModel.DVCTP.nameFr] = deviceType.name.fr!!
-                                it[ReferenceTableModel.DVCTP.nameEng] = deviceType.name.en
-                                it[ReferenceTableModel.DVCTP.nameGer] = deviceType.name.de
-                                it[ReferenceTableModel.DVCTP.edqmCode] = deviceType.edqmCode
-                                it[ReferenceTableModel.DVCTP.edqmDefinition] = deviceType.edqmDefinition
+                                it[code] = deviceType.code
+                                it[nameNl] = deviceType.name.nl!!
+                                it[nameFr] = deviceType.name.fr!!
+                                it[nameEng] = deviceType.name.en
+                                it[nameGer] = deviceType.name.de
+                                it[edqmCode] = deviceType.edqmCode
+                                it[edqmDefinition] = deviceType.edqmDefinition
                             }
                         }
 
@@ -88,13 +88,13 @@ fun parseReferenceXml(
                             val packagingString = fullElement(startElement, reader)
                             val packaging = xmlMapper.readValue<PackagingClosure>(packagingString)
                             ReferenceTableModel.PCKCL.insert {
-                                it[ReferenceTableModel.PCKCL.code] = packaging.code
-                                it[ReferenceTableModel.PCKCL.nameNl] = packaging.name.nl!!
-                                it[ReferenceTableModel.PCKCL.nameFr] = packaging.name.fr!!
-                                it[ReferenceTableModel.PCKCL.nameEng] = packaging.name.en
-                                it[ReferenceTableModel.PCKCL.nameGer] = packaging.name.de
-                                it[ReferenceTableModel.PCKCL.edqmCode] = packaging.edqmCode
-                                it[ReferenceTableModel.PCKCL.edqmDefinition] = packaging.edqmDefinition
+                                it[code] = packaging.code
+                                it[nameNl] = packaging.name.nl!!
+                                it[nameFr] = packaging.name.fr!!
+                                it[nameEng] = packaging.name.en
+                                it[nameGer] = packaging.name.de
+                                it[edqmCode] = packaging.edqmCode
+                                it[edqmDefinition] = packaging.edqmDefinition
                             }
                         }
 
@@ -102,11 +102,11 @@ fun parseReferenceXml(
                             val materialString = fullElement(startElement, reader)
                             val material = xmlMapper.readValue<PackagingMaterial>(materialString)
                             ReferenceTableModel.PCKMT.insert {
-                                it[ReferenceTableModel.PCKMT.code] = material.code
-                                it[ReferenceTableModel.PCKMT.nameNl] = material.name.nl!!
-                                it[ReferenceTableModel.PCKMT.nameFr] = material.name.fr!!
-                                it[ReferenceTableModel.PCKMT.nameEng] = material.name.en
-                                it[ReferenceTableModel.PCKMT.nameGer] = material.name.de
+                                it[code] = material.code
+                                it[nameNl] = material.name.nl!!
+                                it[nameFr] = material.name.fr!!
+                                it[nameEng] = material.name.en
+                                it[nameGer] = material.name.de
                             }
                         }
 
@@ -115,13 +115,13 @@ fun parseReferenceXml(
                             val packagingType = xmlMapper.readValue<PackagingType>(packagingTypeString)
 
                             ReferenceTableModel.PCKTP.insert {
-                                it[ReferenceTableModel.PCKTP.code] = packagingType.code
-                                it[ReferenceTableModel.PCKTP.nameNl] = packagingType.name.nl!!
-                                it[ReferenceTableModel.PCKTP.nameFr] = packagingType.name.fr!!
-                                it[ReferenceTableModel.PCKTP.nameEng] = packagingType.name.en
-                                it[ReferenceTableModel.PCKTP.nameGer] = packagingType.name.de
-                                it[ReferenceTableModel.PCKTP.edqmCode] = packagingType.edqmCode
-                                it[ReferenceTableModel.PCKTP.edqmDefinition] = packagingType.edqmDefinition
+                                it[code] = packagingType.code
+                                it[nameNl] = packagingType.name.nl!!
+                                it[nameFr] = packagingType.name.fr!!
+                                it[nameEng] = packagingType.name.en
+                                it[nameGer] = packagingType.name.de
+                                it[edqmCode] = packagingType.edqmCode
+                                it[edqmDefinition] = packagingType.edqmDefinition
                             }
                         }
 
@@ -130,11 +130,11 @@ fun parseReferenceXml(
                             val pharmaceuticalForm = xmlMapper.readValue<PharmaceuticalForm>(pharmaceuticalFormString)
 
                             ReferenceTableModel.PHFRM.insert {
-                                it[ReferenceTableModel.PHFRM.code] = pharmaceuticalForm.code
-                                it[ReferenceTableModel.PHFRM.nameNl] = pharmaceuticalForm.name.nl!!
-                                it[ReferenceTableModel.PHFRM.nameFr] = pharmaceuticalForm.name.fr!!
-                                it[ReferenceTableModel.PHFRM.nameEnglish] = pharmaceuticalForm.name.en
-                                it[ReferenceTableModel.PHFRM.nameGerman] = pharmaceuticalForm.name.de
+                                it[code] = pharmaceuticalForm.code
+                                it[nameNl] = pharmaceuticalForm.name.nl!!
+                                it[nameFr] = pharmaceuticalForm.name.fr!!
+                                it[nameEnglish] = pharmaceuticalForm.name.en
+                                it[nameGerman] = pharmaceuticalForm.name.de
                             }
                         }
 
@@ -142,11 +142,11 @@ fun parseReferenceXml(
                             val routeOfAdmString = fullElement(startElement, reader)
                             val routeOfAdministration = xmlMapper.readValue<RouteOfAdministration>(routeOfAdmString)
                             ReferenceTableModel.ROA.insert {
-                                it[ReferenceTableModel.ROA.code] = routeOfAdministration.code
-                                it[ReferenceTableModel.ROA.nameNl] = routeOfAdministration.name.nl!!
-                                it[ReferenceTableModel.ROA.nameFr] = routeOfAdministration.name.fr!!
-                                it[ReferenceTableModel.ROA.nameEng] = routeOfAdministration.name.en
-                                it[ReferenceTableModel.ROA.nameGer] = routeOfAdministration.name.de
+                                it[code] = routeOfAdministration.code
+                                it[nameNl] = routeOfAdministration.name.nl!!
+                                it[nameFr] = routeOfAdministration.name.fr!!
+                                it[nameEng] = routeOfAdministration.name.en
+                                it[nameGer] = routeOfAdministration.name.de
                             }
                         }
 
@@ -154,16 +154,16 @@ fun parseReferenceXml(
                             val substanceString = fullElement(startElement, reader)
                             val substance = xmlMapper.readValue<Substance>(substanceString)
                             ReferenceTableModel.SBST.insert {
-                                it[ReferenceTableModel.SBST.code] = substance.code
-                                it[ReferenceTableModel.SBST.chemicalForm] = substance.chemicalForm
-                                it[ReferenceTableModel.SBST.nameNl] = substance.name.nl!!
-                                it[ReferenceTableModel.SBST.nameFr] = substance.name.fr!!
-                                it[ReferenceTableModel.SBST.nameEng] = substance.name.en
-                                it[ReferenceTableModel.SBST.nameGer] = substance.name.de
-                                it[ReferenceTableModel.SBST.noteNl] = substance.note?.nl
-                                it[ReferenceTableModel.SBST.noteFr] = substance.note?.fr
-                                it[ReferenceTableModel.SBST.noteEng] = substance.note?.en
-                                it[ReferenceTableModel.SBST.noteGer] = substance.note?.de
+                                it[code] = substance.code
+                                it[chemicalForm] = substance.chemicalForm
+                                it[nameNl] = substance.name.nl!!
+                                it[nameFr] = substance.name.fr!!
+                                it[nameEng] = substance.name.en
+                                it[nameGer] = substance.name.de
+                                it[noteNl] = substance.note?.nl
+                                it[noteFr] = substance.note?.fr
+                                it[noteEng] = substance.note?.en
+                                it[noteGer] = substance.note?.de
                             }
                         }
 
@@ -171,11 +171,11 @@ fun parseReferenceXml(
                             val noSwitchReasonString = fullElement(startElement, reader)
                             val noSwitchReason = xmlMapper.readValue<NoSwitchReason>(noSwitchReasonString)
                             ReferenceTableModel.NOSWR.insert {
-                                it[ReferenceTableModel.NOSWR.code] = noSwitchReason.code
-                                it[ReferenceTableModel.NOSWR.descriptionNl] = noSwitchReason.description.nl
-                                it[ReferenceTableModel.NOSWR.descriptionFr] = noSwitchReason.description.fr
-                                it[ReferenceTableModel.NOSWR.descriptionEng] = noSwitchReason.description.en
-                                it[ReferenceTableModel.NOSWR.descriptionGer] = noSwitchReason.description.de
+                                it[code] = noSwitchReason.code
+                                it[descriptionNl] = noSwitchReason.description.nl
+                                it[descriptionFr] = noSwitchReason.description.fr
+                                it[descriptionEng] = noSwitchReason.description.en
+                                it[descriptionGer] = noSwitchReason.description.de
                             }
                         }
 
@@ -183,21 +183,21 @@ fun parseReferenceXml(
                             val virtualFormString = fullElement(startElement, reader)
                             val virtualForm = xmlMapper.readValue<VirtualForm>(virtualFormString)
                             ReferenceTableModel.VTFRM.insert {
-                                it[ReferenceTableModel.VTFRM.code] = virtualForm.code
-                                it[ReferenceTableModel.VTFRM.abbreviatedNl] = virtualForm.abbreviation.nl!!
-                                it[ReferenceTableModel.VTFRM.abbreviatedFr] = virtualForm.abbreviation.fr!!
-                                it[ReferenceTableModel.VTFRM.abbreviatedEng] = virtualForm.abbreviation.en
-                                it[ReferenceTableModel.VTFRM.abbreviatedGer] = virtualForm.abbreviation.de
+                                it[code] = virtualForm.code
+                                it[abbreviatedNl] = virtualForm.abbreviation.nl!!
+                                it[abbreviatedFr] = virtualForm.abbreviation.fr!!
+                                it[abbreviatedEng] = virtualForm.abbreviation.en
+                                it[abbreviatedGer] = virtualForm.abbreviation.de
 
-                                it[ReferenceTableModel.VTFRM.nameNl] = virtualForm.name.nl!!
-                                it[ReferenceTableModel.VTFRM.nameFr] = virtualForm.name.fr!!
-                                it[ReferenceTableModel.VTFRM.nameEng] = virtualForm.name.en
-                                it[ReferenceTableModel.VTFRM.nameGer] = virtualForm.name.de
+                                it[nameNl] = virtualForm.name.nl!!
+                                it[nameFr] = virtualForm.name.fr!!
+                                it[nameEng] = virtualForm.name.en
+                                it[nameGer] = virtualForm.name.de
 
-                                it[ReferenceTableModel.VTFRM.descriptionNl] = virtualForm.description?.nl
-                                it[ReferenceTableModel.VTFRM.descriptionFr] = virtualForm.description?.fr
-                                it[ReferenceTableModel.VTFRM.descriptionEng] = virtualForm.description?.en
-                                it[ReferenceTableModel.VTFRM.descriptionGer] = virtualForm.description?.de
+                                it[descriptionNl] = virtualForm.description?.nl
+                                it[descriptionFr] = virtualForm.description?.fr
+                                it[descriptionEng] = virtualForm.description?.en
+                                it[descriptionGer] = virtualForm.description?.de
                             }
                         }
 
@@ -205,17 +205,17 @@ fun parseReferenceXml(
                             val wadaString = fullElement(startElement, reader)
                             val wada = xmlMapper.readValue<Wada>(wadaString)
                             ReferenceTableModel.WADA.insert {
-                                it[ReferenceTableModel.WADA.code] = wada.code
+                                it[code] = wada.code
 
-                                it[ReferenceTableModel.WADA.nameNl] = wada.name.nl!!
-                                it[ReferenceTableModel.WADA.nameFr] = wada.name.fr!!
-                                it[ReferenceTableModel.WADA.nameEng] = wada.name.en
-                                it[ReferenceTableModel.WADA.nameGer] = wada.name.de
+                                it[nameNl] = wada.name.nl!!
+                                it[nameFr] = wada.name.fr!!
+                                it[nameEng] = wada.name.en
+                                it[nameGer] = wada.name.de
 
-                                it[ReferenceTableModel.WADA.descriptionNl] = wada.description?.nl
-                                it[ReferenceTableModel.WADA.descriptionFr] = wada.description?.fr
-                                it[ReferenceTableModel.WADA.descriptionEng] = wada.description?.en
-                                it[ReferenceTableModel.WADA.descriptionGer] = wada.description?.de
+                                it[descriptionNl] = wada.description?.nl
+                                it[descriptionFr] = wada.description?.fr
+                                it[descriptionEng] = wada.description?.en
+                                it[descriptionGer] = wada.description?.de
                             }
                         }
 
@@ -225,11 +225,11 @@ fun parseReferenceXml(
                                 xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
 
                             ReferenceTableModel.NOGNPR.insert {
-                                it[ReferenceTableModel.NOGNPR.code] = noGenPrescrReason.code
-                                it[ReferenceTableModel.NOGNPR.descriptionNl] = noGenPrescrReason.description.nl
-                                it[ReferenceTableModel.NOGNPR.descriptionFr] = noGenPrescrReason.description.fr
-                                it[ReferenceTableModel.NOGNPR.descriptionEng] = noGenPrescrReason.description.en
-                                it[ReferenceTableModel.NOGNPR.descriptionGer] = noGenPrescrReason.description.de
+                                it[code] = noGenPrescrReason.code
+                                it[descriptionNl] = noGenPrescrReason.description.nl
+                                it[descriptionFr] = noGenPrescrReason.description.fr
+                                it[descriptionEng] = noGenPrescrReason.description.en
+                                it[descriptionGer] = noGenPrescrReason.description.de
                             }
                         }
 
@@ -238,9 +238,9 @@ fun parseReferenceXml(
                             val standardForm = xmlMapper.readValue<StandardForm>(standardFormString)
 
                             ReferenceTableModel.STDFRM.insert {
-                                it[ReferenceTableModel.STDFRM.standard] = standardForm.standard
-                                it[ReferenceTableModel.STDFRM.code] = standardForm.code
-                                it[ReferenceTableModel.STDFRM.virtualFormCode] =
+                                it[standard] = standardForm.standard
+                                it[code] = standardForm.code
+                                it[virtualFormCode] =
                                     standardForm.virtualFormReference.codeReference
                             }
                         }
@@ -250,9 +250,9 @@ fun parseReferenceXml(
                             val standardRoute = xmlMapper.readValue<StandardRoute>(standardRouteString)
 
                             ReferenceTableModel.STDROA.insert {
-                                it[ReferenceTableModel.STDROA.standard] = standardRoute.standard
-                                it[ReferenceTableModel.STDROA.code] = standardRoute.code
-                                it[ReferenceTableModel.STDROA.routeOfAdministrationCode] =
+                                it[standard] = standardRoute.standard
+                                it[code] = standardRoute.code
+                                it[routeOfAdministrationCode] =
                                     standardRoute.routeOfAdminReference.codeReference
                             }
                         }
@@ -263,9 +263,9 @@ fun parseReferenceXml(
 
                             for (singleReference in standardSubstance.substanceReference) {
                                 ReferenceTableModel.STDSBST.insert {
-                                    it[ReferenceTableModel.STDSBST.standard] = standardSubstance.standard
-                                    it[ReferenceTableModel.STDSBST.code] = standardSubstance.code
-                                    it[ReferenceTableModel.STDSBST.substanceCode] = singleReference.codeReference
+                                    it[standard] = standardSubstance.standard
+                                    it[code] = standardSubstance.code
+                                    it[substanceCode] = singleReference.codeReference
                                 }
                             }
                         }
@@ -275,11 +275,11 @@ fun parseReferenceXml(
                             val standardUnit = xmlMapper.readValue<StandardUnit>(standardUnitString)
 
                             ReferenceTableModel.STDUNT.insert {
-                                it[ReferenceTableModel.STDUNT.name] = standardUnit.name
-                                it[ReferenceTableModel.STDUNT.descriptionNl] = standardUnit.description?.nl
-                                it[ReferenceTableModel.STDUNT.descriptionFr] = standardUnit.description?.fr
-                                it[ReferenceTableModel.STDUNT.descriptionEng] = standardUnit.description?.en
-                                it[ReferenceTableModel.STDUNT.descriptionGer] = standardUnit.description?.de
+                                it[name] = standardUnit.name
+                                it[descriptionNl] = standardUnit.description?.nl
+                                it[descriptionFr] = standardUnit.description?.fr
+                                it[descriptionEng] = standardUnit.description?.en
+                                it[descriptionGer] = standardUnit.description?.de
                             }
                         }
 
@@ -288,11 +288,11 @@ fun parseReferenceXml(
                             val appendix = xmlMapper.readValue<Appendix>(appendixString)
 
                             ReferenceTableModel.APPENDIX.insert {
-                                it[ReferenceTableModel.APPENDIX.code] = appendix.code
-                                it[ReferenceTableModel.APPENDIX.descriptionNl] = appendix.description.nl
-                                it[ReferenceTableModel.APPENDIX.descriptionFr] = appendix.description.fr
-                                it[ReferenceTableModel.APPENDIX.descriptionEng] = appendix.description.en
-                                it[ReferenceTableModel.APPENDIX.descriptionGer] = appendix.description.de
+                                it[code] = appendix.code
+                                it[descriptionNl] = appendix.description.nl
+                                it[descriptionFr] = appendix.description.fr
+                                it[descriptionEng] = appendix.description.en
+                                it[descriptionGer] = appendix.description.de
                             }
                         }
 
@@ -301,11 +301,11 @@ fun parseReferenceXml(
                             val formCategory = xmlMapper.readValue<FormCategory>(formCatString)
 
                             ReferenceTableModel.FORMCAT.insert {
-                                it[ReferenceTableModel.FORMCAT.code] = formCategory.code
-                                it[ReferenceTableModel.FORMCAT.descriptionNl] = formCategory.description.nl
-                                it[ReferenceTableModel.FORMCAT.descriptionFr] = formCategory.description.fr
-                                it[ReferenceTableModel.FORMCAT.descriptionEng] = formCategory.description.en
-                                it[ReferenceTableModel.FORMCAT.descriptionGer] = formCategory.description.de
+                                it[code] = formCategory.code
+                                it[descriptionNl] = formCategory.description.nl
+                                it[descriptionFr] = formCategory.description.fr
+                                it[descriptionEng] = formCategory.description.en
+                                it[descriptionGer] = formCategory.description.de
                             }
                         }
 
@@ -319,9 +319,9 @@ fun parseReferenceXml(
                             val professionalCode = xmlMapper.readValue<ProfessionalCode>(professionalCodeString)
 
                             ReferenceTableModel.PROFESSIONALCODE.insert {
-                                it[ReferenceTableModel.PROFESSIONALCODE.professionalCv] =
+                                it[professionalCv] =
                                     professionalCode.professionalCv
-                                it[ReferenceTableModel.PROFESSIONALCODE.professionalName] = professionalCode.nameId
+                                it[professionalName] = professionalCode.nameId
                             }
                         }
 
@@ -330,8 +330,8 @@ fun parseReferenceXml(
                             val appendix = xmlMapper.readValue<AppendixType>(appendixString)
 
                             ReferenceTableModel.APPENDIX_TYPE.insert {
-                                it[ReferenceTableModel.APPENDIX_TYPE.appendixTypeId] = appendix.appendixTypeId.toInt()
-                                it[ReferenceTableModel.APPENDIX_TYPE.nameId] = appendix.nameId.toInt()
+                                it[appendixTypeId] = appendix.appendixTypeId.toInt()
+                                it[nameId] = appendix.nameId.toInt()
                             }
                         }
 
@@ -340,8 +340,8 @@ fun parseReferenceXml(
                             val formType = xmlMapper.readValue<FormType>(formTypeString)
 
                             ReferenceTableModel.FORM_TYPE.insert {
-                                it[ReferenceTableModel.FORM_TYPE.formTypeId] = formType.formTypeId.toInt()
-                                it[ReferenceTableModel.FORM_TYPE.nameId] = formType.nameId.toInt()
+                                it[formTypeId] = formType.formTypeId.toInt()
+                                it[nameId] = formType.nameId.toInt()
                             }
                         }
 
@@ -350,10 +350,10 @@ fun parseReferenceXml(
                             val nameType = xmlMapper.readValue<NameType>(nameTypeString)
 
                             ReferenceTableModel.NAME_TYPE.insert {
-                                it[ReferenceTableModel.NAME_TYPE.nameTypeCV] = nameType.nameTypeCv
-                                it[ReferenceTableModel.NAME_TYPE.nameId] = nameType.nameId.toInt()
+                                it[nameTypeCV] = nameType.nameTypeCv
+                                it[nameId] = nameType.nameId.toInt()
                                 it[ReferenceTableModel.NAME_TYPE.nameType] = nameType.nameType
-                                it[ReferenceTableModel.NAME_TYPE.nameTypeSequence] = nameType.nameTypeSeq?.toInt()
+                                it[nameTypeSequence] = nameType.nameTypeSeq?.toInt()
                             }
                         }
 
@@ -363,10 +363,10 @@ fun parseReferenceXml(
                                 xmlMapper.readValue<LegalReferencePathToParagraph>(legalReferenceString)
 
                             ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH.insert {
-                                it[ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH.legalReferencePath] =
+                                it[legalReferencePath] =
                                     legalReference.legalReferencePath
-                                it[ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH.chapterName] = legalReference.chapterName
-                                it[ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH.paragraphName] =
+                                it[chapterName] = legalReference.chapterName
+                                it[paragraphName] =
                                     legalReference.paragraphName
                             }
                         }
@@ -376,12 +376,12 @@ fun parseReferenceXml(
                             val reimbursementCriterion = xmlMapper.readValue<ReimbursementCriterion>(reimbCritString)
 
                             ReferenceTableModel.RMBCRIT.insert {
-                                it[ReferenceTableModel.RMBCRIT.code] = reimbursementCriterion.code
-                                it[ReferenceTableModel.RMBCRIT.category] = reimbursementCriterion.category
-                                it[ReferenceTableModel.RMBCRIT.descriptionNl] = reimbursementCriterion.description.nl
-                                it[ReferenceTableModel.RMBCRIT.descriptionFr] = reimbursementCriterion.description.fr
-                                it[ReferenceTableModel.RMBCRIT.descriptionEng] = reimbursementCriterion.description.en
-                                it[ReferenceTableModel.RMBCRIT.descriptionGer] = reimbursementCriterion.description.de
+                                it[code] = reimbursementCriterion.code
+                                it[category] = reimbursementCriterion.category
+                                it[descriptionNl] = reimbursementCriterion.description.nl
+                                it[descriptionFr] = reimbursementCriterion.description.fr
+                                it[descriptionEng] = reimbursementCriterion.description.en
+                                it[descriptionGer] = reimbursementCriterion.description.de
                             }
                         }
 

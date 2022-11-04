@@ -35,26 +35,26 @@ fun parseCompoundingXml(
                     tryPersist {
                         transaction {
                             CompoundingTableModel.COMP_INGREDIENT.insert {
-                                it[CompoundingTableModel.COMP_INGREDIENT.productId] = compoundingIngredient.ProductId
-                                it[CompoundingTableModel.COMP_INGREDIENT.codeSystem] = compoundingIngredient.codeType
-                                it[CompoundingTableModel.COMP_INGREDIENT.code] = compoundingIngredient.code
+                                it[productId] = compoundingIngredient.ProductId
+                                it[codeSystem] = compoundingIngredient.codeType
+                                it[code] = compoundingIngredient.code
                             }
 
                             for (data in compoundingIngredient.data) {
                                 for (synonymObject in data.synonyms) {
                                     CompoundingTableModel.COMP_INGREDIENT_SYNONYM.insert {
-                                        it[CompoundingTableModel.COMP_INGREDIENT_SYNONYM.ingredientProductId] =
+                                        it[ingredientProductId] =
                                             compoundingIngredient.ProductId
-                                        it[CompoundingTableModel.COMP_INGREDIENT_SYNONYM.language] =
+                                        it[language] =
                                             synonymObject.language
-                                        it[CompoundingTableModel.COMP_INGREDIENT_SYNONYM.rank] = synonymObject.rank
-                                        it[CompoundingTableModel.COMP_INGREDIENT_SYNONYM.synonym] =
+                                        it[rank] = synonymObject.rank
+                                        it[synonym] =
                                             synonymObject.Synonym
 
-                                        it[CompoundingTableModel.COMP_INGREDIENT_SYNONYM.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(data.from)
                                         if (data.to != null) {
-                                            it[CompoundingTableModel.COMP_INGREDIENT_SYNONYM.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(data.to)
                                         }
                                     }
@@ -71,24 +71,24 @@ fun parseCompoundingXml(
                     tryPersist {
                         transaction {
                             CompoundingTableModel.COMP_FORMULA.insert {
-                                it[CompoundingTableModel.COMP_FORMULA.productId] = compoundingFormula.ProductId
-                                it[CompoundingTableModel.COMP_FORMULA.codeSystem] = compoundingFormula.codeType
-                                it[CompoundingTableModel.COMP_FORMULA.code] = compoundingFormula.code
+                                it[productId] = compoundingFormula.ProductId
+                                it[codeSystem] = compoundingFormula.codeType
+                                it[code] = compoundingFormula.code
                             }
 
                             for (data in compoundingFormula.data) {
                                 for (synonymObject in data.synonyms) {
                                     CompoundingTableModel.COMP_FORMULA_SYNONYM.insert {
-                                        it[CompoundingTableModel.COMP_FORMULA_SYNONYM.formulaProductId] =
+                                        it[formulaProductId] =
                                             compoundingFormula.ProductId
-                                        it[CompoundingTableModel.COMP_FORMULA_SYNONYM.language] = synonymObject.language
-                                        it[CompoundingTableModel.COMP_FORMULA_SYNONYM.rank] = synonymObject.rank
-                                        it[CompoundingTableModel.COMP_FORMULA_SYNONYM.synonym] = synonymObject.Synonym
+                                        it[language] = synonymObject.language
+                                        it[rank] = synonymObject.rank
+                                        it[synonym] = synonymObject.Synonym
 
-                                        it[CompoundingTableModel.COMP_FORMULA_SYNONYM.validFrom] =
+                                        it[validFrom] =
                                             LocalDate.parse(data.from)
                                         if (data.to != null) {
-                                            it[CompoundingTableModel.COMP_FORMULA_SYNONYM.validTo] =
+                                            it[validTo] =
                                                 LocalDate.parse(data.to)
                                         }
                                     }
