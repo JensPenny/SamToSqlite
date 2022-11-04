@@ -12,9 +12,7 @@ import java.io.FileInputStream
 import javax.xml.stream.XMLInputFactory
 
 fun parseReferenceXml(
-    inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper,
-    path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
@@ -240,8 +238,7 @@ fun parseReferenceXml(
                             ReferenceTableModel.STDFRM.insert {
                                 it[standard] = standardForm.standard
                                 it[code] = standardForm.code
-                                it[virtualFormCode] =
-                                    standardForm.virtualFormReference.codeReference
+                                it[virtualFormCode] = standardForm.virtualFormReference.codeReference
                             }
                         }
 
@@ -252,8 +249,7 @@ fun parseReferenceXml(
                             ReferenceTableModel.STDROA.insert {
                                 it[standard] = standardRoute.standard
                                 it[code] = standardRoute.code
-                                it[routeOfAdministrationCode] =
-                                    standardRoute.routeOfAdminReference.codeReference
+                                it[routeOfAdministrationCode] = standardRoute.routeOfAdminReference.codeReference
                             }
                         }
 
@@ -319,9 +315,9 @@ fun parseReferenceXml(
                             val professionalCode = xmlMapper.readValue<ProfessionalCode>(professionalCodeString)
 
                             ReferenceTableModel.PROFESSIONALCODE.insert {
-                                it[professionalCv] =
-                                    professionalCode.professionalCv
-                                it[professionalName] = professionalCode.nameId
+                                it[professionalCv] = professionalCode.professionalCv
+                                it[nameId] = professionalCode.nameId.toInt()
+                                //it[professionalName] = professionalCode.
                             }
                         }
 
@@ -363,11 +359,9 @@ fun parseReferenceXml(
                                 xmlMapper.readValue<LegalReferencePathToParagraph>(legalReferenceString)
 
                             ReferenceTableModel.LEGAL_REF_TO_PARAGRAPH.insert {
-                                it[legalReferencePath] =
-                                    legalReference.legalReferencePath
+                                it[legalReferencePath] = legalReference.legalReferencePath
                                 it[chapterName] = legalReference.chapterName
-                                it[paragraphName] =
-                                    legalReference.paragraphName
+                                it[paragraphName] = legalReference.paragraphName
                             }
                         }
 
