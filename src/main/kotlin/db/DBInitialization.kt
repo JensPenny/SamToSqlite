@@ -107,6 +107,11 @@ class DBInitialization {
                 ActualMedicineSamTableModel.AMPP_NIHDI,
                 ActualMedicineSamTableModel.AMPP_NIHDI_BIS,
                 ActualMedicineSamTableModel.AMPP_ECON,
+                ActualMedicineSamTableModel.AMPPC,
+                ActualMedicineSamTableModel.AMPPCES,
+                ActualMedicineSamTableModel.DMPP,
+                ActualMedicineSamTableModel.RACTING,
+                ActualMedicineSamTableModel.RACTIEQ,
                 inBatch = true
             )
 
@@ -122,6 +127,11 @@ class DBInitialization {
                 ActualMedicineSamTableModel.AMPP_NIHDI,
                 ActualMedicineSamTableModel.AMPP_NIHDI_BIS,
                 ActualMedicineSamTableModel.AMPP_ECON,
+                ActualMedicineSamTableModel.AMPPC,
+                ActualMedicineSamTableModel.AMPPCES,
+                ActualMedicineSamTableModel.DMPP,
+                ActualMedicineSamTableModel.RACTING,
+                ActualMedicineSamTableModel.RACTIEQ,
                 inBatch = true
             )
         }

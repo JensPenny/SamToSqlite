@@ -34,7 +34,6 @@ fun main() {
 
     val fullTime = measureTime {
 
-
         val ampParseTime = measureTime { parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml") }
 
         //done
@@ -194,7 +193,50 @@ fun parseAmpXml(
                                             }
                                         }
                                     }
+                                }
 
+                                for (ingredient in ampComponent.ingredients) {
+                                    for (ingredientData in ingredient.dataBlocks) {
+                                        ActualMedicineSamTableModel.RACTING.insert {
+                                            it[ampCode] = amp.code
+                                            it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
+                                            it[rank] = ingredient.rank.toInt()
+                                            it[type] = ingredientData.type
+                                            it[substanceCode] = ingredientData.substanceCode.codeReference
+                                            //it[knownEffect] = ingredientData
+                                            it[strengthUnit] = ingredientData.strength?.unit
+                                            it[strengthQuantity] = ingredientData.strength?.Strength
+                                            it[strengthDescription] = ingredientData.strengthDescription
+                                            //it[additionalInformation] =
+
+                                            it[validFrom] = LocalDate.parse(ingredientData.from)
+                                            if (ingredientData.to != null) {
+                                                it[validTo] = LocalDate.parse(ingredientData.to)
+                                            }
+                                        }
+                                    }
+                                    for (actualIngredientEquivalent in ingredient.actualIngredientEquivalents) {
+                                        for (dataBlock in actualIngredientEquivalent.dataBlocks) {
+                                            ActualMedicineSamTableModel.RACTIEQ.insert {
+                                                it[ampCode] = amp.code
+                                                it[ampcSequenceNumber] = ampComponent.sequenceNumber.toInt()
+                                                it[rank] = ingredient.rank.toInt()
+                                                it[sequenceNumber] = actualIngredientEquivalent.sequenceNumber.toInt()
+                                                it[type] = dataBlock.type
+                                                it[substanceCode] = dataBlock.substanceCode?.codeReference
+                                                //it[knownEffect] = dataBlock
+                                                it[strengthQuantity] = dataBlock.strength?.Strength
+                                                it[strengthUnit] = dataBlock.strength?.unit
+                                                it[strengthDescription] = dataBlock.strengthDescription
+                                                //it[additionalInformation] = dataBlock.a
+
+                                                it[validFrom] = LocalDate.parse(dataBlock.from)
+                                                if (dataBlock.to != null) {
+                                                    it[validTo] = LocalDate.parse(dataBlock.to)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
 
@@ -316,15 +358,63 @@ fun parseAmpXml(
                                 }
 
                                 for (amppComponent in amppElement.amppComponents) {
+                                    for (amppComponentDataBlock in amppComponent.amppComponentDataBlocks) {
+                                        ActualMedicineSamTableModel.AMPPC.insert {
+                                            it[ctiExtended] = amppElement.ctiExtended
+                                            it[sequenceNumber] = amppComponent.sequenceNumber.toInt()
+                                            it[ampcSequenceNumber] = amppComponentDataBlock.ampcSequenceNr?.toInt()
+                                            it[deviceTypeCode] = amppComponentDataBlock.deviceType?.codeReference
+                                            it[packagingTypeCode] = amppComponentDataBlock.packagingType?.codeReference
+                                            it[contentType] = amppComponentDataBlock.contentType
+                                            it[contentMultiplier] = amppComponentDataBlock.contentMultiplier?.toInt()
+                                            it[packSpecification] = amppComponentDataBlock.packSpecification
 
+                                            it[validFrom] = LocalDate.parse(amppComponentDataBlock.from)
+                                            if (amppComponentDataBlock.to != null) {
+                                                it[validTo] = LocalDate.parse(amppComponentDataBlock.to)
+                                            }
+                                        }
+                                    }
+                                    for (ampComponentEquivalent in amppComponent.ampComponentEquivalents) {
+                                        for (amppCompEquiData in ampComponentEquivalent.amppComponentEquivalentDataBlocks) {
+                                            ActualMedicineSamTableModel.AMPPCES.insert {
+                                                it[ctiExtended] = amppElement.ctiExtended
+                                                it[amppcSequenceNumber] = amppComponent.sequenceNumber.toInt()
+                                                it[sequenceNumber] = ampComponentEquivalent.sequenceNumber.toInt()
+                                                it[contentQuantity] = amppCompEquiData.content?.Content
+                                                it[contentUnit] = amppCompEquiData.content?.unit
+
+                                                it[validFrom] = LocalDate.parse(amppCompEquiData.from)
+                                                if (amppCompEquiData.to != null) {
+                                                    it[validTo] = LocalDate.parse(amppCompEquiData.to)
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
                                 for (dmpp in amppElement.dmpps) {
+                                    for (dmppDataBlock in dmpp.dmppDataBlocks) {
+                                        ActualMedicineSamTableModel.DMPP.insert {
+                                            it[code] = dmpp.code
+                                            it[codeType] = dmpp.codeSystem
+                                            it[productId] = dmpp.productId
+                                            it[deliveryEnvironment] = dmpp.deliveryEnvironment
+                                            it[price] = dmppDataBlock.price
+                                            it[reimbursable] = dmppDataBlock.reimbursable
+                                            //it[reimbursementRequiresPriorAgreement] = dmppDataBlock.
+                                            //it[cheapestCeilingPricesStatus5] = dmppDataBlock.ch
 
+                                            it[validFrom] = LocalDate.parse(dmppDataBlock.from)
+                                            if (dmppDataBlock.to != null) {
+                                                it[validTo] = LocalDate.parse(dmppDataBlock.to)
+                                            }
+                                        }
+                                    }
                                 }
 
                                 for (commercialization in amppElement.commercialization) {
-
+                                    //todo next part
                                 }
 
                                 for (supplyProblem in amppElement.supplyProblems) {
@@ -351,19 +441,22 @@ fun parseNonMedicinalXml(
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
-    while (reader.hasNext()) {
-        val event = reader.nextEvent()
+    var currentCounter = 0
+    val commitAfterAmount = 100
 
-        if (event.isStartElement) {
-            val startElement = event.asStartElement()
+    tryPersist {
+        transaction {
+            while (reader.hasNext()) {
+                val event = reader.nextEvent()
 
-            when (startElement.name.localPart) {
-                "ns3:NonMedicinalProduct" -> {
-                    val nonmedicinalString = fullElement(startElement, reader)
-                    val nonmedicinal = xmlMapper.readValue<Nonmedicinal>(nonmedicinalString)
+                if (event.isStartElement) {
+                    val startElement = event.asStartElement()
 
-                    tryPersist {
-                        transaction {
+                    when (startElement.name.localPart) {
+                        "ns3:NonMedicinalProduct" -> {
+                            currentCounter++ //Add one to the count of elements
+                            val nonmedicinalString = fullElement(startElement, reader)
+                            val nonmedicinal = xmlMapper.readValue<Nonmedicinal>(nonmedicinalString)
 
                             for (datablock in nonmedicinal.datablocks) {
                                 NonmedicinalTableModel.NONMEDICINAL.insert {
@@ -393,13 +486,19 @@ fun parseNonMedicinalXml(
                                         it[validTo] = LocalDate.parse(datablock.to)
                                     }
                                 }
+
+                                if (currentCounter == commitAfterAmount) {
+                                    logger.info("Committing nonmedicinals")
+                                    commit()
+                                    currentCounter = 0
+                                }
+
                             }
                         }
+                        else -> {
+                            println("no handler for " + startElement.name.localPart)
+                        }
                     }
-                }
-
-                else -> {
-                    println("no handler for " + startElement.name.localPart)
                 }
             }
         }

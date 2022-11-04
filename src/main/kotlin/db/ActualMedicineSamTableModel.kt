@@ -119,6 +119,41 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
+    //Real Actual Ingredient
+    object RACTING : IntIdTable("RACTING") {
+        val ampCode = varchar("ampCode", 12)
+        val sequenceNumber = integer("sequenceNumber")
+        val rank = integer("rank")
+        val type = varchar("type", 20)
+        val substanceCode = varchar("substanceCode", 10)
+        val knownEffect = bool("knownEffect").nullable()
+        val strengthQuantity = varchar("strengthQuantity", 20).nullable()
+        val strengthUnit = varchar("strengthUnit", 20).nullable()
+        val strengthDescription = varchar("strengthDescription", 50).nullable()
+        val additionalInformation = varchar("additionalInformation", 255).nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Real Actual Ingredient Equivalent
+    object RACTIEQ : IntIdTable("RACTIEQ") {
+        val ampCode = varchar("ampCode", 12)
+        val ampcSequenceNumber = integer("ampcSequenceNumber")
+        val rank = integer("rank")
+        val sequenceNumber = integer("sequenceNumber")
+        val type = varchar("type", 20).nullable()
+        val substanceCode = varchar("substanceCode", 10).nullable()
+        val knownEffect = bool("knownEffect").nullable()
+        val strengthQuantity = varchar("strengthQuantity", 20).nullable()
+        val strengthUnit = varchar("strengthUnit", 20).nullable()
+        val strengthDescription = varchar("strengthDescription", 50).nullable()
+        val additionalInformation = varchar("additionalInformation", 255).nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
     //AMP Package
     //Sem. Key: CTI-Extended
     //Foreign keys:
@@ -237,6 +272,48 @@ class ActualMedicineSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
+    //AMPP Component
+    object AMPPC : IntIdTable("AMPPC") {
+        val ctiExtended = varchar("ctiExtended", 9)
+        val sequenceNumber = integer("sequenceNumber")
+        val ampcSequenceNumber = integer("ampcSequenceNumber").nullable()
+        val deviceTypeCode = varchar("deviceTypeCode", 8).nullable()
+        val packagingTypeCode = varchar("packagingTypeCode", 8).nullable()
+        val contentType = varchar("contentType", 50).nullable()
+        val contentMultiplier = integer("contentMultiplier").nullable()
+        val packSpecification = varchar("packSpecification", 255).nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //AMPPC-Equivalent - don't judge me. The actual explanation also doesn't really make sense. Who uses this stuff?
+    object AMPPCES : IntIdTable("AMPPCES") {
+        val ctiExtended = varchar("ctiExtended", 9)
+        val amppcSequenceNumber = integer("amppcSequenceNumber")
+        val sequenceNumber = integer("sequenceNumber")
+        val contentQuantity = varchar("contentQuantity", 20).nullable()
+        val contentUnit = varchar("contentUnit", 20).nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Delivered Medicinal Product Package
+    object DMPP : IntIdTable("DMPP") {
+        val code = varchar("code", 7)
+        val codeType = varchar("codeType", 10)
+        val productId = varchar("productId", 100)
+        val deliveryEnvironment = varchar("deliveryEnvironment", 1)
+        val price = varchar("price", 20).nullable()
+        val reimbursable = bool("reimbursable")
+        val reimbursementRequiresPriorAgreement = bool("reimbursementRequiresPriorAgreement").nullable()
+        val cheapestCeilingPricesStatus5 = bool("cheapestCeilingPricesStatus5").nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
     //Supply Problem
     object SPPROB : IntIdTable("SPPROB") {
         val ctiExtended = varchar("ctiExtended", 9)
@@ -295,82 +372,6 @@ class ActualMedicineSamTableModel {
         val noteFr = text("noteFr")
         val noteGer = text("noteGer").nullable()
         val noteEng = text("noteEng").nullable()
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
-    }
-
-    //AMPP Component
-    object AMPPC : IntIdTable("AMPPC") {
-        val ctiExtended = varchar("ctiExtended", 9)
-        val sequenceNumber = integer("sequenceNumber")
-        val ampcSequenceNumber = integer("ampcSequenceNumber").nullable()
-        val deviceTypeCode = varchar("deviceTypeCode", 8).nullable()
-        val packagingTypeCode = varchar("packagingTypeCode", 8).nullable()
-        val contentType = varchar("contentType", 50)
-        val contentMultiplier = integer("contentMultiplier").nullable()
-        val packSpecification = varchar("packSpecification", 255).nullable()
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
-    }
-
-    //AMPPC-Equivalent - don't judge me. The actual explanation also doesn't really make sense. Who uses this stuff?
-    object AMPPCES : IntIdTable("AMPPCES") {
-        val ctiExtended = varchar("ctiExtended", 9)
-        val amppcSequenceNumber = integer("amppcSequenceNumber")
-        val sequenceNumber = integer("sequenceNumber")
-        val contentQuantity = integer("contentQuantity")
-        val contentUnit = varchar("contentUnit", 20)
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
-    }
-
-    //Delivered Medicinal Product Package
-    object DMPP : IntIdTable("DMPP") {
-        val code = varchar("code", 7)
-        val codeType = varchar("codeType", 10)
-        val deliveryEnvironment = varchar("deliveryEnvironment", 1)
-        val price = integer("price").nullable()
-        val reimbursable = bool("reimbursable")
-        val reimbursementRequiresPriorAgreement = bool("reimbursementRequiresPriorAgreement").nullable()
-        val cheapestCeilingPricesStatus5 = bool("cheapestCeilingPricesStatus5").nullable()
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
-    }
-
-    //Real Actual Ingredient
-    object RACTING : IntIdTable("RACTING") {
-        val ampCode = varchar("ampCode", 12)
-        val sequenceNumber = integer("sequenceNumber")
-        val rank = integer("rank")
-        val type = varchar("type", 20)
-        val substanceCode = varchar("substanceCode", 10)
-        val knownEffect = bool("knownEffect").nullable()
-        val strengthQuantity = integer("strengthQuantity").nullable()
-        val strengthUnit = varchar("strengthUnit", 20).nullable()
-        val strengthDescription = varchar("strengthDescription", 50).nullable()
-        val additionalInformation = varchar("additionalInformation", 255).nullable()
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
-    }
-
-    //Real Actual Ingredient Equivalent
-    object RACTIEQ : IntIdTable("RACTIEQ") {
-        val ampCode = varchar("ampCode", 12)
-        val ampcSequenceNumber = integer("ampcSequenceNumber")
-        val rank = integer("rank")
-        val sequenceNumber = integer("sequenceNumber")
-        val type = varchar("type", 20)
-        val substanceCode = varchar("substanceCode", 10)
-        val knownEffect = bool("knownEffect").nullable()
-        val strengthQuantity = integer("strengthQuantity").nullable()
-        val strengthUnit = varchar("strengthUnit", 20).nullable()
-        val strengthDescription = varchar("strengthDescription", 50).nullable()
-        val additionalInformation = varchar("additionalInformation", 255).nullable()
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()

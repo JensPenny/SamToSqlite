@@ -62,6 +62,10 @@ Two reference-tables are noted but aren't really spoonfed by the documentation. 
 * AMPC_TO_PHARMFORM: a table that links an amp component to 1 or more pharmaceutical forms
 * AMPC_TO_ROA: a table that links an amp component to 1 or more routes of administration.
 
+### RealActualIngredient quirks
+* Property `knownEffect` is documented but doesn't exist in the export.
+* Property `additionalInformation` is documented but doesn't exist in the export.
+
 ## AMPP quirks
 * The full dataset of one ampp is split between a whopping 5 tables(!!). Cobble these together by cti-extended to get an actual idea of an ampp. 
 * A good part here is that the creators split the dmpp and other sub-elements in the top-level ampp item, so these don't fall under the
@@ -74,4 +78,9 @@ validity of the primary ampp datablocks.
 * The docs say that `cheap` and `cheapest` have moved from dmpp to ampp. The docs lie. 
 * Property `contraceptive` is documented but doesn't exist in the export.
 * None of the fields for `AMPP_NIHDI_BIS` are available. Shame, since DDD is useful!
+
+## DMPP Quirks
+* DMPP has a product id that is undocumented, but looks useful. It's exported as a varchar 100
+* Property `reimbursementRequiresPriorAgreement` is documented but doesn't exist in the export.
+* Property `cheapestCeilingPricesStatus5` is documented but doesn't exist in the export.
 * 

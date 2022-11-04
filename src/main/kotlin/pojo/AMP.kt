@@ -124,10 +124,10 @@ data class Dmpp(
     var deliveryEnvironment: String,
 
     @set:JsonProperty("code")
-    var code: String?,
+    var code: String,
 
     @set:JsonProperty("codeType")
-    var codeSystem: String?,
+    var codeSystem: String,
 
     @set:JsonAlias("DmppData", "ns4:Data")
     var dmppDataBlocks: List<DmppData> = ArrayList()
@@ -226,7 +226,17 @@ data class AmppComponentData(
     var contentType: String?,
 
     @set:JsonAlias("CodeReference", "ns4:PackagingType")
-    var packagingType: CodeReference,
+    var packagingType: CodeReference?,
+
+    @set:JsonAlias("CodeReference", "ns4:DeviceType")
+    var deviceType: CodeReference?,
+
+    @set:JsonProperty("ContentMultiplier")
+    var contentMultiplier: String?,
+
+    @set:JsonProperty("PackSpecification")
+    var packSpecification: String?,
+
 )
 
 @JsonRootName("ns4:Data")
@@ -399,8 +409,11 @@ data class RealActualIngredient(
     @set:JsonProperty("rank")
     var rank: String,
 
-    @set:JsonAlias("AmpComponentData", "ns4:Data")
+    @set:JsonAlias("RealActualIngredientData", "ns4:Data")
     var dataBlocks: ArrayList<RealActualIngredientData> = ArrayList(),
+
+    @set:JsonAlias("RealActualIngredientEquivalent", "ns4:RealActualIngredientEquivalent")
+    var actualIngredientEquivalents: ArrayList<RealActualIngredientEquivalent> = ArrayList()
 )
 
 @JsonRootName("ns4:Data")
@@ -411,7 +424,7 @@ data class RealActualIngredientData(
     var to: String? = null,
 
     @set:JsonProperty("Type")
-    var type: String? = null,
+    var type: String,
 
     @set:JsonAlias("IngredientStrength", "Strength")
     var strength: IngredientStrength?,
@@ -419,12 +432,45 @@ data class RealActualIngredientData(
     @set:JsonAlias("CodeReference", "ns4:Substance")
     var substanceCode: CodeReference,
 
+    @set:JsonProperty("StrengthDescription")
+    var strengthDescription: String?,
+
     /*    var ampCode: String? = null,
         var sequenceNumber: String? = null,
         var rank: String? = null,
         var knownEffect: String? = null,
         var strengthDescription: String? = null,
         var additionalInformation: String? = null,*/
+)
+
+@JsonRootName("ns4:RealActualIngredientEquivalent")
+data class RealActualIngredientEquivalent(
+    @set:JsonProperty("sequenceNr")
+    var sequenceNumber: String,
+
+    @set:JsonAlias("RealActualIngredientEquivalentData", "ns4:Data")
+    var dataBlocks: ArrayList<RealActualIngredientEquivalentData> = ArrayList(),
+)
+
+@JsonRootName("ns4:Data")
+data class RealActualIngredientEquivalentData(
+    @set:JsonProperty("from")
+    var from: String,
+
+    @set:JsonProperty("to")
+    var to: String? = null,
+
+    @set:JsonProperty("Type")
+    var type: String?,
+
+    @set:JsonAlias("IngredientStrength", "Strength")
+    var strength: IngredientStrength?,
+
+    @set:JsonAlias("CodeReference", "ns4:Substance")
+    var substanceCode: CodeReference?,
+
+    @set:JsonProperty("StrengthDescription")
+    var strengthDescription: String?,
 )
 
 @JsonRootName("Strength")
