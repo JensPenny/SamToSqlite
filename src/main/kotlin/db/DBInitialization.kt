@@ -11,13 +11,33 @@ class DBInitialization {
     fun createTables() {
         println("creating tables")
 
-        createAmpTables()
+        createAmpTables() //done
+        createChapter4Tables()
         createCompoundingTables() //done
         createCompanyTables() //done
         createNonmedicinalTables() //done
         createReferenceTables() //done
     }
 
+    private fun createChapter4Tables(){
+        transaction {
+            drop(
+                Chapter4SamTableModel.PARAGRAPH,
+                Chapter4SamTableModel.VERSE,
+                Chapter4SamTableModel.ADDED_DOCUMENT,
+                Chapter4SamTableModel.EXCLUSION,
+                inBatch = true
+            )
+
+            create(
+                Chapter4SamTableModel.PARAGRAPH,
+                Chapter4SamTableModel.VERSE,
+                Chapter4SamTableModel.ADDED_DOCUMENT,
+                Chapter4SamTableModel.EXCLUSION,
+                inBatch = true
+            )
+        }
+    }
     private fun createNonmedicinalTables() {
         transaction {
             drop(NonmedicinalTableModel.NONMEDICINAL)

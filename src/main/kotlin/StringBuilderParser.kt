@@ -1,6 +1,10 @@
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
+import com.fasterxml.jackson.module.kotlin.readValue
 import db.*
 import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import parser.parseCompanyXml
 import parser.parseCompoundingXml
@@ -9,8 +13,12 @@ import parser.parseReferenceXml
 import pojo.*
 import xml.createXmlInputFactory
 import xml.createXmlMapper
+import java.io.FileInputStream
 import java.io.StringWriter
+import java.security.Timestamp
+import java.time.*
 import javax.xml.stream.XMLEventReader
+import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -31,6 +39,7 @@ fun main() {
 
     val fullTime = measureTime {
 
+/*
         val ampParseTime = measureTime { parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml") }
 
         //done
@@ -47,16 +56,209 @@ fun main() {
         //done
         val refParseTime =
             measureTime { parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1667395561910.xml") }
+*/
+
+        val chapter4Time = measureTime { parseChapter4Xml(inputFactory, xmlMapper, "res/latest/CHAPTERIV-1667395606032.xml") }
 
         //Pooling logresults to make this stuff more readable
-        logger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
-        logger.info("CMP file parsed in ${compoundingTime.inWholeMinutes}:${compoundingTime.inWholeSeconds - (compoundingTime.inWholeMinutes * 60)}")
-        logger.info("CPN file parsed in ${cpnParseTime.inWholeMinutes}:${cpnParseTime.inWholeSeconds - (cpnParseTime.inWholeMinutes * 60)}")
-        logger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
-        logger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
+        //logger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
+        logger.info("CHAPTERIV file parsed in ${chapter4Time.inWholeMinutes}:${chapter4Time.inWholeSeconds - (chapter4Time.inWholeMinutes * 60)}")
+        //logger.info("CMP file parsed in ${compoundingTime.inWholeMinutes}:${compoundingTime.inWholeSeconds - (compoundingTime.inWholeMinutes * 60)}")
+        //logger.info("CPN file parsed in ${cpnParseTime.inWholeMinutes}:${cpnParseTime.inWholeSeconds - (cpnParseTime.inWholeMinutes * 60)}")
+        //logger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
+        //logger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
     }
     logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
 
+}
+
+fun parseChapter4Xml(inputFactory: XMLInputFactory,
+                     xmlMapper: ObjectMapper,
+                     path: String) {
+
+    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+    val commitAfterAmount = 100
+    var currentCounter = 0
+
+    tryPersist {
+        transaction {
+            while (reader.hasNext()) {
+                val event = reader.nextEvent()
+
+                if (event.isStartElement) {
+                    val startElement = event.asStartElement()
+
+                    if (currentCounter >= commitAfterAmount) {
+                        commit()
+                        currentCounter = 0
+                    } else {
+                        currentCounter++
+                    }
+
+                    when(startElement.name.localPart) {
+                        "ns2:Paragraph" -> {
+                            val paragraphString = fullElement(startElement, reader)
+                            val paragraph = xmlMapper.readValue<Paragraph>(paragraphString)
+
+                            for (paragraphData in paragraph.paragraphData) {
+                                currentCounter++
+                                Chapter4SamTableModel.PARAGRAPH.insert {
+                                    it[chapterName] = paragraph.chapterName
+                                    it[paragraphName] = paragraph.paragraphName
+
+                                    it[keyStringNls] = paragraphData.keystringNl
+                                    it[keyStringFr] = paragraphData.keystringFr
+                                    it[agreementType] = paragraphData.agreementType
+                                    it[processType] = paragraphData.processType
+                                    //it[legalReference] = paragraphData.l
+                                    it[publicationDate] = paragraphData.publicationDate?.let { d -> LocalDate.parse(d) }
+                                    it[modificationDate] = paragraphData.modificationDate?.let { d -> LocalDate.parse(d) }
+                                    it[processTypeOverrule] = paragraphData.processTypeOverrule
+                                    it[agreementTypePro] = paragraphData.agreementTypePro
+                                    it[modificationStatus] = paragraphData.modificationStatus
+
+                                    it[validFrom] = LocalDate.parse(paragraphData.from)
+                                    if (paragraphData.to != null) {
+                                        it[validTo] = LocalDate.parse(paragraphData.to)
+                                    }
+
+                                    //Extra createdby-properties
+                                    if (paragraphData.createdTimestamp != null) {
+                                        it[createdDate] = Instant.parse(paragraphData.createdTimestamp + "Z") //Add zulu time for easy parsing
+                                    }
+                                    it[createdByUser] = paragraphData.createdUserId
+                                }
+                            }
+
+                            for (exclusion in paragraph.exclusion) {
+                                for (exclusionData in exclusion.exlusionData) {
+                                    currentCounter++
+                                    Chapter4SamTableModel.EXCLUSION.insert {
+                                        it[chapterName] = paragraph.chapterName
+                                        it[paragraphName] = paragraph.paragraphName
+
+                                        it[exclusionType] = exclusion.exclusionType
+                                        it[identifierNum] = exclusion.identifierNum
+                                        it[modificationStatus] = exclusionData.modificationStatus
+
+                                        it[validFrom] = LocalDate.parse(exclusionData.from)
+                                        if (exclusionData.to != null) {
+                                            it[validTo] = LocalDate.parse(exclusionData.to)
+                                        }
+
+                                        //Extra createdby-properties
+                                        if (exclusionData.createdTimestamp != null) {
+                                            it[createdDate] = Instant.parse(exclusionData.createdTimestamp + "Z") //Add zulu time for easy parsing
+                                        }
+                                        it[createdByUser] = exclusionData.createdUserId
+                                    }
+                                }
+                            }
+
+                            for (verse in paragraph.verses) {
+                                for (verseData in verse.verseData) {
+                                    currentCounter++
+                                    Chapter4SamTableModel.VERSE.insert {
+                                        it[chapterName] = paragraph.chapterName
+                                        it[paragraphName] = paragraph.paragraphName
+
+                                        it[verseSequence] = verse.verseSeq.toInt()
+                                        it[verseSequenceParent] = verseData.verseSeqParent.toInt()
+                                        it[verseLevel] = verseData.verseLevel.toInt()
+                                        it[verseType] = verseData.verseType
+                                        it[checkBoxIndicator] = verseData.checkBoxInd
+                                        it[minCheckNumber] = verseData.minCheckNumber?.toInt()
+                                        it[andClauseNumber] = verseData.andClauseNum?.toInt()
+                                        it[textNl] = verseData.textNl
+                                        it[textFr] = verseData.textFr
+                                        it[requestType] = verseData.requestType
+                                        it[agreementTerm] = verseData.agreementTerm?.toInt()
+                                        it[agreementTermUnit] = verseData.agreementTermUnit
+                                        it[maxPackageNumber] = verseData.maxPackageNumber?.toInt()
+                                        it[purchasingAdvisorQual] = verseData.purchasingAdvisorQualList
+                                        //it[legalReference] = verseData.leg
+                                        it[modificationDate] = verseData.modificationDate?.let { d -> LocalDate.parse(d) }
+                                        it[agreementYearMax] = verseData.agreementYearMax?.toInt()
+                                        it[agreementRenewalMax] = verseData.agreementRenewalMax?.toInt()
+                                        it[sexRestricted] = verseData.sexRestricted
+                                        it[minimumAgeAuthorized] = verseData.minimumAgeAuthorized?.toInt()
+                                        it[minimumAgeAuthorizedUnit] = verseData.minimumAgeAuthorizedUnit
+                                        it[maximumAgeAuthorized] = verseData.maximumAgeAuthorized?.toInt()
+                                        it[maximumAgeAuthorizedUnit] = verseData.maximumAgeAuthorizedUnit
+                                        it[maximumContentQuantity] = verseData.maximumContentQuantity
+                                        it[maximumContentUnit] = verseData.maximumContentUnit
+                                        it[maximumStrengthQuantity] = verseData.maximumStrengthQuantity
+                                        it[maximumStrengthUnit] = verseData.maximumStrengthUnit
+                                        it[maximumDurationQuantity] = verseData.maximumDurationQuantity
+                                        it[maximumDurationUnit] = verseData.maximumDurationUnit
+                                        it[otherAddedDocument] = verseData.otherAddedDocument
+                                        it[modificationStatus] = verseData.modificationStatus
+
+                                        it[validFrom] = LocalDate.parse(verseData.from)
+                                        if (verseData.to != null) {
+                                            it[validTo] = LocalDate.parse(verseData.to)
+                                        }
+
+                                        //Extra createdby-properties
+                                        if (verseData.createdTimestamp != null) {
+                                            it[createdDate] = Instant.parse(verseData.createdTimestamp + "Z") //Add zulu time for easy parsing
+                                        }
+                                        it[createdByUser] = verseData.createdUserId
+
+                                    }
+
+                                    for (addedDocument in verse.addedDocuments) {
+                                        for (documentData in addedDocument.documentData) {
+                                            currentCounter++
+                                            Chapter4SamTableModel.ADDED_DOCUMENT.insert {
+                                                it[chapterName] = paragraph.chapterName
+                                                it[paragrapName] = paragraph.paragraphName
+                                                it[verseSequence] = verse.verseSeq.toInt()
+                                                it[documentSequence] = addedDocument.documentSequence.toInt()
+                                                it[nameId] = documentData.nameId.toInt()
+                                                it[formTypeId] = documentData.formTypeId.toInt()
+                                                it[appendixTypeId] = documentData.appendixTypeId.toInt()
+                                                //it[mimeType] = documentData.mim
+                                                //it[documentContent] = documentData.doc
+                                                it[addressURL] = documentData.addressUrl
+                                                it[modificationStatus] = documentData.modificationStatus
+                                                it[validFrom] = LocalDate.parse(documentData.from)
+                                                if (documentData.to != null) {
+                                                    it[validTo] = LocalDate.parse(documentData.to)
+                                                }
+
+                                                //Extra createdby-properties
+                                                if (documentData.createdTimestamp != null) {
+                                                    it[createdDate] = Instant.parse(documentData.createdTimestamp + "Z") //Add zulu time for easy parsing
+                                                }
+                                                it[createdByUser] = documentData.createdUserId
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        "ns2:QualificationList" -> {
+                            val qualificationListString = fullElement(startElement, reader)
+                            val qualificationList = xmlMapper.readValue<QualificationList>(qualificationListString)
+
+                            currentCounter++
+                        }
+                        "ns2:NameExplanation" -> {
+                            val nameExplanationString = fullElement(startElement, reader)
+                            val nameExplanation = xmlMapper.readValue<NameExplanation>(nameExplanationString)
+
+                            currentCounter++
+                        }
+
+                        else -> {
+                            println("no handler for " + startElement.name.localPart)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 inline fun tryPersist(call: () -> Unit) {

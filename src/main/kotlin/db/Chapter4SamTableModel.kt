@@ -1,7 +1,10 @@
 package db
 
+import db.Chapter4SamTableModel.PARAGRAPH.nullable
+import db.Chapter4SamTableModel.VERSE.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.timestamp
 
 /**
  * Chapter IV statements - reimbursement contexts
@@ -17,15 +20,19 @@ class Chapter4SamTableModel {
         val keyStringFr = varchar("keyStringFr", 500).nullable()
         val agreementType = varchar("agreementType", 1).nullable()
         val processType = varchar("processType", 1).nullable()
-        val legalReference = varchar("legalReference", 100)
-        val publicationDate = date("publicationDate")
-        val modificationDate = date("modificationDate")
+        val legalReference = varchar("legalReference", 100).nullable()
+        val publicationDate = date("publicationDate").nullable()
+        val modificationDate = date("modificationDate").nullable()
         val processTypeOverrule = varchar("processTypeOverrule", 10).nullable()
         val agreementTypePro = varchar("agreementTypePro", 1).nullable()
         val modificationStatus = varchar("modificationStatus", 1)
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     //Paragraph Trace
@@ -54,7 +61,7 @@ class Chapter4SamTableModel {
         val andClauseNumber = integer("andClauseNumber").nullable()
         val textNl = text("textNl")
         val textFr = text("textFr")
-        val requestType = varchar("requestType", 1)
+        val requestType = varchar("requestType", 1).nullable()
         val agreementTerm = integer("agreementTerm").nullable()
         val agreementTermUnit = varchar("agreementTermUnit", 1).nullable()
         val maxPackageNumber = integer("maxPackageNumber").nullable()
@@ -68,17 +75,21 @@ class Chapter4SamTableModel {
         val minimumAgeAuthorizedUnit = varchar("minimumAgeAuthorizedUnit", 5).nullable()
         val maximumAgeAuthorized = integer("maximumAgeAuthorized").nullable()
         val maximumAgeAuthorizedUnit = varchar("maximumAgeAuthorizedUnit", 5).nullable()
-        val maximumContentQuantity = integer("maximumContentQuantity").nullable()
+        val maximumContentQuantity = varchar("maximumContentQuantity", 20).nullable()
         val maximumContentUnit = varchar("maximumContentUnit", 5).nullable()
-        val maximumStrengthQuantity = integer("maximumStrengthQuantity").nullable()
+        val maximumStrengthQuantity = varchar("maximumStrengthQuantity", 20).nullable()
         val maximumStrengthUnit = varchar("maximumStrengthUnit", 5).nullable()
-        val maximumDurationQuantity = integer("maximumDurationQuantity").nullable()
+        val maximumDurationQuantity = varchar("maximumDurationQuantity", 20).nullable()
         val maximumDurationUnit = varchar("maximumDurationUnit", 5).nullable()
         val otherAddedDocument = bool("oherAddedDocument").nullable()
         val modificationStatus = varchar("modificationStatus", 1)
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     //Qualification List
@@ -120,17 +131,25 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     object EXCLUSION : IntIdTable("EXCLUSION") {
         val chapterName = varchar("chapterName", 10)
         val paragraphName = varchar("paragraphName", 10)
-        val exclusionType = varchar("exclusionType", 1)
-        val identifierNum = varchar("identifierNum", 10)
-        val modificationStatus = varchar("modificationStatus", 1)
+        val exclusionType = varchar("exclusionType", 1).nullable()
+        val identifierNum = varchar("identifierNum", 10).nullable()
+        val modificationStatus = varchar("modificationStatus", 1).nullable()
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     object NAME_EXPLANATION : IntIdTable("NAME_EXPLANATION") {
