@@ -242,12 +242,58 @@ fun parseChapter4Xml(inputFactory: XMLInputFactory,
                             val qualificationListString = fullElement(startElement, reader)
                             val qualificationList = xmlMapper.readValue<QualificationList>(qualificationListString)
 
-                            currentCounter++
+                            for (qualificationListData in qualificationList.qualificationListData) {
+                                currentCounter++
+                                Chapter4SamTableModel.QUALLIST.insert {
+                                    it[Chapter4SamTableModel.QUALLIST.qualificationList] = qualificationList.qualificationListId
+                                    it[nameId] = qualificationListData.nameId.toInt()
+                                    it[exclusiveInd] = qualificationListData.exclusiveInd
+                                    it[modificationStatus] = qualificationListData.modificationStatus
+
+                                    it[validFrom] = LocalDate.parse(qualificationListData.from)
+                                    if (qualificationListData.to != null) {
+                                        it[validTo] = LocalDate.parse(qualificationListData.to)
+                                    }
+
+                                    //Extra createdby-properties
+                                    if (qualificationListData.createdTimestamp != null) {
+                                        it[createdDate] = Instant.parse(qualificationListData.createdTimestamp + "Z") //Add zulu time for easy parsing
+                                    }
+                                    it[createdByUser] = qualificationListData.createdUserId
+                                }
+                            }
+
+                            for (professionalAuthorisation in qualificationList.professionalAuthorisations) {
+                                for (professionalAuthorisationData in professionalAuthorisation.professionalAuthorisationData) {
+                                    currentCounter++
+                                    Chapter4SamTableModel.PROF_AUTHORISATION.insert {
+                                        it[professionalAuthorisationId] = professionalAuthorisation.professionalAuthorisationId.toInt()
+                                        it[Chapter4SamTableModel.PROF_AUTHORISATION.qualificationList] = qualificationList.qualificationListId
+                                        it[professionalCv] = professionalAuthorisationData.professionalCv
+                                        //it[purchasingAdvisorName] = professionalAuthorisationData.purchasingAdvisorName
+                                        it[modificationStatus] = professionalAuthorisationData.modificationStatus
+
+                                        it[validFrom] = LocalDate.parse(professionalAuthorisationData.from)
+                                        if (professionalAuthorisationData.to != null) {
+                                            it[validTo] = LocalDate.parse(professionalAuthorisationData.to)
+                                        }
+
+                                        //Extra createdby-properties
+                                        if (professionalAuthorisationData.createdTimestamp != null) {
+                                            it[createdDate] = Instant.parse(professionalAuthorisationData.createdTimestamp + "Z") //Add zulu time for easy parsing
+                                        }
+                                        it[createdByUser] = professionalAuthorisationData.createdUserId
+                                    }
+                                }
+                            }
                         }
                         "ns2:NameExplanation" -> {
                             val nameExplanationString = fullElement(startElement, reader)
                             val nameExplanation = xmlMapper.readValue<NameExplanation>(nameExplanationString)
 
+                            for (c in id) {
+                                
+                            }
                             currentCounter++
                         }
 

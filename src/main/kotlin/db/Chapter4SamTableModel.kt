@@ -1,6 +1,7 @@
 package db
 
 import db.Chapter4SamTableModel.PARAGRAPH.nullable
+import db.Chapter4SamTableModel.QUALLIST.nullable
 import db.Chapter4SamTableModel.VERSE.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
@@ -101,6 +102,10 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     //Professional Authorisation
@@ -113,6 +118,10 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     //Added document

@@ -270,7 +270,7 @@ data class QualificationList(
 @JsonRootName("ns2:ProfessionalAuthorisation")
 data class ProfessionalAuthorisation(
     @set:JsonProperty("ProfessionalAuthorisationId")
-    var professionalAuthorisationId: String?,
+    var professionalAuthorisationId: String,
 
     @set:JsonAlias("ProfessionalAuthorisationData", "ns2:Data")
     var professionalAuthorisationData: ArrayList<ProfessionalAuthorisationData> = ArrayList(),
@@ -291,7 +291,7 @@ data class ProfessionalAuthorisationData(
     @set:JsonProperty("ProfessionalCV")
     var professionalCv: String?,
     @set:JsonProperty("ModificationStatus")
-    var modificationStatus: String?,
+    var modificationStatus: String,
 )
 
 @JsonRootName("ns2:Data")
@@ -309,10 +309,13 @@ data class QualificationListData(
     var createdUserId: String?,
 
     @set:JsonProperty("NameId")
-    var nameId: String?,
+    var nameId: String,
+
+    @set:JsonProperty("ExclusiveInd")
+    var exclusiveInd: String?,
 
     @set:JsonProperty("ModificationStatus")
-    var modificationStatus: String?,
+    var modificationStatus: String,
 )
 
 //Top level element

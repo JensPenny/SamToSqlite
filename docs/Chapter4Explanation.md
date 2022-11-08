@@ -24,3 +24,6 @@ There is a quirk that is featured in multiple data elements in the export:
 ## Added document quirks
 * Field `mimeType` is documented but is never used in the export.
 * Field `documentContent` is documented but is never used in the export.
+
+# Qualification list
+* Field `purchasingAdvisorName` is documented but is never used in the export.
