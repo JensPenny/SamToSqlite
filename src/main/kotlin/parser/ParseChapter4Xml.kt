@@ -15,9 +15,11 @@ import java.time.Instant
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
-fun parseChapter4Xml(inputFactory: XMLInputFactory,
-                     xmlMapper: ObjectMapper,
-                     path: String) {
+fun parseChapter4Xml(
+    inputFactory: XMLInputFactory,
+    xmlMapper: ObjectMapper,
+    path: String
+) {
 
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
     val commitAfterAmount = 100
@@ -32,10 +34,8 @@ fun parseChapter4Xml(inputFactory: XMLInputFactory,
                     val startElement = event.asStartElement()
 
                     if (currentCounter >= commitAfterAmount) {
-                        commit()
+                        commit() //Only have to commit in between, because the transaction gets committed at the end as well
                         currentCounter = 0
-                    } else {
-                        currentCounter++
                     }
 
                     when (startElement.name.localPart) {
