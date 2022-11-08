@@ -28,6 +28,8 @@ class DBInitialization {
                 Chapter4SamTableModel.EXCLUSION,
                 Chapter4SamTableModel.QUALLIST,
                 Chapter4SamTableModel.PROF_AUTHORISATION,
+                Chapter4SamTableModel.NAME_EXPLANATION,
+                Chapter4SamTableModel.NAME_TRANSLATION,
                 inBatch = true
             )
 
@@ -38,6 +40,8 @@ class DBInitialization {
                 Chapter4SamTableModel.EXCLUSION,
                 Chapter4SamTableModel.QUALLIST,
                 Chapter4SamTableModel.PROF_AUTHORISATION,
+                Chapter4SamTableModel.NAME_EXPLANATION,
+                Chapter4SamTableModel.NAME_TRANSLATION,
                 inBatch = true
             )
         }

@@ -1,5 +1,7 @@
 package db
 
+import db.Chapter4SamTableModel.EXCLUSION.nullable
+import db.Chapter4SamTableModel.NAME_EXPLANATION.nullable
 import db.Chapter4SamTableModel.PARAGRAPH.nullable
 import db.Chapter4SamTableModel.QUALLIST.nullable
 import db.Chapter4SamTableModel.VERSE.nullable
@@ -109,7 +111,7 @@ class Chapter4SamTableModel {
     }
 
     //Professional Authorisation
-    object PROF_AUTHORISATION : IntIdTable("PROF_AUTHIRISATION") {
+    object PROF_AUTHORISATION : IntIdTable("PROF_AUTHORISATION") {
         val professionalAuthorisationId = integer("professionalAuthorisationId")
         val qualificationList = varchar("qualificationList", 10)
         val professionalCv = varchar("professionalCv", 10).nullable()
@@ -168,6 +170,10 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 
     //Legal Reference
@@ -200,5 +206,9 @@ class Chapter4SamTableModel {
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
+
+        //Undocumented
+        val createdDate = timestamp("createdDate").nullable()
+        val createdByUser = varchar("createdByUser", 30).nullable()
     }
 }

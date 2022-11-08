@@ -321,8 +321,8 @@ data class QualificationListData(
 //Top level element
 @JsonRootName("ns2:NameExplanation")
 data class NameExplanation(
-    @set:JsonProperty("nameId")
-    var nameId: String?,
+    @set:JsonProperty("NameId")
+    var nameId: String,
 
     @set:JsonAlias("NameExplanationData", "ns2:Data")
     var nameExplanationData: ArrayList<NameExplanationData> = ArrayList(),
@@ -360,7 +360,7 @@ data class NameTranslationData(
     @set:JsonProperty("LongText")
     var longText: String?,
     @set:JsonProperty("ModificationStatus")
-    var modificationStatus: String?,
+    var modificationStatus: String,
 )
 
 @JsonRootName("ns2:Data")
@@ -376,7 +376,7 @@ data class NameExplanationData(
     @set:JsonProperty("CreatedUserId")
     var createdUserId: String?,
     @set:JsonProperty("SourceTableId")
-    var sourceTableId: String?,
+    var sourceTableId: String,
     @set:JsonProperty("ModificationStatus")
-    var modificationStatus: String?,
+    var modificationStatus: String,
 )

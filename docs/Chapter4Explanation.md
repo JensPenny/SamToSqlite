@@ -25,5 +25,12 @@ There is a quirk that is featured in multiple data elements in the export:
 * Field `mimeType` is documented but is never used in the export.
 * Field `documentContent` is documented but is never used in the export.
 
-# Qualification list
+# Qualification list quirks
 * Field `purchasingAdvisorName` is documented but is never used in the export.
+
+# NameExplanation quirks
+
+## Nametranslation quirks
+* Field `longBinaryText` is documented but is never used in the export.
+* Field `addressUrl` is documented but is never used in the export. It exists in the verse but not here
+* 
