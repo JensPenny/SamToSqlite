@@ -26,6 +26,8 @@ class DBInitialization {
                 Chapter4SamTableModel.VERSE,
                 Chapter4SamTableModel.ADDED_DOCUMENT,
                 Chapter4SamTableModel.EXCLUSION,
+                Chapter4SamTableModel.QUALLIST,
+                Chapter4SamTableModel.PROF_AUTHORISATION,
                 inBatch = true
             )
 
@@ -34,6 +36,8 @@ class DBInitialization {
                 Chapter4SamTableModel.VERSE,
                 Chapter4SamTableModel.ADDED_DOCUMENT,
                 Chapter4SamTableModel.EXCLUSION,
+                Chapter4SamTableModel.QUALLIST,
+                Chapter4SamTableModel.PROF_AUTHORISATION,
                 inBatch = true
             )
         }

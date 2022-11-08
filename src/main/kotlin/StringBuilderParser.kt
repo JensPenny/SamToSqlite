@@ -291,9 +291,7 @@ fun parseChapter4Xml(inputFactory: XMLInputFactory,
                             val nameExplanationString = fullElement(startElement, reader)
                             val nameExplanation = xmlMapper.readValue<NameExplanation>(nameExplanationString)
 
-                            for (c in id) {
-                                
-                            }
+
                             currentCounter++
                         }
 
