@@ -2,7 +2,7 @@ package parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import db.ReimbursementLawSamTableModel
+import db.ReimbursementContextTableModel
 import fullElement
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -40,7 +40,7 @@ fun parseReimbursementXml(
 
                             for (contextData in reimbursementContext.contextDatas) {
                                 currentCounter++
-                                ReimbursementLawSamTableModel.RMBCTX.insert {
+                                ReimbursementContextTableModel.RMBCTX.insert {
                                     it[code] = reimbursementContext.code
                                     it[codeType] = reimbursementContext.codeType
                                     it[deliveryEnvironment] = reimbursementContext.deliveryEnvironment
@@ -81,7 +81,7 @@ fun parseReimbursementXml(
                             for (copayment in reimbursementContext.copayments) {
                                 for (copaymentData in copayment.copaymentData) {
                                     currentCounter++
-                                    ReimbursementLawSamTableModel.COPAY.insert {
+                                    ReimbursementContextTableModel.COPAY.insert {
                                         it[code] = reimbursementContext.code
                                         it[codeType] = reimbursementContext.codeType
                                         it[deliveryEnvironment] = reimbursementContext.deliveryEnvironment

@@ -15,20 +15,25 @@ class DBInitialization {
         createCompanyTables() //done
         createNonmedicinalTables() //done
         createReferenceTables() //done
-        createReimbursementLawTables() //done
+        createReimbursementContextTables() //done
+        createReimbursementLawTables()
     }
 
     private fun createReimbursementLawTables() {
+
+    }
+
+    private fun createReimbursementContextTables() {
         transaction {
             drop(
-                ReimbursementLawSamTableModel.RMBCTX,
-                ReimbursementLawSamTableModel.COPAY,
+                ReimbursementContextTableModel.RMBCTX,
+                ReimbursementContextTableModel.COPAY,
                 inBatch = true,
             )
 
             create(
-                ReimbursementLawSamTableModel.RMBCTX,
-                ReimbursementLawSamTableModel.COPAY,
+                ReimbursementContextTableModel.RMBCTX,
+                ReimbursementContextTableModel.COPAY,
                 inBatch = true,
             )
         }
