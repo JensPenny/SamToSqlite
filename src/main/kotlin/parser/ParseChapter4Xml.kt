@@ -16,9 +16,7 @@ import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseChapter4Xml(
-    inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper,
-    path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
 
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
@@ -54,16 +52,12 @@ fun parseChapter4Xml(
                                     it[agreementType] = paragraphData.agreementType
                                     it[processType] = paragraphData.processType
                                     //it[legalReference] = paragraphData.l
-                                    it[publicationDate] =
-                                        paragraphData.publicationDate?.let { d -> LocalDate.parse(d) }
+                                    it[publicationDate] = paragraphData.publicationDate?.let { d -> LocalDate.parse(d) }
                                     it[modificationDate] =
                                         paragraphData.modificationDate?.let { d -> LocalDate.parse(d) }
-                                    it[processTypeOverrule] =
-                                        paragraphData.processTypeOverrule
-                                    it[agreementTypePro] =
-                                        paragraphData.agreementTypePro
-                                    it[modificationStatus] =
-                                        paragraphData.modificationStatus
+                                    it[processTypeOverrule] = paragraphData.processTypeOverrule
+                                    it[agreementTypePro] = paragraphData.agreementTypePro
+                                    it[modificationStatus] = paragraphData.modificationStatus
 
                                     it[validFrom] = LocalDate.parse(paragraphData.from)
                                     if (paragraphData.to != null) {
@@ -88,14 +82,11 @@ fun parseChapter4Xml(
 
                                         it[exclusionType] = exclusion.exclusionType
                                         it[identifierNum] = exclusion.identifierNum
-                                        it[modificationStatus] =
-                                            exclusionData.modificationStatus
+                                        it[modificationStatus] = exclusionData.modificationStatus
 
-                                        it[validFrom] =
-                                            LocalDate.parse(exclusionData.from)
+                                        it[validFrom] = LocalDate.parse(exclusionData.from)
                                         if (exclusionData.to != null) {
-                                            it[validTo] =
-                                                LocalDate.parse(exclusionData.to)
+                                            it[validTo] = LocalDate.parse(exclusionData.to)
                                         }
 
                                         //Extra createdby-properties
@@ -116,56 +107,37 @@ fun parseChapter4Xml(
                                         it[paragraphName] = paragraph.paragraphName
 
                                         it[verseSequence] = verse.verseSeq.toInt()
-                                        it[verseSequenceParent] =
-                                            verseData.verseSeqParent.toInt()
+                                        it[verseSequenceParent] = verseData.verseSeqParent.toInt()
                                         it[verseLevel] = verseData.verseLevel.toInt()
                                         it[verseType] = verseData.verseType
                                         it[checkBoxIndicator] = verseData.checkBoxInd
-                                        it[minCheckNumber] =
-                                            verseData.minCheckNumber?.toInt()
-                                        it[andClauseNumber] =
-                                            verseData.andClauseNum?.toInt()
+                                        it[minCheckNumber] = verseData.minCheckNumber?.toInt()
+                                        it[andClauseNumber] = verseData.andClauseNum?.toInt()
                                         it[textNl] = verseData.textNl
                                         it[textFr] = verseData.textFr
                                         it[requestType] = verseData.requestType
                                         it[agreementTerm] = verseData.agreementTerm?.toInt()
                                         it[agreementTermUnit] = verseData.agreementTermUnit
-                                        it[maxPackageNumber] =
-                                            verseData.maxPackageNumber?.toInt()
-                                        it[purchasingAdvisorQual] =
-                                            verseData.purchasingAdvisorQualList
+                                        it[maxPackageNumber] = verseData.maxPackageNumber?.toInt()
+                                        it[purchasingAdvisorQual] = verseData.purchasingAdvisorQualList
                                         //it[legalReference] = verseData.leg
                                         it[modificationDate] =
                                             verseData.modificationDate?.let { d -> LocalDate.parse(d) }
-                                        it[agreementYearMax] =
-                                            verseData.agreementYearMax?.toInt()
-                                        it[agreementRenewalMax] =
-                                            verseData.agreementRenewalMax?.toInt()
+                                        it[agreementYearMax] = verseData.agreementYearMax?.toInt()
+                                        it[agreementRenewalMax] = verseData.agreementRenewalMax?.toInt()
                                         it[sexRestricted] = verseData.sexRestricted
-                                        it[minimumAgeAuthorized] =
-                                            verseData.minimumAgeAuthorized?.toInt()
-                                        it[minimumAgeAuthorizedUnit] =
-                                            verseData.minimumAgeAuthorizedUnit
-                                        it[maximumAgeAuthorized] =
-                                            verseData.maximumAgeAuthorized?.toInt()
-                                        it[maximumAgeAuthorizedUnit] =
-                                            verseData.maximumAgeAuthorizedUnit
-                                        it[maximumContentQuantity] =
-                                            verseData.maximumContentQuantity
-                                        it[maximumContentUnit] =
-                                            verseData.maximumContentUnit
-                                        it[maximumStrengthQuantity] =
-                                            verseData.maximumStrengthQuantity
-                                        it[maximumStrengthUnit] =
-                                            verseData.maximumStrengthUnit
-                                        it[maximumDurationQuantity] =
-                                            verseData.maximumDurationQuantity
-                                        it[maximumDurationUnit] =
-                                            verseData.maximumDurationUnit
-                                        it[otherAddedDocument] =
-                                            verseData.otherAddedDocument
-                                        it[modificationStatus] =
-                                            verseData.modificationStatus
+                                        it[minimumAgeAuthorized] = verseData.minimumAgeAuthorized?.toInt()
+                                        it[minimumAgeAuthorizedUnit] = verseData.minimumAgeAuthorizedUnit
+                                        it[maximumAgeAuthorized] = verseData.maximumAgeAuthorized?.toInt()
+                                        it[maximumAgeAuthorizedUnit] = verseData.maximumAgeAuthorizedUnit
+                                        it[maximumContentQuantity] = verseData.maximumContentQuantity
+                                        it[maximumContentUnit] = verseData.maximumContentUnit
+                                        it[maximumStrengthQuantity] = verseData.maximumStrengthQuantity
+                                        it[maximumStrengthUnit] = verseData.maximumStrengthUnit
+                                        it[maximumDurationQuantity] = verseData.maximumDurationQuantity
+                                        it[maximumDurationUnit] = verseData.maximumDurationUnit
+                                        it[otherAddedDocument] = verseData.otherAddedDocument
+                                        it[modificationStatus] = verseData.modificationStatus
 
                                         it[validFrom] = LocalDate.parse(verseData.from)
                                         if (verseData.to != null) {
@@ -185,31 +157,20 @@ fun parseChapter4Xml(
                                         for (documentData in addedDocument.documentData) {
                                             currentCounter++
                                             Chapter4SamTableModel.ADDED_DOCUMENT.insert {
-                                                it[chapterName] =
-                                                    paragraph.chapterName
-                                                it[paragrapName] =
-                                                    paragraph.paragraphName
-                                                it[verseSequence] =
-                                                    verse.verseSeq.toInt()
-                                                it[documentSequence] =
-                                                    addedDocument.documentSequence.toInt()
-                                                it[nameId] =
-                                                    documentData.nameId.toInt()
-                                                it[formTypeId] =
-                                                    documentData.formTypeId.toInt()
-                                                it[appendixTypeId] =
-                                                    documentData.appendixTypeId.toInt()
+                                                it[chapterName] = paragraph.chapterName
+                                                it[paragrapName] = paragraph.paragraphName
+                                                it[verseSequence] = verse.verseSeq.toInt()
+                                                it[documentSequence] = addedDocument.documentSequence.toInt()
+                                                it[nameId] = documentData.nameId.toInt()
+                                                it[formTypeId] = documentData.formTypeId.toInt()
+                                                it[appendixTypeId] = documentData.appendixTypeId.toInt()
                                                 //it[mimeType] = documentData.mim
                                                 //it[documentContent] = documentData.doc
-                                                it[addressURL] =
-                                                    documentData.addressUrl
-                                                it[modificationStatus] =
-                                                    documentData.modificationStatus
-                                                it[validFrom] =
-                                                    LocalDate.parse(documentData.from)
+                                                it[addressURL] = documentData.addressUrl
+                                                it[modificationStatus] = documentData.modificationStatus
+                                                it[validFrom] = LocalDate.parse(documentData.from)
                                                 if (documentData.to != null) {
-                                                    it[validTo] =
-                                                        LocalDate.parse(documentData.to)
+                                                    it[validTo] = LocalDate.parse(documentData.to)
                                                 }
 
                                                 //Extra createdby-properties
@@ -217,8 +178,7 @@ fun parseChapter4Xml(
                                                     it[createdDate] =
                                                         Instant.parse(documentData.createdTimestamp + "Z") //Add zulu time for easy parsing
                                                 }
-                                                it[createdByUser] =
-                                                    documentData.createdUserId
+                                                it[createdByUser] = documentData.createdUserId
                                             }
                                         }
                                     }
@@ -237,14 +197,11 @@ fun parseChapter4Xml(
                                         qualificationList.qualificationListId
                                     it[nameId] = qualificationListData.nameId.toInt()
                                     it[exclusiveInd] = qualificationListData.exclusiveInd
-                                    it[modificationStatus] =
-                                        qualificationListData.modificationStatus
+                                    it[modificationStatus] = qualificationListData.modificationStatus
 
-                                    it[validFrom] =
-                                        LocalDate.parse(qualificationListData.from)
+                                    it[validFrom] = LocalDate.parse(qualificationListData.from)
                                     if (qualificationListData.to != null) {
-                                        it[validTo] =
-                                            LocalDate.parse(qualificationListData.to)
+                                        it[validTo] = LocalDate.parse(qualificationListData.to)
                                     }
 
                                     //Extra createdby-properties
@@ -252,8 +209,7 @@ fun parseChapter4Xml(
                                         it[createdDate] =
                                             Instant.parse(qualificationListData.createdTimestamp + "Z") //Add zulu time for easy parsing
                                     }
-                                    it[createdByUser] =
-                                        qualificationListData.createdUserId
+                                    it[createdByUser] = qualificationListData.createdUserId
                                 }
                             }
 
@@ -265,17 +221,13 @@ fun parseChapter4Xml(
                                             professionalAuthorisation.professionalAuthorisationId.toInt()
                                         it[Chapter4SamTableModel.PROF_AUTHORISATION.qualificationList] =
                                             qualificationList.qualificationListId
-                                        it[professionalCv] =
-                                            professionalAuthorisationData.professionalCv
+                                        it[professionalCv] = professionalAuthorisationData.professionalCv
                                         //it[purchasingAdvisorName] = professionalAuthorisationData.purchasingAdvisorName
-                                        it[modificationStatus] =
-                                            professionalAuthorisationData.modificationStatus
+                                        it[modificationStatus] = professionalAuthorisationData.modificationStatus
 
-                                        it[validFrom] =
-                                            LocalDate.parse(professionalAuthorisationData.from)
+                                        it[validFrom] = LocalDate.parse(professionalAuthorisationData.from)
                                         if (professionalAuthorisationData.to != null) {
-                                            it[validTo] =
-                                                LocalDate.parse(professionalAuthorisationData.to)
+                                            it[validTo] = LocalDate.parse(professionalAuthorisationData.to)
                                         }
 
                                         //Extra createdby-properties
@@ -283,8 +235,7 @@ fun parseChapter4Xml(
                                             it[createdDate] =
                                                 Instant.parse(professionalAuthorisationData.createdTimestamp + "Z") //Add zulu time for easy parsing
                                         }
-                                        it[createdByUser] =
-                                            professionalAuthorisationData.createdUserId
+                                        it[createdByUser] = professionalAuthorisationData.createdUserId
                                     }
                                 }
                             }
@@ -298,16 +249,12 @@ fun parseChapter4Xml(
                                 currentCounter++
                                 Chapter4SamTableModel.NAME_EXPLANATION.insert {
                                     it[nameId] = nameExplanation.nameId.toInt()
-                                    it[sourceTableId] =
-                                        nameExplanationData.sourceTableId.toInt()
-                                    it[modificationStatus] =
-                                        nameExplanationData.modificationStatus
+                                    it[sourceTableId] = nameExplanationData.sourceTableId.toInt()
+                                    it[modificationStatus] = nameExplanationData.modificationStatus
 
-                                    it[validFrom] =
-                                        LocalDate.parse(nameExplanationData.from)
+                                    it[validFrom] = LocalDate.parse(nameExplanationData.from)
                                     if (nameExplanationData.to != null) {
-                                        it[validTo] =
-                                            LocalDate.parse(nameExplanationData.to)
+                                        it[validTo] = LocalDate.parse(nameExplanationData.to)
                                     }
 
                                     //Extra createdby-properties
@@ -315,8 +262,7 @@ fun parseChapter4Xml(
                                         it[createdDate] =
                                             Instant.parse(nameExplanationData.createdTimestamp + "Z") //Add zulu time for easy parsing
                                     }
-                                    it[createdByUser] =
-                                        nameExplanationData.createdUserId
+                                    it[createdByUser] = nameExplanationData.createdUserId
                                 }
                             }
 
@@ -324,26 +270,18 @@ fun parseChapter4Xml(
                                 for (nameTranslationData in nameTranslation.nameTranslationData) {
                                     currentCounter++
                                     Chapter4SamTableModel.NAME_TRANSLATION.insert {
-                                        it[nameId] =
-                                            nameExplanation.nameId.toInt()
-                                        it[nameTypeCV] =
-                                            nameTranslation.nametypeCv
-                                        it[languageCv] =
-                                            nameTranslation.languageCv
-                                        it[shortText] =
-                                            nameTranslationData.shortText
-                                        it[longText] =
-                                            nameTranslationData.longText
+                                        it[nameId] = nameExplanation.nameId.toInt()
+                                        it[nameTypeCV] = nameTranslation.nametypeCv
+                                        it[languageCv] = nameTranslation.languageCv
+                                        it[shortText] = nameTranslationData.shortText
+                                        it[longText] = nameTranslationData.longText
                                         //it[longBinaryText] = nameTranslationData.longBinaryText
                                         //it[addressURL] =
-                                        it[modificationStatus] =
-                                            nameTranslationData.modificationStatus
+                                        it[modificationStatus] = nameTranslationData.modificationStatus
 
-                                        it[validFrom] =
-                                            LocalDate.parse(nameTranslationData.from)
+                                        it[validFrom] = LocalDate.parse(nameTranslationData.from)
                                         if (nameTranslationData.to != null) {
-                                            it[validTo] =
-                                                LocalDate.parse(nameTranslationData.to)
+                                            it[validTo] = LocalDate.parse(nameTranslationData.to)
                                         }
 
                                         //Extra createdby-properties
@@ -351,8 +289,7 @@ fun parseChapter4Xml(
                                             it[createdDate] =
                                                 Instant.parse(nameTranslationData.createdTimestamp + "Z") //Add zulu time for easy parsing
                                         }
-                                        it[createdByUser] =
-                                            nameTranslationData.createdUserId
+                                        it[createdByUser] = nameTranslationData.createdUserId
                                     }
                                 }
                             }

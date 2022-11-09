@@ -60,14 +60,14 @@ class ReimbursementLawSamTableModel {
         val reimbursementBasePrice = varchar("reimbursementBasePrice", 20)
         val referenceBasePrice = varchar("referenceBasePrice", 20)
         val copaymentSupplement = varchar("copaymentSupplement", 20).nullable()
-        val pricingUnitQuantity = integer("pricingUnitQuantity")
+        val pricingUnitQuantity = varchar("pricingUnitQuantity", 20)
 
         val pricingUnitLabelNl = varchar("pricingUnitLabelNl", 255).nullable()
         val pricingUnitLabelFr = varchar("pricingUnitLabelFr", 255).nullable()
         val pricingUnitLabelGerman = varchar("pricingUnitLabelGer", 255).nullable()
         val pricingUnitLabelEnglish = varchar("pricingUnitLabelEng", 255).nullable()
 
-        val pricingSliceQuantity = integer("pricingSliceQuantity").nullable()
+        val pricingSliceQuantity = varchar("pricingSliceQuantity", 20).nullable()
 
         val pricingSliceLabelNl = varchar("pricingSliceLabelNl", 255).nullable()
         val pricingSliceLabelFr = varchar("pricingSliceLabelFr", 255).nullable()
@@ -89,7 +89,7 @@ class ReimbursementLawSamTableModel {
         val deliveryEnvironment = varchar("deliveryEnvironment", 1)
         val legalReferencePath = varchar("legalReferencePath", 79)
         val regimeType = varchar("regimeType", 1)
-        val feeAmount = integer("feeAmount")
+        val feeAmount = varchar("feeAmount", 20)
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()

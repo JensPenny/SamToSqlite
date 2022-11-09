@@ -1,25 +1,40 @@
 package db
 
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SchemaUtils.drop
 import org.jetbrains.exposed.sql.transactions.transaction
-import pojo.CompoundingIngredient
 
 class DBInitialization {
     fun createTables() {
         println("creating tables")
 
         createAmpTables() //done
-        createChapter4Tables()
+        createChapter4Tables() //done
         createCompoundingTables() //done
         createCompanyTables() //done
         createNonmedicinalTables() //done
         createReferenceTables() //done
+        createReimbursementLawTables() //done
     }
 
-    private fun createChapter4Tables(){
+    private fun createReimbursementLawTables() {
+        transaction {
+            drop(
+                ReimbursementLawSamTableModel.RMBCTX,
+                ReimbursementLawSamTableModel.COPAY,
+                inBatch = true,
+            )
+
+            create(
+                ReimbursementLawSamTableModel.RMBCTX,
+                ReimbursementLawSamTableModel.COPAY,
+                inBatch = true,
+            )
+        }
+    }
+
+    private fun createChapter4Tables() {
         transaction {
             drop(
                 Chapter4SamTableModel.PARAGRAPH,
@@ -46,6 +61,7 @@ class DBInitialization {
             )
         }
     }
+
     private fun createNonmedicinalTables() {
         transaction {
             drop(NonmedicinalTableModel.NONMEDICINAL)

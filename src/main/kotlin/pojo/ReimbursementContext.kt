@@ -72,8 +72,14 @@ data class ContextData(
     @set:JsonProperty("ReferenceBasePrice")
     var referenceBasePrice: String,
 
-    @set:JsonAlias("PricingUnit", "PricingUnit")
-    var pricingUnit: PricingUnit?,
+    @set:JsonAlias("Pricing", "PricingUnit")
+    var pricingUnit: Pricing,
+
+    @set:JsonAlias("Pricing", "PricingSlice")
+    var pricingSlice: Pricing?,
+
+    @set:JsonProperty("CopaymentSupplement")
+    var copaymentSupplement: String?,
 
     @set:JsonProperty("CollegeForOrphanDrugs")
     var collegeForOrphanDrugs: Boolean?,
@@ -85,21 +91,12 @@ data class ContextData(
     var reimbursementCriterion: ReimbursementCriterionReference,
 )
 
-@JsonRootName("PricingUnit")
-data class PricingUnit(
+data class Pricing(
     @set:JsonProperty("Quantity")
     var quantity: String,
 
-    @set:JsonAlias("PricingLabel", "Label")
-    var label: PricingLabel?,
-)
-
-@JsonRootName("Label")
-data class PricingLabel(
-    @set:JsonProperty("ns2:Nl")
-    var labelNl: String?,
-    @set:JsonProperty("ns2:Fr")
-    var labelFr: String?,
+    @set:JsonAlias("TranslatedData", "Label")
+    var label: TranslatedData?,
 )
 
 @JsonRootName("ns4:ReimbursementCriterion")

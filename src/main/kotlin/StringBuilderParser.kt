@@ -1,20 +1,14 @@
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
-import com.fasterxml.jackson.module.kotlin.readValue
 import db.*
 import org.jetbrains.exposed.exceptions.ExposedSQLException
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import parser.*
 import pojo.*
 import xml.createXmlInputFactory
 import xml.createXmlMapper
-import java.io.FileInputStream
 import java.io.StringWriter
 import java.time.*
 import javax.xml.stream.XMLEventReader
-import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -71,75 +65,6 @@ fun main() {
     }
     logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
 
-}
-
-fun parseReimbursementXml(
-    inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper,
-    path: String
-) {
-
-    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
-    val commitAfterAmount = 100
-    var currentCounter = 0
-
-    tryPersist {
-        transaction {
-            while (reader.hasNext()) {
-                val event = reader.nextEvent()
-
-                if (event.isStartElement) {
-                    val startElement = event.asStartElement()
-
-                    if (currentCounter >= commitAfterAmount) {
-                        commit()
-                        currentCounter = 0
-                    }
-
-                    when (startElement.name.localPart) {
-                        "ns4:ReimbursementContext" -> {
-                            val reimbursementString = fullElement(startElement, reader)
-                            val reimbursementContext = xmlMapper.readValue<ReimbursementContext>(reimbursementString)
-
-                            for (contextData in reimbursementContext.contextDatas) {
-                                currentCounter++
-                                ReimbursementLawSamTableModel.RMBCTX.insert {
-                                    it[code] = reimbursementContext.code
-                                    it[codeType] = reimbursementContext.codeType
-                                    it[deliveryEnvironment] = reimbursementContext.deliveryEnvironment
-                                    it[legalReferencePath] = reimbursementContext.legalReferencePath
-
-                                    it[reimbursementCriterionCategory] = contextData.reimbursementCriterion.category
-                                    it[reimbursementCriterionCode] = contextData.reimbursementCriterion.code
-                                    it[multiple] = contextData.multiple
-                                    it[temporary] = contextData.temporary
-                                    it[reference] = contextData.reference
-                                    it[flatRateSystem] = contextData.flatRateSystem
-                                    it[reimbursementBasePrice] = contextData.reimbursementBasePrice
-                                    it[referenceBasePrice] = contextData.referenceBasePrice
-
-                                    //todo
-                                }
-                            }
-
-                            for (copayment in reimbursementContext.copayments) {
-                                for (copaymentData in copayment.copaymentData) {
-                                    currentCounter++
-                                    ReimbursementLawSamTableModel.COPAY.insert {
-                                        //todo
-                                    }
-                                }
-                            }
-                        }
-
-                        else -> {
-                            println("no handler for " + startElement.name.localPart)
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 inline fun tryPersist(call: () -> Unit) {
