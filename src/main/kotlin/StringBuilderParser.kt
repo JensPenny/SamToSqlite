@@ -1,14 +1,20 @@
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
+import com.fasterxml.jackson.module.kotlin.readValue
 import db.*
 import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import parser.*
 import pojo.*
 import xml.createXmlInputFactory
 import xml.createXmlMapper
+import java.io.FileInputStream
 import java.io.StringWriter
 import java.time.*
 import javax.xml.stream.XMLEventReader
+import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -50,9 +56,12 @@ fun main() {
         //done
         val refParseTime =
             measureTime { parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1667395561910.xml") }
-*/
+
         val reimbursementTime =
-            measureTime { parseReimbursementXml(inputFactory, xmlMapper, "res/latest/RMB-1667395543490.xml") }
+            measureTime { parseReimbursementContextXml(inputFactory, xmlMapper, "res/latest/RMB-1667395543490.xml") }
+*/
+
+        val reimbursementLawTime = measureTime { parseReimbursementLawXml(inputFactory, xmlMapper, "res/latest/RML-1667395532545.xml") }
 
         //Pooling logresults to make this stuff more readable
         //logger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
@@ -61,10 +70,89 @@ fun main() {
         //logger.info("CPN file parsed in ${cpnParseTime.inWholeMinutes}:${cpnParseTime.inWholeSeconds - (cpnParseTime.inWholeMinutes * 60)}")
         //logger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
         //logger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
-        logger.info("RMB file parsed in ${reimbursementTime.inWholeMinutes}:${reimbursementTime.inWholeSeconds - (reimbursementTime.inWholeMinutes * 60)}")
+        //logger.info("RMB file parsed in ${reimbursementTime.inWholeMinutes}:${reimbursementTime.inWholeSeconds - (reimbursementTime.inWholeMinutes * 60)}")
+        logger.info("RML file parsed in ${reimbursementLawTime.inWholeMinutes}:${reimbursementLawTime.inWholeSeconds - (reimbursementLawTime.inWholeMinutes * 60)}")
     }
     logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
 
+}
+
+fun parseReimbursementLawXml(inputFactory: XMLInputFactory,
+                             xmlMapper: ObjectMapper,
+                             path: String) {
+    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+    val commitAfterAmount = 50 //Lots of text in this one
+    var currentCounter = 0
+
+    tryPersist { transaction {
+        while (reader.hasNext()) {
+            val event = reader.nextEvent()
+
+            if (event.isStartElement) {
+                val startElement = event.asStartElement()
+
+                if (currentCounter >= commitAfterAmount) {
+                    commit()
+                    currentCounter = 0
+                }
+
+                when (startElement.name.localPart) {
+                    "ns3:LegalBasis" -> {
+                        val legalBasisString = fullElement(startElement, reader)
+                        val legalBasis = xmlMapper.readValue<LegalBasis>(legalBasisString)
+
+                        for (data in legalBasis.dataBlocks) {
+                            currentCounter++
+
+                            ReimbursementLawSamTableModel.LGLBAS.insert {
+                                it[key] = legalBasis.key
+                                it[titleNl] = data.title?.nl
+                                it[titleFr] = data.title?.fr
+                                it[titleEnglish] = data.title?.en
+                                it[titleGerman] = data.title?.de
+
+                                it[type] = data.type
+                                it[effectiveOn] = data.effectiveOn?.let { d -> LocalDate.parse(d) }
+
+                                it[validFrom] = LocalDate.parse(data.from)
+                                it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                            }
+                        }
+
+                        for (legalReference in legalBasis.legalReferences) {
+                            for (data in legalReference.dataBlocks) {
+                                currentCounter++
+
+                                ReimbursementLawSamTableModel.LGLREF.insert {
+                                    it[key] = legalReference.key
+                                    it[basisKey] = legalBasis.key
+
+                                    //Legal Reference Key: 180000
+                                    //The full Legal Reference Path is = RD20011221-IV-180000.
+                                }
+                            }
+
+                            for (legalText in legalReference.legalTexts) {
+                                for (dataBlock in legalText.dataBlocks) {
+                                    currentCounter++
+                                    ReimbursementLawSamTableModel.LGLTXT.insert {
+                                        it[key] = legalText.key
+                                        it[basisKey] = legalBasis.key
+                                        it[referenceKey] = legalReference.key
+
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else -> {
+                        println("no handler for " + startElement.name.localPart)
+                    }
+                }
+            }
+        }
+    } }
 }
 
 inline fun tryPersist(call: () -> Unit) {

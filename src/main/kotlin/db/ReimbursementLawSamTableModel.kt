@@ -1,5 +1,6 @@
 package db
 
+import db.Chapter4SamTableModel.LGLREF.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
@@ -24,12 +25,40 @@ class ReimbursementLawSamTableModel {
         val validTo = date("validTo").nullable()
     }
 
-    //Legal Text
-    object LGLTXT : IntIdTable("LGLTXT") {
-        val legalTextPath = varchar("legalTextPath", 175)
-        val legalReferencePath = varchar("legalReferencePath", 79).nullable()
+    //Legal Reference
+    object LGLREF : IntIdTable("LGLREF") {
+        //Own identifiers
+        val key = varchar("key", 70) //Own field to persist the key as well, since legalReferencePath is a combo field
+        val basisKey = varchar("LGLBASkey", 15) //Parent reference
+
+        val legalReferencePath = varchar("legalReferencePath", 79)
         val type = varchar("type", 30)
 
+        val titleNl = varchar("titleNl", 255).nullable()
+        val titleFr = varchar("titleFr", 255).nullable()
+        val titleGerman = varchar("titleGer", 255).nullable()
+        val titleEnglish = varchar("titleEng", 255).nullable()
+
+        val firstPublishedOn = date("firstPublishedOn").nullable()
+        val lastModifiedOn = date("lastModifiedOn").nullable()
+        val legalReferenceTrace = text("legalReferenceTrace").nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Legal Text
+    object LGLTXT : IntIdTable("LGLTXT") {
+        //Own identifiers
+        val key = varchar("key", 70) //Own field to persist the key as well, since legalReferencePath is a combo field
+        val basisKey = varchar("LGLBASkey", 15) //Parent reference
+        val referenceKey = varchar("LGLREFkey", 70) //Parent reference
+
+        //Combined identifiers
+        val legalTextPath = varchar("legalTextPath", 175)
+        val legalReferencePath = varchar("legalReferencePath", 79).nullable()
+
+        val type = varchar("type", 30)
         val contentNl = text("contentNl").nullable()
         val contentFr = text("contentFr").nullable()
         val contentGerman = text("contentGer").nullable()

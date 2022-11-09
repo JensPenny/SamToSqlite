@@ -12,7 +12,7 @@ import java.io.FileInputStream
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
-fun parseReimbursementXml(
+fun parseReimbursementContextXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
 

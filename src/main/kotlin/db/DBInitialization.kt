@@ -20,7 +20,21 @@ class DBInitialization {
     }
 
     private fun createReimbursementLawTables() {
+        transaction {
+            drop(
+                ReimbursementLawSamTableModel.LGLBAS,
+                ReimbursementLawSamTableModel.LGLREF,
+                ReimbursementLawSamTableModel.LGLTXT,
+                inBatch = true
+            )
 
+            create(
+                ReimbursementLawSamTableModel.LGLBAS,
+                ReimbursementLawSamTableModel.LGLREF,
+                ReimbursementLawSamTableModel.LGLTXT,
+                inBatch = true
+            )
+        }
     }
 
     private fun createReimbursementContextTables() {
