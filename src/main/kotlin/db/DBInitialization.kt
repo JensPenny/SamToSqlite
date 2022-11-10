@@ -16,7 +16,26 @@ class DBInitialization {
         createNonmedicinalTables() //done
         createReferenceTables() //done
         createReimbursementContextTables() //done
-        createReimbursementLawTables()
+        createReimbursementLawTables() //done
+        createVmpTables()
+    }
+
+    private fun createVmpTables() {
+        transaction {
+            drop(
+                VirtualMedicineSamTableModel.VTM,
+                VirtualMedicineSamTableModel.VMPG,
+                VirtualMedicineSamTableModel.COMCLS,
+                inBatch = true
+            )
+
+            create(
+                VirtualMedicineSamTableModel.VTM,
+                VirtualMedicineSamTableModel.VMPG,
+                VirtualMedicineSamTableModel.COMCLS,
+                inBatch = true
+            )
+        }
     }
 
     private fun createReimbursementLawTables() {

@@ -71,23 +71,27 @@ class VirtualMedicineSamTableModel {
     //Commented Classification
     object COMCLS : IntIdTable("COMCLS") {
         val code = varchar("code", 10)
+        val parent = varchar("parent", 10).nullable()
 
         val titleNl = varchar("titleNl", 255).nullable()
         val titleFr = varchar("titleFr", 255).nullable()
         val titleGerman = varchar("titleGer", 255).nullable()
         val titleEnglish = varchar("titleEng", 255).nullable()
 
-        val contentNl = varchar("contentNl", 255).nullable()
-        val contentFr = varchar("contentFr", 255).nullable()
-        val contentGerman = varchar("contentGer", 255).nullable()
-        val contentEnglish = varchar("contentEng", 255).nullable()
+        val contentNl = text("contentNl").nullable()
+        val contentFr = text("contentFr").nullable()
+        val contentGerman = text("contentGer").nullable()
+        val contentEnglish = text("contentEng").nullable()
 
-        val posologyNoteNl = varchar("posologyNoteNl", 255).nullable()
-        val posologyNoteFr = varchar("posologyNoteFr", 255).nullable()
-        val posologyNoteGerman = varchar("posologyNoteGer", 255).nullable()
-        val posologyNoteEnglish = varchar("posologyNoteEng", 255).nullable()
+        val posologyNoteNl = text("posologyNoteNl").nullable()
+        val posologyNoteFr = text("posologyNoteFr").nullable()
+        val posologyNoteGerman = text("posologyNoteGer").nullable()
+        val posologyNoteEnglish = text("posologyNoteEng").nullable()
 
-        val url = varchar("url", 255).nullable()
+        val urlNl = varchar("urlNl", 255).nullable()
+        val urlFr = varchar("urlFr", 255).nullable()
+        val urlEnglish = varchar("urlEnglish", 255).nullable()
+        val urlGerman = varchar("urlGerman", 255).nullable()
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
@@ -132,7 +136,7 @@ class VirtualMedicineSamTableModel {
         val indicationCode = text("indicationCode")
         val standardDosageParameterBounds = text("standardDosageParameterBounds")
         val targetGroup = varchar("targetGroup", 255)
-        val kidnieyFailureClass = varchar("kidnieyFailureClass", 2).nullable()
+        val kidneyFailureClass = varchar("kidneyFailureClass", 2).nullable()
         val liverFailureClass = varchar("liverFailureClass", 2).nullable()
         val routeOfAdministrationCode = text("routeOfAdministrationCode")
         val routeSpecification = text("routeSpecification").nullable()

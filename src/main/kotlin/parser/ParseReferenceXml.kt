@@ -219,8 +219,7 @@ fun parseReferenceXml(
 
                         "NoGenericPrescriptionReason" -> {
                             val noGenPrescrReasonStr = fullElement(startElement, reader)
-                            val noGenPrescrReason =
-                                xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
+                            val noGenPrescrReason = xmlMapper.readValue<NoGenericPrescriptionReason>(noGenPrescrReasonStr)
 
                             ReferenceTableModel.NOGNPR.insert {
                                 it[code] = noGenPrescrReason.code
