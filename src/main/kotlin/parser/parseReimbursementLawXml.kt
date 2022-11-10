@@ -18,8 +18,7 @@ fun parseReimbursementLawXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
-    val commitAfterAmount =
-        100 //Doesn't really matter - shitloads of recursive elements, so placing this here isn't really useful
+    val commitAfterAmount = 100     //Doesn't really matter - shitloads of recursive elements, so placing this here isn't really useful
     var currentCounter = AtomicInteger(0)
 
     tryPersist {

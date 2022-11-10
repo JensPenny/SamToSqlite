@@ -13,9 +13,7 @@ import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseCompanyXml(
-    inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper,
-    path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
 
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))

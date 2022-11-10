@@ -13,9 +13,7 @@ import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseNonMedicinalXml(
-    inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper,
-    path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
@@ -47,8 +45,7 @@ fun parseNonMedicinalXml(
                                     it[nameGer] = datablock.name.de
 
                                     it[category] = datablock.category
-                                    it[commercialStatus] =
-                                        datablock.commercialStatus
+                                    it[commercialStatus] = datablock.commercialStatus
 
                                     it[distributorNl] = datablock.distributor.nl
                                     it[distributorFr] = datablock.distributor.fr

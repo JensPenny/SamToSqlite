@@ -14,9 +14,7 @@ import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseCompoundingXml(
-    inputFactory: XMLInputFactory,
-    xmlMapper: ObjectMapper,
-    path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
@@ -29,8 +27,7 @@ fun parseCompoundingXml(
             when (startElement.name.localPart) {
                 "ns2:CompoundingIngredient" -> {
                     val compoundingIngredientString = fullElement(startElement, reader)
-                    val compoundingIngredient =
-                        xmlMapper.readValue<CompoundingIngredient>(compoundingIngredientString)
+                    val compoundingIngredient = xmlMapper.readValue<CompoundingIngredient>(compoundingIngredientString)
 
                     tryPersist {
                         transaction {
@@ -43,19 +40,14 @@ fun parseCompoundingXml(
                             for (data in compoundingIngredient.data) {
                                 for (synonymObject in data.synonyms) {
                                     CompoundingTableModel.COMP_INGREDIENT_SYNONYM.insert {
-                                        it[ingredientProductId] =
-                                            compoundingIngredient.ProductId
-                                        it[language] =
-                                            synonymObject.language
+                                        it[ingredientProductId] = compoundingIngredient.ProductId
+                                        it[language] = synonymObject.language
                                         it[rank] = synonymObject.rank
-                                        it[synonym] =
-                                            synonymObject.Synonym
+                                        it[synonym] = synonymObject.Synonym
 
-                                        it[validFrom] =
-                                            LocalDate.parse(data.from)
+                                        it[validFrom] = LocalDate.parse(data.from)
                                         if (data.to != null) {
-                                            it[validTo] =
-                                                LocalDate.parse(data.to)
+                                            it[validTo] = LocalDate.parse(data.to)
                                         }
                                     }
                                 }
@@ -79,17 +71,14 @@ fun parseCompoundingXml(
                             for (data in compoundingFormula.data) {
                                 for (synonymObject in data.synonyms) {
                                     CompoundingTableModel.COMP_FORMULA_SYNONYM.insert {
-                                        it[formulaProductId] =
-                                            compoundingFormula.ProductId
+                                        it[formulaProductId] = compoundingFormula.ProductId
                                         it[language] = synonymObject.language
                                         it[rank] = synonymObject.rank
                                         it[synonym] = synonymObject.Synonym
 
-                                        it[validFrom] =
-                                            LocalDate.parse(data.from)
+                                        it[validFrom] = LocalDate.parse(data.from)
                                         if (data.to != null) {
-                                            it[validTo] =
-                                                LocalDate.parse(data.to)
+                                            it[validTo] = LocalDate.parse(data.to)
                                         }
                                     }
                                 }

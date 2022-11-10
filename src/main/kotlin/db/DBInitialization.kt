@@ -250,7 +250,6 @@ class DBInitialization {
     }
 
     fun createDB() {
-        //Database.connect()
         // In file
         Database.connect("jdbc:sqlite:/home/jens/Workspace/SamToSqlite/data/data.db", "org.sqlite.JDBC")
         // In memory

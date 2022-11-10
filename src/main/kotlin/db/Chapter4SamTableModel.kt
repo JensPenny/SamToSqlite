@@ -1,10 +1,5 @@
 package db
 
-import db.Chapter4SamTableModel.EXCLUSION.nullable
-import db.Chapter4SamTableModel.NAME_EXPLANATION.nullable
-import db.Chapter4SamTableModel.PARAGRAPH.nullable
-import db.Chapter4SamTableModel.QUALLIST.nullable
-import db.Chapter4SamTableModel.VERSE.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 import org.jetbrains.exposed.sql.javatime.timestamp
@@ -36,18 +31,6 @@ class Chapter4SamTableModel {
         //Undocumented
         val createdDate = timestamp("createdDate").nullable()
         val createdByUser = varchar("createdByUser", 30).nullable()
-    }
-
-    //Paragraph Trace
-    object PARAGR_TRACE : IntIdTable("PARAGR_TRACE") {
-        val chapterName = varchar("chapterName", 10)
-        val paragraphName = varchar("paragraphName", 10)
-        val parentChapterName = varchar("parentChapterName", 10)
-        val parentParagraphName = varchar("parentParagraphName", 10)
-        val modificationStatus = varchar("modificationStatus", 1)
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
     }
 
     //Verse
@@ -174,24 +157,6 @@ class Chapter4SamTableModel {
         //Undocumented
         val createdDate = timestamp("createdDate").nullable()
         val createdByUser = varchar("createdByUser", 30).nullable()
-    }
-
-    //Legal Reference
-    object LGLREF : IntIdTable("LGLREF") {
-        val legalReferencePath = varchar("legalReferencePath", 79)
-        val type = varchar("type", 30)
-
-        val titleNl = varchar("titleNl", 255).nullable()
-        val titleFr = varchar("titleFr", 255).nullable()
-        val titleGerman = varchar("titleGer", 255).nullable()
-        val titleEnglish = varchar("titleEng", 255).nullable()
-
-        val firstPublishedOn = date("firstPublishedOn").nullable()
-        val lastModifiedOn = date("lastModifiedOn").nullable()
-        val legalReferenceTrace = text("legalReferenceTrace").nullable()
-
-        val validFrom = date("validFrom")
-        val validTo = date("validTo").nullable()
     }
 
     object NAME_TRANSLATION : IntIdTable("NAME_TRANSLATION") {

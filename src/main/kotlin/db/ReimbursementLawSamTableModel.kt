@@ -1,6 +1,5 @@
 package db
 
-import db.Chapter4SamTableModel.LGLREF.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
