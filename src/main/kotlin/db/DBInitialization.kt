@@ -26,6 +26,10 @@ class DBInitialization {
                 VirtualMedicineSamTableModel.VTM,
                 VirtualMedicineSamTableModel.VMPG,
                 VirtualMedicineSamTableModel.COMCLS,
+                VirtualMedicineSamTableModel.VMP,
+                VirtualMedicineSamTableModel.VMPC,
+                VirtualMedicineSamTableModel.VTLING,
+                VirtualMedicineSamTableModel.RVTLING,
                 inBatch = true
             )
 
@@ -33,6 +37,10 @@ class DBInitialization {
                 VirtualMedicineSamTableModel.VTM,
                 VirtualMedicineSamTableModel.VMPG,
                 VirtualMedicineSamTableModel.COMCLS,
+                VirtualMedicineSamTableModel.VMP,
+                VirtualMedicineSamTableModel.VMPC,
+                VirtualMedicineSamTableModel.VTLING,
+                VirtualMedicineSamTableModel.RVTLING,
                 inBatch = true
             )
         }

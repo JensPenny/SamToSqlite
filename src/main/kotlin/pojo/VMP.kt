@@ -120,7 +120,7 @@ data class VmpData(
     var abbreviation: TranslatedDataNoNS,
 
     @set:JsonAlias("CodeReference", "ns3:CommentedClassification")
-    var commentedClassificationReference: CodeReference,
+    var commentedClassificationReference: CodeReference?,
 
     @set:JsonAlias("CodeReference", "ns3:VmpGroup")
     var vmpGroupReference: CodeReference,
@@ -165,7 +165,37 @@ data class VirtualIngredient(
     var rank: String,
 
     @set:JsonAlias("VirtualIngredientData", "ns3:Data")
-    var dataBlocks: ArrayList<VirtualIngredientData> = ArrayList()
+    var dataBlocks: ArrayList<VirtualIngredientData> = ArrayList(),
+
+    @set:JsonAlias("RealVirtualIngredient", "ns3:RealVirtualIngredient")
+    var realVirtualIngredients: ArrayList<RealVirtualIngredient> = ArrayList()
+)
+
+@JsonRootName("ns3:RealVirtualIngredient")
+data class RealVirtualIngredient(
+    @set:JsonProperty("sequenceNr")
+    var sequenceNr: String,
+
+    @set:JsonAlias("RealVirtualIngredientData", "ns3:Data")
+    var dataBlocks: ArrayList<RealVirtualIngredientData> = ArrayList()
+)
+
+@JsonRootName("ns3:RealVirtualIngredientData")
+data class RealVirtualIngredientData(
+    @set:JsonProperty("from")
+    var from: String,
+
+    @set:JsonProperty("to")
+    var to: String? = null,
+
+    @set:JsonProperty("ns2:Type")
+    var type: String,
+
+    @set:JsonAlias("CodeReference", "ns3:Substance")
+    var substanceReference: CodeReference,
+
+    @set:JsonAlias("VirtualIngredientStrength", "ns2:Strength")
+    var strength: VirtualIngredientStrength?,
 )
 
 @JsonRootName("ns3:Data")
@@ -180,7 +210,7 @@ data class VirtualIngredientData(
     var type: String,
 
     @set:JsonAlias("VirtualIngredientStrength", "ns2:Strength")
-    var strength: VirtualIngredientStrength,
+    var strength: VirtualIngredientStrength?,
 
     @set:JsonAlias("CodeReference", "ns3:Substance")
     var substanceReference: CodeReference,

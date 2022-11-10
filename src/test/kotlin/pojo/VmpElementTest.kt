@@ -31,7 +31,7 @@ class VmpElementTest {
         assertEquals("2019-09-15", vmpData.to)
         assertEquals("Groupe Toplexil sirop, solution (or.)", vmpData.name.fr)
         assertEquals("Groep Toplexil siroop, oplossing (or.)", vmpData.abbreviation.nl)
-        assertEquals("BQEAAA/9", vmpData.commentedClassificationReference.codeReference)
+        assertEquals("BQEAAA/9", vmpData.commentedClassificationReference?.codeReference)
         assertEquals("15313", vmpData.vmpGroupReference.codeReference)
 
         val vmpComponent = vmp.vmpComponents[0]
@@ -51,11 +51,11 @@ class VmpElementTest {
         assertEquals("2016-10-01", virtualIngredientData.from)
         assertEquals("2019-09-15", virtualIngredientData.to)
         assertEquals("ACTIVE_SUBSTANCE", virtualIngredientData.type)
-        assertEquals("mg", virtualIngredientData.strength.numeratorRange?.unit)
-        assertEquals("33.3000", virtualIngredientData.strength.numeratorRange?.min)
-        assertEquals("33.3000", virtualIngredientData.strength.numeratorRange?.max)
-        assertEquals("mL", virtualIngredientData.strength.denominator?.unit)
-        assertEquals("5.0000", virtualIngredientData.strength.denominator?.Denominator)
+        assertEquals("mg", virtualIngredientData.strength?.numeratorRange?.unit)
+        assertEquals("33.3000", virtualIngredientData.strength?.numeratorRange?.min)
+        assertEquals("33.3000", virtualIngredientData.strength?.numeratorRange?.max)
+        assertEquals("mL", virtualIngredientData.strength?.denominator?.unit)
+        assertEquals("5.0000", virtualIngredientData.strength?.denominator?.Denominator)
         assertEquals("4", virtualIngredientData.substanceReference.codeReference)
     }
     var vmpTestData =

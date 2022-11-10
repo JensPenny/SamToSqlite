@@ -82,94 +82,184 @@ fun main() {
     logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
 }
 
-fun parseVmpXml(inputFactory: XMLInputFactory,
-                xmlMapper: ObjectMapper,
-                path: String) {
+fun parseVmpXml(
+    inputFactory: XMLInputFactory,
+    xmlMapper: ObjectMapper,
+    path: String
+) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
     val commitAfterAmount = 100
-    var counter = AtomicInteger(0)
+    val counter = AtomicInteger(0)
 
-    tryPersist { transaction {
-        while(reader.hasNext()) {
-            val event = reader.nextEvent()
-            if (event.isStartElement) {
-                val startElement = event.asStartElement()
+    tryPersist {
+        transaction {
+            while (reader.hasNext()) {
+                val event = reader.nextEvent()
+                if (event.isStartElement) {
+                    val startElement = event.asStartElement()
 
-                if (counter.get() > 100) {
-                    TransactionManager.currentOrNull()?.commit()
-                    counter.set(0)
-                }
+                    if (counter.get() > commitAfterAmount) {
+                        TransactionManager.currentOrNull()?.commit()
+                        counter.set(0)
+                    }
 
-                when(startElement.name.localPart) {
-                    "ns3:Vtm" -> {
-                        val vtmString = fullElement(startElement, reader)
-                        val vtm = xmlMapper.readValue<VtmElement>(vtmString)
+                    when (startElement.name.localPart) {
+                        "ns3:Vtm" -> {
+                            val vtmString = fullElement(startElement, reader)
+                            val vtm = xmlMapper.readValue<VtmElement>(vtmString)
 
-                        for (data in vtm.dataBlocks) {
-                            counter.incrementAndGet()
-                            VirtualMedicineSamTableModel.VTM.insert {
-                                it[code] = vtm.code.toInt()
-                                it[nameNl] = data.name.nl!!
-                                it[nameFr] = data.name.fr!!
-                                it[nameEnglish] = data.name.en
-                                it[nameGerman] = data.name.de
+                            for (data in vtm.dataBlocks) {
+                                counter.incrementAndGet()
+                                VirtualMedicineSamTableModel.VTM.insert {
+                                    it[code] = vtm.code.toInt()
+                                    it[nameNl] = data.name.nl!!
+                                    it[nameFr] = data.name.fr!!
+                                    it[nameEnglish] = data.name.en
+                                    it[nameGerman] = data.name.de
 
-                                it[validFrom] = LocalDate.parse(data.from)
-                                it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                    it[validFrom] = LocalDate.parse(data.from)
+                                    it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                }
                             }
                         }
-                    }
-                    "ns3:VmpGroup" -> {
-                        val vmpGroupString = fullElement(startElement, reader)
-                        val vmpGroup = xmlMapper.readValue<VmpGroupElement>(vmpGroupString)
 
-                        for (data in vmpGroup.dataBlocks) {
-                            counter.incrementAndGet()
+                        "ns3:VmpGroup" -> {
+                            val vmpGroupString = fullElement(startElement, reader)
+                            val vmpGroup = xmlMapper.readValue<VmpGroupElement>(vmpGroupString)
 
-                            VirtualMedicineSamTableModel.VMPG.insert {
-                                it[code] = vmpGroup.code.toInt()
-                                it[noswrCode] = data.noSwitchReason?.codeReference
-                                it[nognprCode] = data.noGenericPrescriptionReason?.codeReference
+                            for (data in vmpGroup.dataBlocks) {
+                                counter.incrementAndGet()
 
-                                it[nameNl] = data.name.nl!!
-                                it[nameFr] = data.name.fr!!
-                                it[nameGerman] = data.name.de
-                                it[nameEnglish] = data.name.en
+                                VirtualMedicineSamTableModel.VMPG.insert {
+                                    it[code] = vmpGroup.code.toInt()
+                                    it[noswrCode] = data.noSwitchReason?.codeReference
+                                    it[nognprCode] = data.noGenericPrescriptionReason?.codeReference
 
-                                //it[patientFrailtyIndicator] = data
-                                //it[singleAdministrationDose] =
+                                    it[nameNl] = data.name.nl!!
+                                    it[nameFr] = data.name.fr!!
+                                    it[nameGerman] = data.name.de
+                                    it[nameEnglish] = data.name.en
 
-                                it[validFrom] = LocalDate.parse(data.from)
-                                it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                    //it[patientFrailtyIndicator] = data
+                                    //it[singleAdministrationDose] =
+
+                                    it[validFrom] = LocalDate.parse(data.from)
+                                    it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                }
                             }
                         }
-                    }
-                    "ns3:CommentedClassification" -> {
-                        val commentClassificationString = fullElement(startElement, reader)
-                        val commentedClassification = xmlMapper.readValue<CommentedClassificationElement>(commentClassificationString)
 
-                        //This is recursive, so we start our own counter here.
-                        persistCommentedClassification(commentedClassification, null, counter)
-                    }
-                    "ns3:Vmp" -> {
-                        val vmpString = fullElement(startElement, reader)
-                        val vmp = xmlMapper.readValue<VmpElement>(vmpString)
+                        "ns3:CommentedClassification" -> {
+                            val commentClassificationString = fullElement(startElement, reader)
+                            val commentedClassification =
+                                xmlMapper.readValue<CommentedClassificationElement>(commentClassificationString)
 
-                        logger.info(vmp.toString())
-                    }
-                    else -> {
-                        println("no handler for " + startElement.name.localPart)
+                            //This is recursive, so we start our own counter here.
+                            persistCommentedClassification(commentedClassification, null, counter)
+                        }
+
+                        "ns3:Vmp" -> {
+                            val vmpString = fullElement(startElement, reader)
+                            val vmp = xmlMapper.readValue<VmpElement>(vmpString)
+
+                            for (data in vmp.dataBlocks) {
+                                counter.incrementAndGet()
+                                VirtualMedicineSamTableModel.VMP.insert {
+                                    it[code] = vmp.code.toInt()
+                                    it[vmpGroupCode] = data.vmpGroupReference.codeReference.toInt()
+                                    it[nameNl] = data.name.nl!!
+                                    it[nameFr] = data.name.fr!!
+                                    it[nameEnglish] = data.name.en
+                                    it[nameGerman] = data.name.de
+
+                                    it[abbreviatedNameNl] = data.abbreviation.nl!!
+                                    it[abbreviatedNameFr] = data.abbreviation.fr!!
+                                    it[abbreviatedNameEng] = data.abbreviation.en
+                                    it[abbreviatedNameGer] = data.abbreviation.de
+
+                                    it[validFrom] = LocalDate.parse(data.from)
+                                    it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                }
+                            }
+
+                            for (vmpComponent in vmp.vmpComponents) {
+                                for (data in vmpComponent.dataBlocks) {
+                                    counter.incrementAndGet()
+                                    VirtualMedicineSamTableModel.VMPC.insert {
+                                        it[code] = vmpComponent.code.toInt()
+                                        it[vmpCode] = vmp.code.toInt()
+                                        it[virtualFormCode] = data.virtualForm.codeReference
+                                        it[phaseNumber] = data.phaseNumber.toInt()
+
+                                        it[nameNl] = data.name.nl!!
+                                        it[nameFr] = data.name.fr!!
+                                        it[nameEnglish] = data.name.en
+                                        it[nameGerman] = data.name.de
+
+                                        it[validFrom] = LocalDate.parse(data.from)
+                                        it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                    }
+                                }
+
+                                for (virtualIngredient in vmpComponent.virtualIngredients) {
+                                    for (data in virtualIngredient.dataBlocks) {
+                                        counter.incrementAndGet()
+                                        VirtualMedicineSamTableModel.VTLING.insert {
+                                            it[vmpcCode] = vmpComponent.code.toInt()
+                                            it[rank] = virtualIngredient.rank.toInt()
+                                            it[substanceCode] = data.substanceReference.codeReference
+                                            it[type] = data.type
+                                            it[strengthNumeratorMinimum] = data.strength?.numeratorRange?.min
+                                            it[strengthNumeratorMaximum] = data.strength?.numeratorRange?.max
+                                            it[strengthNumeratorUnit] = data.strength?.numeratorRange?.unit
+                                            it[strengthDenominator] = data.strength?.denominator?.Denominator
+                                            it[strengthDenominatorUnit] = data.strength?.denominator?.unit
+
+                                            it[validFrom] = LocalDate.parse(data.from)
+                                            it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                        }
+                                    }
+
+                                    for (realVirtualIngredient in virtualIngredient.realVirtualIngredients) {
+                                        for (data in realVirtualIngredient.dataBlocks) {
+                                            counter.incrementAndGet()
+                                            VirtualMedicineSamTableModel.RVTLING.insert {
+                                                it[vmpcCode] = vmpComponent.code.toInt()
+                                                it[rank] = virtualIngredient.rank.toInt()
+                                                it[sequenceNumber] = realVirtualIngredient.sequenceNr.toInt()
+                                                it[substanceCode] = data.substanceReference.codeReference
+                                                it[type] = data.type
+                                                it[strengthNumeratorMinimum] = data.strength?.numeratorRange?.min
+                                                it[strengthNumeratorMaximum] = data.strength?.numeratorRange?.max
+                                                it[strengthNumeratorUnit] = data.strength?.numeratorRange?.unit
+                                                it[strengthDenominatorUnit] = data.strength?.denominator?.unit
+                                                it[strengthDenominator] = data.strength?.denominator?.Denominator
+
+                                                it[validFrom] = LocalDate.parse(data.from)
+                                                it[validTo] = data.to?.let { d -> LocalDate.parse(d) }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        else -> {
+                            println("no handler for " + startElement.name.localPart)
+                        }
                     }
                 }
             }
         }
-    } }
+    }
 }
 
-private fun persistCommentedClassification(toPersist: CommentedClassificationElement,
-                                           parentCode: String?,
-                                           counter: AtomicInteger) {
+private fun persistCommentedClassification(
+    toPersist: CommentedClassificationElement,
+    parentCode: String?,
+    counter: AtomicInteger
+) {
     for (data in toPersist.dataBlocks) {
         if (counter.get() > 100) {
             TransactionManager.currentOrNull()?.commit()
@@ -231,7 +321,8 @@ fun fullElement(startElement: StartElement, reader: XMLEventReader): String {
     while (!(event.isEndElement
                 && event.asEndElement().name.localPart == startElement.name.localPart
                 && openedTags <= 1
-                )) {
+                )
+    ) {
         xmlWriter.add(event)
         event = reader.nextEvent()
 

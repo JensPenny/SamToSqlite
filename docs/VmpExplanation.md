@@ -16,3 +16,4 @@
 * Changes frequently, but is widely used by nurses everywhere (so thanks for the export :praise:) 
 
 ## VMP
+* Like AMP, a pretty complex object, but parsing and saving it is pretty straightforward.
