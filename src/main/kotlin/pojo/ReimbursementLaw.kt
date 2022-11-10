@@ -57,7 +57,10 @@ data class LegalText(
     var key: String,
 
     @set:JsonAlias("LegalTextData", "ns3:Data")
-    var dataBlocks: ArrayList<LegalTextData> = ArrayList()
+    var dataBlocks: ArrayList<LegalTextData> = ArrayList(),
+
+    @set:JsonAlias("LegalText", "ns3:LegalText")
+    var legalTexts: ArrayList<LegalText> = ArrayList(),
 )
 
 @JsonRootName("ns3:Data")
@@ -75,7 +78,7 @@ data class LegalTextData(
     var type: String,
 
     @set:JsonProperty("ns2:SequenceNr")
-    var sequenceNr: String?,
+    var sequenceNr: String,
 )
 
 @JsonRootName("ns3:Data")
@@ -90,7 +93,7 @@ data class LegalReferenceData(
     var title: TranslatedDataNoNS?,
 
     @set:JsonProperty("ns2:Type")
-    var type: String?,
+    var type: String,
 
     @set:JsonProperty("ns2:FirstPublishedOn")
     var firstPublishedOn: String?,
