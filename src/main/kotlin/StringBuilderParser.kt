@@ -25,8 +25,6 @@ fun main() {
     val xmlMapper = createXmlMapper(inputFactory)
 
     logger.info("Starting export")
-    //Todo: make paths also variable
-
     val fullTime = measureTime {
 
         val ampParseTime = measureTime { parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml") }

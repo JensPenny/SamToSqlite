@@ -3,8 +3,8 @@ plugins {
     id 'application'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'com.jenspenny'
+version = '0.1.0'
 def exposedVersion = '0.40.1'
 
 repositories {
@@ -49,5 +49,17 @@ compileTestKotlin {
 }
 
 application {
-    mainClassName = 'MainKt'
+    mainClassName = 'StringBuilderParserKt'
+}
+
+//Building a fat jar to more easily deploy this
+jar {
+    manifest {
+        attributes["Main-Class"] = "StringBuilderParserKt"
+    } from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

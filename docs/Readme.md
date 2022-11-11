@@ -16,3 +16,7 @@ The download is not there yet, but these phases are being implemented:
 - [ ] Dump the zipped .db to a blob storage file
 - [ ] Let this job run daily in a container. Check if it survives and doesn't pull down the docker instance
 - [ ] Make this file available somewhere
+
+## 1. Getting the files from the samv2 site
+We've created the export based on the samv2 v5 version. This is downloadable on https://www.vas.ehealth.fgov.be/websamcivics/samcivics/download/samv2.html. 
+To automate this, I'd rather have a way to get the latest version reliably. Instead of reverse-engineering this we just asked the question. 

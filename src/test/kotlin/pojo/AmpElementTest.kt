@@ -49,7 +49,7 @@ class AmpElementTest {
         assertEquals(false, ampData.blackTriangle)
         assertEquals("ALLOPATHIC", ampData.medicineType)
 
-        assertEquals("01028", ampData.company!!.actorNr)
+        assertEquals("01028", ampData.company.actorNr)
     }
 
     @Test

@@ -306,6 +306,7 @@ fun parseReferenceXml(
                         }
 
                         "Parameter" -> {
+                            @Suppress("UNUSED_VARIABLE")
                             val parameterString = fullElement(startElement, reader)
                             //logger.debug("Did absolutely nothing with a parsed 'parameter'")
                         }

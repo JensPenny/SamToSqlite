@@ -13,20 +13,29 @@ fun parseAmpXml(
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(path))
 
-    while (reader.hasNext()) {
-        val event = reader.nextEvent()
+    tryPersist {
+        transaction {
 
-        if (event.isStartElement) {
-            val startElement = event.asStartElement()
+            val commitAfterAmount = 100  //We won't perfectly commit after 100. We check this every cycle and keep the AMP if there arent enough inserts
+            var counter = 0
 
-            when (startElement.name.localPart) {
-                "ns4:Amp" -> {
-                    val ampString = fullElement(startElement, reader)
-                    val amp = xmlMapper.readValue<AmpElement>(ampString)
+            while (reader.hasNext()) {
+                val event = reader.nextEvent()
 
-                    tryPersist {
-                        transaction {
+                if (event.isStartElement) {
+                    val startElement = event.asStartElement()
+
+                    if (counter > commitAfterAmount) {
+                        commit()
+                        counter = 0
+                    }
+
+                    when (startElement.name.localPart) {
+                        "ns4:Amp" -> {
+                            val ampString = fullElement(startElement, reader)
+                            val amp = xmlMapper.readValue<AmpElement>(ampString)
                             for (ampData in amp.dataBlocks) {
+                                counter++
                                 ActualMedicineSamTableModel.AMP_FAMHP.insert {
                                     it[code] = amp.code
                                     it[vmpCode] = amp.vmpCode?.toInt()
@@ -50,6 +59,7 @@ fun parseAmpXml(
                                     }
                                 }
 
+                                counter++
                                 ActualMedicineSamTableModel.AMP_BCPI.insert {
                                     it[code] = amp.code
                                     it[abbreviatedNameNl] = ampData.abbreviatedName?.nl
@@ -75,6 +85,7 @@ fun parseAmpXml(
 
                             for (ampComponent in amp.ampComponents) {
                                 for (ampComponentData in ampComponent.dataBlocks) {
+                                    counter++
                                     ActualMedicineSamTableModel.AMPC_FAMHP.insert {
                                         it[ampCode] = amp.code
                                         it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
@@ -85,6 +96,7 @@ fun parseAmpXml(
                                         }
                                     }
 
+                                    counter++
                                     ActualMedicineSamTableModel.AMPC_BCPI.insert {
                                         it[ampCode] = amp.code
                                         it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
@@ -113,6 +125,7 @@ fun parseAmpXml(
                                     }
 
                                     for (pharmaceuticalFormReference in ampComponentData.pharmaceuticalFormReferences) {
+                                        counter++
                                         ActualMedicineSamTableModel.AMPC_TO_PHARMFORM.insert {
                                             it[ampCode] = amp.code
                                             it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
@@ -126,6 +139,7 @@ fun parseAmpXml(
                                     }
 
                                     for (roaReference in ampComponentData.routesOfAdministration) {
+                                        counter++
                                         ActualMedicineSamTableModel.AMPC_TO_ROA.insert {
                                             it[ampCode] = amp.code
                                             it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
@@ -141,6 +155,7 @@ fun parseAmpXml(
 
                                 for (ingredient in ampComponent.ingredients) {
                                     for (ingredientData in ingredient.dataBlocks) {
+                                        counter++
                                         ActualMedicineSamTableModel.RACTING.insert {
                                             it[ampCode] = amp.code
                                             it[sequenceNumber] = ampComponent.sequenceNumber.toInt()
@@ -160,6 +175,7 @@ fun parseAmpXml(
                                         }
                                     }
                                     for (actualIngredientEquivalent in ingredient.actualIngredientEquivalents) {
+                                        counter++
                                         for (dataBlock in actualIngredientEquivalent.dataBlocks) {
                                             ActualMedicineSamTableModel.RACTIEQ.insert {
                                                 it[ampCode] = amp.code
@@ -186,6 +202,7 @@ fun parseAmpXml(
 
                             for (amppElement in amp.amppElements) {
                                 for (amppDataBlock in amppElement.amppDataBlocks) {
+                                    counter++
                                     ActualMedicineSamTableModel.AMPP_FAMHP.insert {
                                         it[ctiExtended] = amppElement.ctiExtended
                                         it[ampCode] = amp.code
@@ -232,6 +249,7 @@ fun parseAmpXml(
                                         }
                                     }
 
+                                    counter++
                                     ActualMedicineSamTableModel.AMPP_BCFI.insert {
                                         it[ctiExtended] = amppElement.ctiExtended
                                         it[singleUse] = amppDataBlock.singleUse
@@ -259,6 +277,7 @@ fun parseAmpXml(
                                         }
                                     }
 
+                                    counter++
                                     ActualMedicineSamTableModel.AMPP_NIHDI.insert {
                                         it[ctiExtended] = amppElement.ctiExtended
                                         it[exfactory_price] = amppDataBlock.exFactoryPrice
@@ -286,6 +305,7 @@ fun parseAmpXml(
                                     }
                                      */
 
+                                    counter++
                                     ActualMedicineSamTableModel.AMPP_ECON.insert {
                                         it[ctiExtended] = amppElement.ctiExtended
                                         it[officialExFactoryPrice] = amppDataBlock.officialExFactoryPrice
@@ -304,6 +324,7 @@ fun parseAmpXml(
 
                                 for (amppComponent in amppElement.amppComponents) {
                                     for (amppComponentDataBlock in amppComponent.amppComponentDataBlocks) {
+                                        counter++
                                         ActualMedicineSamTableModel.AMPPC.insert {
                                             it[ctiExtended] = amppElement.ctiExtended
                                             it[sequenceNumber] = amppComponent.sequenceNumber.toInt()
@@ -322,6 +343,7 @@ fun parseAmpXml(
                                     }
                                     for (ampComponentEquivalent in amppComponent.ampComponentEquivalents) {
                                         for (amppCompEquiData in ampComponentEquivalent.amppComponentEquivalentDataBlocks) {
+                                            counter++
                                             ActualMedicineSamTableModel.AMPPCES.insert {
                                                 it[ctiExtended] = amppElement.ctiExtended
                                                 it[amppcSequenceNumber] = amppComponent.sequenceNumber.toInt()
@@ -340,6 +362,7 @@ fun parseAmpXml(
 
                                 for (dmpp in amppElement.dmpps) {
                                     for (dmppDataBlock in dmpp.dmppDataBlocks) {
+                                        counter++
                                         ActualMedicineSamTableModel.DMPP.insert {
                                             it[code] = dmpp.code
                                             it[codeType] = dmpp.codeSystem
@@ -360,6 +383,7 @@ fun parseAmpXml(
 
                                 for (commercialization in amppElement.commercialization) {
                                     for (commercializationDataBlock in commercialization.commercializationDataBlocks) {
+                                        counter++
                                         ActualMedicineSamTableModel.CMRCL.insert {
                                             it[ctiExtended] = amppElement.ctiExtended
                                             it[endOfCommercializationNl] =
@@ -391,6 +415,7 @@ fun parseAmpXml(
 
                                 for (supplyProblem in amppElement.supplyProblems) {
                                     for (supplyDataBlock in supplyProblem.supplyDataBlocks) {
+                                        counter++
                                         ActualMedicineSamTableModel.SPPROB.insert {
                                             it[ctiExtended] = amppElement.ctiExtended
                                             if (supplyDataBlock.expectedEnd != null) {
@@ -433,6 +458,7 @@ fun parseAmpXml(
 
                                 for (derogationImport in amppElement.derogationImport) {
                                     for (derogationDatablock in derogationImport.derogationData) {
+                                        counter++
                                         ActualMedicineSamTableModel.DRGIMP.insert {
                                             it[ctiExtended] = amppElement.ctiExtended
                                             it[sequenceNumber] = derogationImport.sequenceNumber.toInt()
@@ -450,11 +476,11 @@ fun parseAmpXml(
                                 }
                             }
                         }
-                    }
-                }
 
-                else -> {
-                    println("no handler for " + startElement.name.localPart)
+                        else -> {
+                            println("no handler for " + startElement.name.localPart)
+                        }
+                    }
                 }
             }
         }

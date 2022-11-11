@@ -39,4 +39,18 @@ honest, especially since the file is 1.1 GB on disk. We'll just have to see how 
 09:14:05.957 [main] INFO  SamV2Exporter - Full export parsed in 26:37
 ```
 
+### 3. Full export. Most tables are transactional, except the AMP
+```
+22:59:12.764 [main] INFO  SamV2Exporter - AMP file parsed in 14:58
+22:59:12.764 [main] INFO  SamV2Exporter - CHAPTERIV file parsed in 4:24
+22:59:12.764 [main] INFO  SamV2Exporter - CMP file parsed in 0:34
+22:59:12.764 [main] INFO  SamV2Exporter - CPN file parsed in 0:6
+22:59:12.764 [main] INFO  SamV2Exporter - NONMEDICINAL file parsed in 1:21
+22:59:12.764 [main] INFO  SamV2Exporter - REF file parsed in 0:14
+22:59:12.764 [main] INFO  SamV2Exporter - RMB file parsed in 3:46
+22:59:12.764 [main] INFO  SamV2Exporter - RML file parsed in 0:22
+22:59:12.764 [main] INFO  SamV2Exporter - VMP file parsed in 0:28
+22:59:12.764 [main] INFO  SamV2Exporter - Full export parsed in 26:18
+```
+
 
