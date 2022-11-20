@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-core: $exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
@@ -23,7 +23,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.4'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.13.4'
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4"
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0'
 
     //implementation 'io.github.microutils:kotlin-logging-jvm:3.0.2'
 
@@ -42,10 +42,12 @@ test {
 
 compileKotlin {
     kotlinOptions.jvmTarget = '1.8'
+    //kotlinOptions.jvmTarget = '17'
 }
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = '1.8'
+    //kotlinOptions.jvmTarget = '17'
 }
 
 application {

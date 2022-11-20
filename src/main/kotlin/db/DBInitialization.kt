@@ -250,8 +250,10 @@ class DBInitialization {
     }
 
     fun createDB() {
-        // In file
-        Database.connect("jdbc:sqlite:/home/jens/Workspace/SamToSqlite/data/data.db", "org.sqlite.JDBC")
+        // In file - local
+        //Database.connect("jdbc:sqlite:data/data.db", "org.sqlite.JDBC")
+        //In file - docker
+        Database.connect("jdbc:sqlite:/opt/samtosql/data.db", "org.sqlite.JDBC")
         // In memory
         //Database.connect("jdbc:sqlite:file:test?mode=memory&cache=shared", "org.sqlite.JDBC";
     }

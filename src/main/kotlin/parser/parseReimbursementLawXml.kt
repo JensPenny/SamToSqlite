@@ -9,15 +9,16 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.LegalBasis
 import pojo.LegalText
 import tryPersist
+import java.io.File
 import java.io.FileInputStream
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicInteger
 import javax.xml.stream.XMLInputFactory
 
 fun parseReimbursementLawXml(
-    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
 ) {
-    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+    val reader = inputFactory.createXMLEventReader(FileInputStream(file))
     val commitAfterAmount = 100     //Doesn't really matter - shitloads of recursive elements, so placing this here isn't really useful
     var currentCounter = AtomicInteger(0)
 

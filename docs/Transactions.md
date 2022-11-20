@@ -53,4 +53,19 @@ honest, especially since the file is 1.1 GB on disk. We'll just have to see how 
 22:59:12.764 [main] INFO  SamV2Exporter - Full export parsed in 26:18
 ```
 
+### 4. Updated to ubuntu 22.04 and performance fell off a cliff :(. 
+Still troubleshooting, but its pretty hard w/o a profiler.
+While these transactions are interesting for me, the real test will happen when we run this on a container and the dinky DO instance I have running.
+```
+22:02:00.906 [main] INFO  SamV2Exporter - AMP file parsed in 21:18
+22:02:00.907 [main] INFO  SamV2Exporter - CHAPTERIV file parsed in 8:19
+22:02:00.907 [main] INFO  SamV2Exporter - CMP file parsed in 0:43
+22:02:00.908 [main] INFO  SamV2Exporter - CPN file parsed in 0:28
+22:02:00.908 [main] INFO  SamV2Exporter - NONMEDICINAL file parsed in 3:19
+22:02:00.908 [main] INFO  SamV2Exporter - REF file parsed in 0:35
+22:02:00.909 [main] INFO  SamV2Exporter - RMB file parsed in 8:37
+22:02:00.909 [main] INFO  SamV2Exporter - RML file parsed in 1:13
+22:02:00.909 [main] INFO  SamV2Exporter - VMP file parsed in 1:15
+22:02:00.910 [main] INFO  SamV2Exporter - Full export parsed in 45:52
+```
 

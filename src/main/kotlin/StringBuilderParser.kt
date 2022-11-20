@@ -6,10 +6,13 @@ import parser.*
 import pojo.*
 import xml.createXmlInputFactory
 import xml.createXmlMapper
+import java.io.File
 import java.io.StringWriter
+import java.nio.file.Files
 import java.time.*
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import kotlin.io.path.name
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
@@ -24,18 +27,61 @@ fun main() {
     val inputFactory = createXmlInputFactory()
     val xmlMapper = createXmlMapper(inputFactory)
 
+    var ampFile: File? = null
+    var chapter4File: File? = null
+    var compoundingFile: File? = null
+    var companyFile: File? = null
+    var nonmedicinalFile: File? = null
+    var referenceFile: File? = null
+    var reimbursementFile: File? = null
+    var reimbursementLawFile: File? = null
+    var vmpFile: File? = null
+    // using extension function walk
+
+    val fileDirectory = File("res/latest/")
+    if (!fileDirectory.isDirectory) {
+        throw IllegalArgumentException("File-object at ${fileDirectory.path} is not a directory.")
+    }
+
+    Files.newDirectoryStream(fileDirectory.toPath()).forEach {
+        when {
+            it.name.matches(Regex("AMP.*")) -> ampFile = it.toFile()
+            it.name.matches(Regex("CHAPTERIV.*")) -> chapter4File = it.toFile()
+            it.name.matches(Regex("CMP.*")) -> compoundingFile = it.toFile()
+            it.name.matches(Regex("CPN.*")) -> companyFile = it.toFile()
+            it.name.matches(Regex("NONMEDICINAL.*")) -> nonmedicinalFile = it.toFile()
+            it.name.matches(Regex("REF.*")) -> referenceFile = it.toFile()
+            it.name.matches(Regex("RMB.*")) -> reimbursementFile = it.toFile()
+            it.name.matches(Regex("RML.*")) -> reimbursementLawFile = it.toFile()
+            it.name.matches(Regex("VMP.*")) -> vmpFile = it.toFile()
+            else -> logger.error("Could not find a use for path $it")
+        }
+    }
+
     logger.info("Starting export")
     val fullTime = measureTime {
 
-        val ampParseTime = measureTime { parseAmpXml(inputFactory, xmlMapper, "res/latest/AMP-1667395273070.xml") }
-        val chapter4Time = measureTime { parseChapter4Xml(inputFactory, xmlMapper, "res/latest/CHAPTERIV-1667395606032.xml") }
-        val compoundingTime = measureTime { parseCompoundingXml(inputFactory, xmlMapper, "res/latest/CMP-1667395564754.xml") }
-        val cpnParseTime = measureTime { parseCompanyXml(inputFactory, xmlMapper, "res/latest/CPN-1667395271162.xml") }
-        val nonmedicinalTime = measureTime { parseNonMedicinalXml(inputFactory, xmlMapper, "res/latest/NONMEDICINAL-1667395565095.xml") }
-        val refParseTime = measureTime { parseReferenceXml(inputFactory, xmlMapper, "res/latest/REF-1667395561910.xml") }
-        val reimbursementTime = measureTime { parseReimbursementContextXml(inputFactory, xmlMapper, "res/latest/RMB-1667395543490.xml") }
-        val reimbursementLawTime = measureTime { parseReimbursementLawXml(inputFactory, xmlMapper, "res/latest/RML-1667395532545.xml") }
-        val vmpParseTime = measureTime { parseVmpXml(inputFactory, xmlMapper, "res/latest/VMP-1667395497382.xml") }
+        //logMemory()
+        val ampParseTime = measureTime { parseAmpXml(inputFactory, xmlMapper, ampFile!!) }
+        //logMemory()
+        val chapter4Time = measureTime { parseChapter4Xml(inputFactory, xmlMapper, chapter4File!!) }
+        //logMemory()
+        val compoundingTime = measureTime { parseCompoundingXml(inputFactory, xmlMapper, compoundingFile!!) }
+        //logMemory()
+        val cpnParseTime = measureTime { parseCompanyXml(inputFactory, xmlMapper, companyFile!!) }
+        //logMemory()
+        val nonmedicinalTime = measureTime { parseNonMedicinalXml(inputFactory, xmlMapper, nonmedicinalFile!!) }
+        //logMemory()
+        val refParseTime = measureTime { parseReferenceXml(inputFactory, xmlMapper, referenceFile!!) }
+        //logMemory()
+        val reimbursementTime =
+            measureTime { parseReimbursementContextXml(inputFactory, xmlMapper, reimbursementFile!!) }
+        //logMemory()
+        val reimbursementLawTime =
+            measureTime { parseReimbursementLawXml(inputFactory, xmlMapper, reimbursementLawFile!!) }
+        //logMemory()
+        val vmpParseTime = measureTime { parseVmpXml(inputFactory, xmlMapper, vmpFile!!) }
+        //logMemory()
 
         //Pooling logresults to make this stuff more readable
         logger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
@@ -69,11 +115,7 @@ fun fullElement(startElement: StartElement, reader: XMLEventReader): String {
     var openedTags = 1
 
     var event = reader.nextEvent()
-    while (!(event.isEndElement
-                && event.asEndElement().name.localPart == startElement.name.localPart
-                && openedTags <= 1
-                )
-    ) {
+    while (!(event.isEndElement && event.asEndElement().name.localPart == startElement.name.localPart && openedTags <= 1)) {
         xmlWriter.add(event)
         event = reader.nextEvent()
 
@@ -90,4 +132,9 @@ fun fullElement(startElement: StartElement, reader: XMLEventReader): String {
     xmlWriter.add(event)
     xmlWriter.close()
     return writer.toString()
+}
+
+private fun logMemory() {
+    val mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
+    logger.info("total: ${Runtime.getRuntime().totalMemory() / 1024 / 1024}\tfree: ${Runtime.getRuntime().freeMemory() / 1024 / 1024}\tused: ${mem / 1024 / 1024}")
 }

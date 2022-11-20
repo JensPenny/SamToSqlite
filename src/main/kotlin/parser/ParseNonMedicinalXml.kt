@@ -8,14 +8,15 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.Nonmedicinal
 import tryPersist
+import java.io.File
 import java.io.FileInputStream
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseNonMedicinalXml(
-    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
 ) {
-    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+    val reader = inputFactory.createXMLEventReader(FileInputStream(file))
 
     var currentCounter = 0
     val commitAfterAmount = 100

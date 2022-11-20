@@ -179,7 +179,7 @@ data class VirtualForm(
 )
 
 /**
- * @See db.ReferenceTableModel.VTFRM
+ * @See db.ReferenceTableModel.WADA
  */
 @JsonRootName("Wada")
 data class Wada(

@@ -10,16 +10,17 @@ import pojo.NameExplanation
 import pojo.Paragraph
 import pojo.QualificationList
 import tryPersist
+import java.io.File
 import java.io.FileInputStream
 import java.time.Instant
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseChapter4Xml(
-    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
 ) {
 
-    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+    val reader = inputFactory.createXMLEventReader(FileInputStream(file))
     val commitAfterAmount = 100
     var currentCounter = 0
 

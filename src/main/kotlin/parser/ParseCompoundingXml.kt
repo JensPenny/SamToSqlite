@@ -9,14 +9,15 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.CompoundingFormula
 import pojo.CompoundingIngredient
 import tryPersist
+import java.io.File
 import java.io.FileInputStream
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
 
 fun parseCompoundingXml(
-    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, path: String
+    inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
 ) {
-    val reader = inputFactory.createXMLEventReader(FileInputStream(path))
+    val reader = inputFactory.createXMLEventReader(FileInputStream(file))
 
     while (reader.hasNext()) {
         val event = reader.nextEvent()
