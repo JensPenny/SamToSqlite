@@ -78,3 +78,4 @@ res/latest
 data/
 /bin/
 /.idea/
+*secret*
