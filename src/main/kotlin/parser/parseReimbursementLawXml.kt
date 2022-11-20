@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import db.ReimbursementLawSamTableModel
 import fullElement
+import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import pojo.LegalBasis
@@ -15,12 +16,13 @@ import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicInteger
 import javax.xml.stream.XMLInputFactory
 
+val commitAfterAmount = 100
+
 fun parseReimbursementLawXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
 ) {
     val reader = inputFactory.createXMLEventReader(FileInputStream(file))
-    val commitAfterAmount = 100     //Doesn't really matter - shitloads of recursive elements, so placing this here isn't really useful
-    var currentCounter = AtomicInteger(0)
+    val currentCounter = AtomicInteger(0)
 
     tryPersist {
         transaction {
@@ -30,10 +32,7 @@ fun parseReimbursementLawXml(
                 if (event.isStartElement) {
                     val startElement = event.asStartElement()
 
-                    if (currentCounter.get() >= commitAfterAmount) {
-                        commit()
-                        currentCounter = AtomicInteger(0)
-                    }
+                    incrementAndCheckForCommit(currentCounter, commitAfterAmount)
 
                     when (startElement.name.localPart) {
                         "ns3:LegalBasis" -> {
@@ -41,7 +40,7 @@ fun parseReimbursementLawXml(
                             val legalBasis = xmlMapper.readValue<LegalBasis>(legalBasisString)
 
                             for (data in legalBasis.dataBlocks) {
-                                currentCounter.incrementAndGet()
+                                incrementAndCheckForCommit(currentCounter, commitAfterAmount)
 
                                 ReimbursementLawSamTableModel.LGLBAS.insert {
                                     it[key] = legalBasis.key
@@ -62,7 +61,7 @@ fun parseReimbursementLawXml(
                                 val firstReferencePath = "${legalBasis.key}-${legalReference.key}"
 
                                 for (data in legalReference.dataBlocks) {
-                                    currentCounter.incrementAndGet()
+                                    incrementAndCheckForCommit(currentCounter, commitAfterAmount)
 
                                     ReimbursementLawSamTableModel.LGLREF.insert {
                                         it[key] = legalReference.key
@@ -89,7 +88,7 @@ fun parseReimbursementLawXml(
                                     val secondReferencePath =
                                         "${legalBasis.key}-${legalReference.key}-${secondReference.key}"
                                     for (data in secondReference.dataBlocks) {
-                                        currentCounter.incrementAndGet()
+                                        incrementAndCheckForCommit(currentCounter, commitAfterAmount)
 
                                         ReimbursementLawSamTableModel.LGLREF.insert {
                                             it[key] = legalReference.key
@@ -152,10 +151,21 @@ fun parseReimbursementLawXml(
     }
 }
 
+private fun Transaction.incrementAndCheckForCommit(
+    currentCounter: AtomicInteger,
+    commitAfterAmount: Int
+) {
+    val toCheck = currentCounter.incrementAndGet()
+    if (toCheck >= commitAfterAmount) {
+        commit()
+        currentCounter.set(0)
+    }
+}
+
 /**
  * Legal texts are recursive, what makes this...challenging to implement
  */
-private fun insertRecursiveLegalText(
+private fun Transaction.insertRecursiveLegalText(
     currentText: LegalText,
     legalTxtPath: String,
     legalRefPath: String,
@@ -165,7 +175,7 @@ private fun insertRecursiveLegalText(
     counter: AtomicInteger
 ) {
     for (data in currentText.dataBlocks) {
-        counter.incrementAndGet()
+        incrementAndCheckForCommit(counter, commitAfterAmount)
         ReimbursementLawSamTableModel.LGLTXT.insert {
             it[key] = currentText.key
             it[basisKey] = legalBasisKey
