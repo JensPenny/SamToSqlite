@@ -74,7 +74,7 @@ outTmp/
 /kotlin-native/dist
 kotlin-ide/
 
-res/
+res/latest
 data/
 /bin/
 /.idea/
