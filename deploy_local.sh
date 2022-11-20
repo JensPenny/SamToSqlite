@@ -1,3 +1,4 @@
+#!/bin/bash
 
 ### Check if /opt/samtosql exists ###
 if [ ! -d "/opt/samtosql/" ]
@@ -14,7 +15,8 @@ fi
 ### Build the docker image
 echo "Building image and running locally"
 docker build -t penny/samtosql .
-docker run -v /opt/samtosql_docker:/opt/samtosql \
+docker run --rm \
+          -v /opt/samtosql_docker:/opt/samtosql \
           --name samtosql \
           -m 500mb \
           penny/samtosql
