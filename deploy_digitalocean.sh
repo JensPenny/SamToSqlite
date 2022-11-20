@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "move to the correct folder"
 #mkdir -p /home/samtosql_app/
-cd /home/samtosql_app || exit
+cd /home/samtosql_app/SamToSqlite || exit
 echo "create and/or empty result database"
 mkdir -p /opt/samtosql
 rm /opt/samtosql/*
