@@ -5,10 +5,12 @@ cd /home/samtosql_app/SamToSqlite || exit
 echo "create and/or empty result database"
 mkdir -p /opt/samtosql
 rm /opt/samtosql/*
-echo "pull latest git changes"
-git pull 
+echo "pull latest git changes. We only need the last version of the shell to get samv2 though, but just pulling everything"
+git pull
+echo "grab the latest fat jar. This will work since the jar will reside in the base folder"
+curl -O -L https://_:GITHUB_PACKAGE_TOKEN@maven.pkg.github.com/JensPenny/SamToSqlite/com/jenspenny/samtosql/0.1.0/samtosql-0.1.0.jar
 echo "build new docker image"
-docker build -t penny/samtosql .
+docker build -t penny/samtosql -f digitalOcean.Dockerfile .
 echo "starting new (self-destructing) container"
 docker run \
   --rm \

@@ -14,7 +14,7 @@ fi
 
 ### Build the docker image
 echo "Building image and running locally"
-docker build -t penny/samtosql .
+docker build -t penny/samtosql -f local.Dockerfile .
 docker run --rm \
           -v /opt/samtosql_docker:/opt/samtosql \
           --name samtosql \
