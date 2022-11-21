@@ -15,4 +15,4 @@ RUN apt-get update  \
 # RUN echo $(ls -1 /app/res/latest) # debug command to see whats going on
 RUN mkdir -p /opt/samtosql/
 WORKDIR /app
-ENTRYPOINT ["java","-jar","SamToSqlite-0.1.0.jar"]
+ENTRYPOINT ["java","-jar","samtosqlite-0.1.0.jar"]
