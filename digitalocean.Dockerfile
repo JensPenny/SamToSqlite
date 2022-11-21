@@ -1,11 +1,12 @@
-
 FROM openjdk:17-slim AS run
 RUN mkdir /app
 COPY . /app
-RUN apk add --no-cache curl  \
-     && mkdir -p /app/res/latest \
-     && cd /app/res/shell/ \
-     && sh getLatestVersion.sh \
+RUN apt-get update  \
+    && apt-get install -y curl  \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /app/res/latest \
+    && cd /app/res/shell/ \
+    && sh getLatestVersion.sh \
 
 # Command to create the data folder with the sqlite db
 # RUN echo $(ls -1 /app/res/latest) # debug command to see whats going on

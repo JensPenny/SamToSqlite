@@ -10,7 +10,7 @@ git pull
 echo "grab the latest fat jar. This will work since the jar will reside in the base folder"
 curl -O -L https://_:GITHUB_PACKAGE_TOKEN@maven.pkg.github.com/JensPenny/SamToSqlite/com/jenspenny/samtosql/0.1.0/samtosql-0.1.0.jar
 echo "build new docker image"
-docker build -t penny/samtosql -f digitalOcean.Dockerfile .
+docker build -t penny/samtosql -f digitalocean.Dockerfile .
 echo "starting new (self-destructing) container"
 docker run \
   --rm \
