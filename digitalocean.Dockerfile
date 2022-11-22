@@ -19,4 +19,4 @@ RUN apt-get update  \
 # RUN echo $(ls -1 /app/res/latest) # debug command to see whats going on
 RUN mkdir -p /opt/samtosql/
 WORKDIR /app
-ENTRYPOINT ["java","-jar","samtosql-0.2.0.jar"]
+ENTRYPOINT ["java","-jar","samtosql-0.3.0.jar"]

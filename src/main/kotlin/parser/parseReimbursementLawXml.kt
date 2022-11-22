@@ -16,7 +16,7 @@ import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicInteger
 import javax.xml.stream.XMLInputFactory
 
-val commitAfterAmount = 100
+val commitAfterAmount = 50
 
 fun parseReimbursementLawXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File

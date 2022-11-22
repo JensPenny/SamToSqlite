@@ -7,8 +7,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -24,7 +22,7 @@ class DBInitialization {
         createNonmedicinalTables() //done
         createReferenceTables() //done
         createReimbursementContextTables() //done
-        createReimbursementLawTables() //done
+        //createReimbursementLawTables() //done
         createVmpTables()
     }
 

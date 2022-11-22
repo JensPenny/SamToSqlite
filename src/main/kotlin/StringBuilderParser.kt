@@ -77,8 +77,8 @@ fun main() {
         val reimbursementTime =
             measureTime { parseReimbursementContextXml(inputFactory, xmlMapper, reimbursementFile!!) }
         //logMemory()
-        val reimbursementLawTime =
-            measureTime { parseReimbursementLawXml(inputFactory, xmlMapper, reimbursementLawFile!!) }
+        //val reimbursementLawTime =
+            //measureTime { parseReimbursementLawXml(inputFactory, xmlMapper, reimbursementLawFile!!) }
         //logMemory()
         val vmpParseTime = measureTime { parseVmpXml(inputFactory, xmlMapper, vmpFile!!) }
         //logMemory()
@@ -91,7 +91,8 @@ fun main() {
         logger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
         logger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
         logger.info("RMB file parsed in ${reimbursementTime.inWholeMinutes}:${reimbursementTime.inWholeSeconds - (reimbursementTime.inWholeMinutes * 60)}")
-        logger.info("RML file parsed in ${reimbursementLawTime.inWholeMinutes}:${reimbursementLawTime.inWholeSeconds - (reimbursementLawTime.inWholeMinutes * 60)}")
+        //logger.info("RML file parsed in ${reimbursementLawTime.inWholeMinutes}:${reimbursementLawTime.inWholeSeconds - (reimbursementLawTime.inWholeMinutes * 60)}")
+        logger.info("RML (reimbursement law) is deprecated and will not be exported")
         logger.info("VMP file parsed in ${vmpParseTime.inWholeMinutes}:${vmpParseTime.inWholeSeconds - (vmpParseTime.inWholeMinutes * 60)}")
     }
     logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
