@@ -1,6 +1,10 @@
 FROM openjdk:17-slim AS run
 RUN mkdir /app
 COPY . /app
+
+# We ALWAYS want to run the run-command, since it will DL the latest sam version.
+# A little hack makes sure this happens: src-https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN apt-get update  \
     && apt-get install -y \
     curl  \
@@ -15,4 +19,4 @@ RUN apt-get update  \
 # RUN echo $(ls -1 /app/res/latest) # debug command to see whats going on
 RUN mkdir -p /opt/samtosql/
 WORKDIR /app
-ENTRYPOINT ["java","-jar","samtosql-0.1.0.jar"]
+ENTRYPOINT ["java","-jar","samtosql-0.2.0.jar"]

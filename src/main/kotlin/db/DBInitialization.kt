@@ -4,6 +4,14 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SchemaUtils.drop
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
+
 
 class DBInitialization {
     fun createTables() {
@@ -250,11 +258,26 @@ class DBInitialization {
     }
 
     fun createDB() {
+        val samId = getSamIdFromSite()
         // In file - local
         //Database.connect("jdbc:sqlite:data/data.db", "org.sqlite.JDBC")
         //In file - docker
-        Database.connect("jdbc:sqlite:/opt/samtosql/data.db", "org.sqlite.JDBC")
+        Database.connect("jdbc:sqlite:/opt/samtosql/${samId}.db", "org.sqlite.JDBC")
         // In memory
         //Database.connect("jdbc:sqlite:file:test?mode=memory&cache=shared", "org.sqlite.JDBC";
     }
+
+    private fun getSamIdFromSite(): String {
+        val url = URL("https://www.vas.ehealth.fgov.be/websamcivics/samcivics/download/samv2-full-getLastVersion?xsd=5")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+
+        val responseStream: InputStream =
+            if (connection.getResponseCode() / 100 == 2) connection.inputStream else connection.errorStream
+        val s: Scanner = Scanner(responseStream).useDelimiter("\\A")
+        val response = if (s.hasNext()) s.next() else LocalDateTime.now().toString()
+        return response
+    }
+
+
 }

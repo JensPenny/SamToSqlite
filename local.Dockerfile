@@ -19,4 +19,4 @@ COPY --from=build /home/gradle/src/res/latest /app/res/latest
 # RUN echo $(ls -1 /app/res/latest) # debug command to see whats going on
 RUN mkdir -p /opt/samtosql/
 WORKDIR /app
-ENTRYPOINT ["java","-jar","SamToSqlite-0.1.0.jar"]
+ENTRYPOINT ["java","-jar","SamToSqlite-0.2.0.jar"]
