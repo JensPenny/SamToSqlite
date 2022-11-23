@@ -13,17 +13,32 @@ echo "build new docker image"
 docker build -t penny/samtosql -f digitalocean.Dockerfile .
 echo "removing old data"
 rm -f -v /opt/samtosql/*
+# cd ~/logs # I used to pipe the docker run data to another file with less, but this was pretty slow. Better to run this on a screen imo
 echo "starting new (self-destructing) container"
 docker run \
   --rm \
   -v /opt/samtosql:/opt/samtosql \
   --name samtosql \
   -m 350mb \
-  -v logs:/var/log \
   --log-driver local \
   --log-opt max-size=10m \
   --log-opt max-file=3 \
   penny/samtosql
+RETURN_VALUE=$?
+if [ $RETURN_VALUE -ne 0 ]; then
+    echo "Sam export failed. Return code: $RETURN_VALUE."
+    echo "ending script"
+    exit 1
+fi
 echo "sam export ran succesfully"
-
+echo "zipping result"
+dbfiles=( /opt/samtosql/*.db )
+[[ -e $dbfiles ]] || { echo "Matched no files" >&2; exit 1; }
+dbname=$(basename $dbfiles .db)
+zip /opt/samtosql/$dbname.zip $dbfiles
+echo "moving zip to spaces and as latest export"
+s3cmd put /opt/samtosql/$dbname.zip s3://samv2/ --acl-public
+s3cmd put /opt/samtosql/$dbname.zip s3://samv2/latest/latest.zip --acl-public
+echo "cleanup"
+rm /opt/samtosql/* -v
 echo "ending script"
