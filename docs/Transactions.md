@@ -69,3 +69,6 @@ While these transactions are interesting for me, the real test will happen when 
 22:02:00.910 [main] INFO  SamV2Exporter - Full export parsed in 45:52
 ```
 
+### 5. Digitalocean performance
+Running this on a $6 1Gb ram + 1vCPU DO server, the export takes about 30 minutes without the RML-export.  
+I'm not going to lie, I'm pretty happy with that result, especially because we don't use that much RAM with this export.

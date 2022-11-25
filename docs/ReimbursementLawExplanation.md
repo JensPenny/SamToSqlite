@@ -20,6 +20,7 @@ I don't get why this is structured the way it is though. Wouldn't it just be eas
 This is just absolutely unparseable for any sensible database. Just check the tables that this export vomits out. 
 
 ## LegalBasis
+The root level for the different texts
 
 ## LegalReference
 * A legalreference has a field `legalReferencePath'. This is a combined field between basis and the reference keys.
@@ -30,3 +31,7 @@ the docs here, but that's pretty hard to do in a streaming parser.
 ## LegalText
 legalRefKey = varchar("key", 70) //Own field to persist the key as well, since legalReferencePath is a combo field
 val legalReferencePath
+
+## Additional remarks
+* This export doesn't clean up after itself, so it will not run on minimal ram (300Mb). This is because the tree constructed gets pretty large,
+and we don't clean up the text elements at this moment.
