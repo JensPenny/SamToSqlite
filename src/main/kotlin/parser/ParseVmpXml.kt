@@ -7,6 +7,7 @@ import fullElement
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import pojo.CommentedClassificationElement
 import pojo.VmpElement
 import pojo.VmpGroupElement
@@ -17,6 +18,8 @@ import java.io.FileInputStream
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicInteger
 import javax.xml.stream.XMLInputFactory
+
+private val logger = LoggerFactory.getLogger("VMP")
 
 fun parseVmpXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
@@ -180,7 +183,7 @@ fun parseVmpXml(
                         }
 
                         else -> {
-                            println("no handler for " + startElement.name.localPart)
+                            logger.error("no handler for " + startElement.name.localPart)
                         }
                     }
                 }

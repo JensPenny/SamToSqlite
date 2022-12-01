@@ -16,7 +16,7 @@ import kotlin.io.path.name
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-private val logger = LoggerFactory.getLogger("SamV2Exporter")
+val mainLogger = LoggerFactory.getLogger("SamV2Exporter")
 
 @OptIn(ExperimentalTime::class)
 fun main() {
@@ -54,11 +54,11 @@ fun main() {
             it.name.matches(Regex("RMB.*")) -> reimbursementFile = it.toFile()
             it.name.matches(Regex("RML.*")) -> reimbursementLawFile = it.toFile()
             it.name.matches(Regex("VMP.*")) -> vmpFile = it.toFile()
-            else -> logger.error("Could not find a use for path $it")
+            else -> mainLogger.error("Could not find a use for path $it")
         }
     }
 
-    logger.info("Starting export")
+    mainLogger.info("Starting export")
     val fullTime = measureTime {
 
         //logMemory()
@@ -84,26 +84,26 @@ fun main() {
         //logMemory()
 
         //Pooling logresults to make this stuff more readable
-        logger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
-        logger.info("CHAPTERIV file parsed in ${chapter4Time.inWholeMinutes}:${chapter4Time.inWholeSeconds - (chapter4Time.inWholeMinutes * 60)}")
-        logger.info("CMP file parsed in ${compoundingTime.inWholeMinutes}:${compoundingTime.inWholeSeconds - (compoundingTime.inWholeMinutes * 60)}")
-        logger.info("CPN file parsed in ${cpnParseTime.inWholeMinutes}:${cpnParseTime.inWholeSeconds - (cpnParseTime.inWholeMinutes * 60)}")
-        logger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
-        logger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
-        logger.info("RMB file parsed in ${reimbursementTime.inWholeMinutes}:${reimbursementTime.inWholeSeconds - (reimbursementTime.inWholeMinutes * 60)}")
-        //logger.info("RML file parsed in ${reimbursementLawTime.inWholeMinutes}:${reimbursementLawTime.inWholeSeconds - (reimbursementLawTime.inWholeMinutes * 60)}")
-        logger.info("RML (reimbursement law) is deprecated and will not be exported")
-        logger.info("VMP file parsed in ${vmpParseTime.inWholeMinutes}:${vmpParseTime.inWholeSeconds - (vmpParseTime.inWholeMinutes * 60)}")
+        mainLogger.info("AMP file parsed in ${ampParseTime.inWholeMinutes}:${ampParseTime.inWholeSeconds - (ampParseTime.inWholeMinutes * 60)}")
+        mainLogger.info("CHAPTERIV file parsed in ${chapter4Time.inWholeMinutes}:${chapter4Time.inWholeSeconds - (chapter4Time.inWholeMinutes * 60)}")
+        mainLogger.info("CMP file parsed in ${compoundingTime.inWholeMinutes}:${compoundingTime.inWholeSeconds - (compoundingTime.inWholeMinutes * 60)}")
+        mainLogger.info("CPN file parsed in ${cpnParseTime.inWholeMinutes}:${cpnParseTime.inWholeSeconds - (cpnParseTime.inWholeMinutes * 60)}")
+        mainLogger.info("NONMEDICINAL file parsed in ${nonmedicinalTime.inWholeMinutes}:${nonmedicinalTime.inWholeSeconds - (nonmedicinalTime.inWholeMinutes * 60)}")
+        mainLogger.info("REF file parsed in ${refParseTime.inWholeMinutes}:${refParseTime.inWholeSeconds - (refParseTime.inWholeMinutes * 60)}")
+        mainLogger.info("RMB file parsed in ${reimbursementTime.inWholeMinutes}:${reimbursementTime.inWholeSeconds - (reimbursementTime.inWholeMinutes * 60)}")
+        //mainLogger.info("RML file parsed in ${reimbursementLawTime.inWholeMinutes}:${reimbursementLawTime.inWholeSeconds - (reimbursementLawTime.inWholeMinutes * 60)}")
+        mainLogger.info("RML (reimbursement law) is deprecated and will not be exported")
+        mainLogger.info("VMP file parsed in ${vmpParseTime.inWholeMinutes}:${vmpParseTime.inWholeSeconds - (vmpParseTime.inWholeMinutes * 60)}")
     }
-    logger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
+    mainLogger.info("Full export parsed in ${fullTime.inWholeMinutes}:${fullTime.inWholeSeconds - (fullTime.inWholeMinutes * 60)}")
 }
 
 inline fun tryPersist(call: () -> Unit) {
     try {
         call()
     } catch (e: ExposedSQLException) {
-        println("Message: ${e.message}")
-        println("Trace: ${e.stackTrace}")
+        mainLogger.error("Message: ${e.message}")
+        mainLogger.error("Trace: ${e.stackTrace}")
     }
 }
 
@@ -137,5 +137,5 @@ fun fullElement(startElement: StartElement, reader: XMLEventReader): String {
 
 private fun logMemory() {
     val mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
-    logger.info("total: ${Runtime.getRuntime().totalMemory() / 1024 / 1024}\tfree: ${Runtime.getRuntime().freeMemory() / 1024 / 1024}\tused: ${mem / 1024 / 1024}")
+    mainLogger.info("total: ${Runtime.getRuntime().totalMemory() / 1024 / 1024}\tfree: ${Runtime.getRuntime().freeMemory() / 1024 / 1024}\tused: ${mem / 1024 / 1024}")
 }

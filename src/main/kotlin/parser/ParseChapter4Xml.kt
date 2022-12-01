@@ -6,6 +6,7 @@ import db.Chapter4SamTableModel
 import fullElement
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import pojo.NameExplanation
 import pojo.Paragraph
 import pojo.QualificationList
@@ -15,6 +16,8 @@ import java.io.FileInputStream
 import java.time.Instant
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
+
+private val logger = LoggerFactory.getLogger("CHAPTERIV")
 
 fun parseChapter4Xml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
@@ -297,7 +300,7 @@ fun parseChapter4Xml(
                         }
 
                         else -> {
-                            println("no handler for " + startElement.name.localPart)
+                            logger.error("no handler for " + startElement.name.localPart)
                         }
                     }
                 }

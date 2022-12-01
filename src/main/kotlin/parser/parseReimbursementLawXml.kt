@@ -7,6 +7,7 @@ import fullElement
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import pojo.LegalBasis
 import pojo.LegalText
 import tryPersist
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.xml.stream.XMLInputFactory
 
 val commitAfterAmount = 50
+private val logger = LoggerFactory.getLogger("REIMBLAW")
 
 fun parseReimbursementLawXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
@@ -142,7 +144,7 @@ fun parseReimbursementLawXml(
                         }
 
                         else -> {
-                            println("no handler for " + startElement.name.localPart)
+                            logger.error("no handler for " + startElement.name.localPart)
                         }
                     }
                 }

@@ -6,12 +6,15 @@ import db.CompanyTableModel
 import fullElement
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import pojo.Company
 import tryPersist
 import java.io.File
 import java.io.FileInputStream
 import java.time.LocalDate
 import javax.xml.stream.XMLInputFactory
+
+private val logger = LoggerFactory.getLogger("COMPANY")
 
 fun parseCompanyXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
@@ -70,7 +73,7 @@ fun parseCompanyXml(
                         }
 
                         else -> {
-                            println("no handler for " + startElement.name.localPart)
+                            logger.error("no handler for " + startElement.name.localPart)
                         }
                     }
                 }
