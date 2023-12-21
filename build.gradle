@@ -1,12 +1,12 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
     id 'application'
     id 'maven-publish'
 }
 
 group = 'com.jenspenny'
-version = '0.3.3'
-def exposedVersion = '0.40.1'
+version = '0.3.4'
+def exposedVersion = '0.45.0'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
 
-    implementation('org.xerial:sqlite-jdbc:3.43.2.2')
+    implementation('org.xerial:sqlite-jdbc:3.44.1.0')
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.4'
