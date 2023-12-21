@@ -300,6 +300,8 @@ class ActualMedicineSamTableModel {
 
     //Delivered Medicinal Product Package
     object DMPP : IntIdTable("DMPP") {
+        val ctiExtended = varchar("ctiExtended", 9)
+
         val code = varchar("code", 7)
         val codeType = varchar("codeType", 10)
         val productId = varchar("productId", 100)
