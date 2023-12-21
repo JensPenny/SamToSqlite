@@ -365,6 +365,7 @@ fun parseAmpXml(
                                     for (dmppDataBlock in dmpp.dmppDataBlocks) {
                                         counter++
                                         ActualMedicineSamTableModel.DMPP.insert {
+                                            it[ctiExtended] = amppElement.ctiExtended
                                             it[code] = dmpp.code
                                             it[codeType] = dmpp.codeSystem
                                             it[productId] = dmpp.productId
