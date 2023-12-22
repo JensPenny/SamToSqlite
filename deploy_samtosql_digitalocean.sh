@@ -8,7 +8,7 @@ rm /opt/samtosql/*
 echo "pull latest git changes. We only need the last version of the shell to get samv2 though, but just pulling everything"
 git pull
 echo "grab the latest fat jar. This will work since the jar will reside in the base folder"
-curl -O -L https://_:$GITHUB_PACKAGE_TOKEN@maven.pkg.github.com/JensPenny/SamToSqlite/com/jenspenny/samtosql/0.3.4/samtosql-0.3.4.jar
+curl -O -L https://_:$GITHUB_PACKAGE_TOKEN@maven.pkg.github.com/JensPenny/SamToSqlite/com/jenspenny/samtosql/0.3.5/samtosql-0.3.5.jar
 echo "build new docker image"
 docker build -t penny/samtosql -f digitalocean.Dockerfile .
 echo "removing old data"
