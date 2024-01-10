@@ -7,7 +7,9 @@ import pojo.AmpElement
 import java.io.File
 import java.io.FileInputStream
 import java.time.LocalDate
+import java.util.StringJoiner
 import javax.xml.stream.XMLInputFactory
+import kotlin.streams.toList
 
 fun parseAmpXml(
     inputFactory: XMLInputFactory, xmlMapper: ObjectMapper, file: File
@@ -203,6 +205,19 @@ fun parseAmpXml(
 
                             for (amppElement in amp.amppElements) {
                                 for (amppDataBlock in amppElement.amppDataBlocks) {
+                                    val atcCodeReferences = amppDataBlock.atcCodeReference
+                                    for (atc in atcCodeReferences) {
+                                        counter++
+                                        ActualMedicineSamTableModel.AMPP_TO_ATC.insert {
+                                            it[ctiExtended] = amppElement.ctiExtended
+                                            it[atcCode] = atc.codeReference
+                                            it[validFrom] = LocalDate.parse(amppDataBlock.from)
+                                            if (amppDataBlock.to != null) {
+                                                it[validTo] = LocalDate.parse(amppDataBlock.to)
+                                            }
+                                        }
+                                    }
+
                                     counter++
                                     ActualMedicineSamTableModel.AMPP_FAMHP.insert {
                                         it[ctiExtended] = amppElement.ctiExtended

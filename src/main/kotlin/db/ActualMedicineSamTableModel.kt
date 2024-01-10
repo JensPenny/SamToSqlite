@@ -1,5 +1,6 @@
 package db
 
+import db.ActualMedicineSamTableModel.AMPPC.nullable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
@@ -162,6 +163,7 @@ class ActualMedicineSamTableModel {
     object AMPP_FAMHP : IntIdTable("AMPP_FAMHP") {
         val ctiExtended = varchar("ctiExtended", 9)
         val ampCode = varchar("ampCode", 12)
+        val atcCodes = varchar("atcCodes", 255).nullable()
         val deliveryModusCode = varchar("deliveryModusCode", 7)
         val deliveryModusSpecificationCode = varchar("deliveryModusSpecificationCode", 7).nullable()
         val authorizationNumber = varchar("authorizationNumber", 50)
@@ -266,6 +268,15 @@ class ActualMedicineSamTableModel {
         val officialExFactoryPrice = varchar("officialExFactoryPrice", 20).nullable()
         val realExFactoryPrice = varchar("realExFactoryPrice", 20).nullable()
         val decisionDate = date("decisionDate").nullable()
+
+        val validFrom = date("validFrom")
+        val validTo = date("validTo").nullable()
+    }
+
+    //Linking tables
+    object AMPP_TO_ATC : IntIdTable("AMPP_TO_ATC") {
+        val ctiExtended = varchar("ctiExtended", 9)
+        val atcCode = varchar("code", 7)
 
         val validFrom = date("validFrom")
         val validTo = date("validTo").nullable()
