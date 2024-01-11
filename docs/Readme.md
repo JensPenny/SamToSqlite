@@ -40,3 +40,9 @@ This is a list of steps that need to be done to create a new version
 5. Make a new release on github. This should create a new deployment through the github actions interface with an artefact
 ~~6. Log in to digitalocean and update the repo that contains the script. Check if you need to update the script that runs the export~~
 6. The DO droplet has a self-updating script. The only thing that needs to happen is that a new release needs to be made. 
+
+## Adding a new table
+Adding a new table is pretty easy:  
+1. Add the database scheme to the relevant class in the db - package
+2. Fill that database scheme with inserts in the relevant parser. Don't forget to update the counter so we don't overextend on transaction memory
+3. Add the table to the drop and create statements in DBInitialization
