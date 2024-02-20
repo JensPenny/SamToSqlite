@@ -3,7 +3,7 @@ COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 # RUN echo $(ls -1 /home/gradle/src) # debug command to see whats going on
 # RUN echo $(ls -1 /home/gradle/src/res) # debug command to see whats going on
-RUN apk add --no-cache curl  \
+RUN apk add --no-cache curl && apk add --upgrade curl  \
      && mkdir -p /home/gradle/src/res/latest \
      && cd /home/gradle/src/res/shell/ \
      && sh getLatestVersion.sh \
