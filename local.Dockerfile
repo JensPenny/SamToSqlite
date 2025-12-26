@@ -10,7 +10,7 @@ RUN apk add --no-cache curl && apk add --upgrade curl  \
      && cd /home/gradle/src \
      && gradle build --no-daemon
 
-FROM openjdk:17-slim AS run
+FROM eclipse-temurin:17-jdk-alpine-3.23 AS run
 EXPOSE 8080
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/ /app/

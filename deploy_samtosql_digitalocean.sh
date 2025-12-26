@@ -35,10 +35,8 @@ echo "zipping result"
 dbfiles=( /opt/samtosql/*.db )
 [[ -e $dbfiles ]] || { echo "Matched no files" >&2; exit 1; }
 dbname=$(basename $dbfiles .db)
-zip /opt/samtosql/$dbname.zip $dbfiles
+zip -D /opt/samtosql/$dbname.zip $dbfiles
 echo "moving zip to spaces and as latest export"
-s3cmd put /opt/samtosql/$dbname.zip s3://samv2/ --acl-public
-s3cmd put /opt/samtosql/$dbname.zip s3://samv2/latest/latest.zip --acl-public
-echo "cleanup"
-rm /opt/samtosql/* -v
+/usr/bin/s3cmd -c /root/.s3cfg put /opt/samtosql/$dbname.zip s3://samv2/hist/$dbname.zip --acl-public
+/usr/bin/s3cmd -c /root/.s3cfg put /opt/samtosql/$dbname.zip s3://samv2/latest/latest.zip --acl-public
 echo "ending script"
