@@ -7,9 +7,9 @@ The tables are in the format described in the PIM-document on https://www.sampor
 Extra documentation can be found under the same link, in the 'export' document
 
 ## Where
-The files that are generated are available on the following S3 space: [samV2 space](https://samv2.ams3.digitaloceanspaces.com/)
+The files that are generated are available on the following S3 space: [samV2 space](https://samv2.s3.rbx.io.cloud.ovh.net/)
 
-You can find the latest version under following URI: [latest version - WARNING: direct download](https://samv2.ams3.digitaloceanspaces.com/latest/latest.zip)  
+You can find the latest version under following URI: [latest version - WARNING: direct download](https://samv2.s3.rbx.io.cloud.ovh.net/latest/latest.zip)  
 Other versions are zipped under the root space, with <version>.zip as name.   
 Versions get constructed once a day at night.  
 
